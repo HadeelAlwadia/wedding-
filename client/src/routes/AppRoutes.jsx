@@ -19,8 +19,6 @@ import GroomSuitDetails from "../pages/GroomSuits/GroomSuitDetails";
 import WeddingCars from "../pages/WeddingCars/WeddingCars";
 import WeddingCarDetails from "../pages/WeddingCars/WeddingCarDetails";
 
-import Photographers from "../pages/photographers/Photographers";
-import PhotographerDetails from "../pages/photographers/PhotographerDetails";
 
 // Auth Pages
 import Login from "../pages/auth/Login";
@@ -28,7 +26,8 @@ import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 
 import NotFound from "../pages/NotFound";
-
+import PhotographerDetails from "../pages/Photographers/PhotographerDetails";
+import Photographers from "../pages/Photographers/Photographers";
 function AppRoutes() {
   return (
     <BrowserRouter>
