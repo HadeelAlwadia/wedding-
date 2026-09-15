@@ -81,13 +81,33 @@ const Header = () => {
               onSubmit={handleSearch}
               className="hidden w-full max-w-xs xl:block"
             >
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="ابحثي عن خدمة..."
-                className="h-10 w-full rounded-full border border-[#eadfd9] bg-[#FFFAF5] px-5 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-400 focus:border-[#6B3038] focus:bg-white focus:ring-2 focus:ring-[#6B3038]/10"
-              />
+ <div className="relative w-full">
+  {/* أيقونة البحث */}
+  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#6B3038]">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.8}
+      stroke="currentColor"
+      className="h-5 w-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+      />
+    </svg>
+  </span>
+
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder="ابحثي عن صالة، بدل، سيارة ..."
+    className="h-10 w-full rounded-full border border-[#eadfd9] bg-[#FFFAF5] pr-11 pl-5 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-400 focus:border-[#6B3038] focus:bg-white focus:ring-2 focus:ring-[#6B3038]/10"
+  />
+</div>
             </form>
 
             {/* Mobile Button */}
