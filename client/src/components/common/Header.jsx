@@ -4,6 +4,7 @@ import logo from "../../assets/logo.ico";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   // مؤقتًا إلى أن نربطه بـ AuthContext
   const user = null;
@@ -24,104 +25,85 @@ const Header = () => {
     { label: "سيارات الزفاف", to: "/wedding-cars" },
   ];
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if (!search.trim()) return;
+
+    console.log("Search:", search);
+  };
+
   return (
     <>
+      {/* ================= HEADER ================= */}
       <header
         dir="rtl"
         className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur-md"
       >
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-6">
+        <div className="mx-auto flex h-[76px] max-w-7xl items-center px-5 sm:px-6">
 
           {/* ================= LOGO ================= */}
-          <Link
-            to="/"
-            className="flex shrink-0 items-center gap-2"
-          >
-            <img
-              src={logo}
-              alt="شعار هنا"
-              className="h-10 w-10 object-contain"
-            />
-
-            <span className="text-2xl font-bold text-[#6B3038]">
-              هنا
-            </span>
-          </Link>
-
-          {/* ================= NAV ================= */}
-          <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-sm font-medium text-gray-700 transition hover:text-[#6B3038]"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* ================= RIGHT ACTIONS ================= */}
-          <div className="hidden items-center gap-3 lg:flex">
-
-            {/* Search */}
-            <button
-              type="button"
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-600 transition hover:bg-[#F8EEE7] hover:text-[#6B3038]"
-              aria-label="بحث"
+          <div className="flex w-[22%] shrink-0 justify-start">
+            <Link
+              to="/"
+              className="flex items-center gap-2"
             >
-              🔍
-            </button>
+              <img
+                src={logo}
+                alt="شعار هنا"
+                className="h-10 w-10 object-contain"
+              />
 
-            {/* Divider */}
-            <div className="h-7 w-px bg-gray-200" />
-
-            {/* ================= USER ================= */}
-            {isServiceProvider ? (
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-[#F8EEE7]"
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#6B3038] text-sm text-white">
-                  م
-                </div>
-
-                <div className="hidden xl:block">
-                  <p className="text-xs text-gray-400">
-                    حسابك
-                  </p>
-
-                  <p className="text-sm font-semibold text-[#2d2424]">
-                    لوحة التحكم
-                  </p>
-                </div>
-              </Link>
-            ) : (
-              /* المستخدم العادي */
-              <button
-                type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-600 transition hover:bg-[#F8EEE7] hover:text-[#6B3038]"
-                aria-label="حسابي"
-              >
-                ♡
-              </button>
-            )}
-
+              <span className="text-2xl font-bold text-[#6B3038]">
+                هنا
+              </span>
+            </Link>
           </div>
 
-          {/* ================= MOBILE BUTTON ================= */}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#eadfd9] bg-[#FFFAF5] text-[#6B3038] lg:hidden"
-            aria-label="فتح القائمة"
-          >
-            <div className="flex w-5 flex-col gap-1.5">
-              <span className="h-[2px] w-full rounded-full bg-current" />
-              <span className="h-[2px] w-4 rounded-full bg-current" />
-              <span className="h-[2px] w-full rounded-full bg-current" />
-            </div>
-          </button>
+          {/* ================= NAVIGATION ================= */}
+          <div className="flex flex-1 justify-center">
+            <nav className="hidden items-center gap-4 xl:flex">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="whitespace-nowrap text-xs font-medium text-gray-600 transition hover:text-[#6B3038]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* ================= SEARCH ================= */}
+          <div className="flex w-[28%] shrink-0 justify-end">
+            <form
+              onSubmit={handleSearch}
+              className="hidden w-full max-w-xs xl:block"
+            >
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="ابحثي عن خدمة..."
+                className="h-10 w-full rounded-full border border-[#eadfd9] bg-[#FFFAF5] px-5 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-400 focus:border-[#6B3038] focus:bg-white focus:ring-2 focus:ring-[#6B3038]/10"
+              />
+            </form>
+
+            {/* Mobile Button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#eadfd9] bg-[#FFFAF5] text-[#6B3038] xl:hidden"
+              aria-label="فتح القائمة"
+            >
+              <div className="flex w-5 flex-col gap-1.5">
+                <span className="h-[2px] w-full rounded-full bg-current" />
+                <span className="h-[2px] w-4 rounded-full bg-current" />
+                <span className="h-[2px] w-full rounded-full bg-current" />
+              </div>
+            </button>
+          </div>
 
         </div>
       </header>
@@ -129,7 +111,7 @@ const Header = () => {
       {/* ================= MOBILE OVERLAY ================= */}
       <div
         onClick={closeMenu}
-        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 xl:hidden ${
           isMenuOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
@@ -139,14 +121,14 @@ const Header = () => {
       {/* ================= MOBILE DRAWER ================= */}
       <aside
         dir="rtl"
-        className={`fixed right-0 top-0 z-[60] flex h-screen w-[85%] max-w-sm flex-col bg-white shadow-2xl transition-transform duration-500 lg:hidden ${
+        className={`fixed right-0 top-0 z-[60] flex h-screen w-[85%] max-w-sm flex-col bg-white shadow-2xl transition-transform duration-500 xl:hidden ${
           isMenuOpen
             ? "translate-x-0"
             : "translate-x-full"
         }`}
       >
 
-        {/* Header */}
+        {/* Drawer Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-5">
 
           <Link
@@ -157,7 +139,7 @@ const Header = () => {
             <img
               src={logo}
               alt="شعار هنا"
-              className="h-10 w-10"
+              className="h-10 w-10 object-contain"
             />
 
             <span className="text-2xl font-bold text-[#6B3038]">
@@ -176,9 +158,24 @@ const Header = () => {
 
         </div>
 
-        {/* Navigation */}
+        {/* Drawer Content */}
         <div className="flex-1 overflow-y-auto px-5 py-6">
 
+          {/* Mobile Search */}
+          <form
+            onSubmit={handleSearch}
+            className="mb-6"
+          >
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="ابحثي عن خدمة..."
+              className="h-12 w-full rounded-xl border border-[#eadfd9] bg-[#FFFAF5] px-5 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-400 focus:border-[#6B3038] focus:bg-white focus:ring-2 focus:ring-[#6B3038]/10"
+            />
+          </form>
+
+          {/* Navigation */}
           <nav className="space-y-2">
 
             {navLinks.map((link, index) => (
@@ -195,7 +192,6 @@ const Header = () => {
                   </span>
 
                   {link.label}
-
                 </span>
 
                 <span className="text-[#b18456]">
@@ -206,34 +202,20 @@ const Header = () => {
 
           </nav>
 
-          {/* Search */}
-          <div className="mt-6">
-
-            <button
-              type="button"
-              className="flex w-full items-center gap-3 rounded-xl bg-[#FFFAF5] px-4 py-3.5 text-sm text-gray-500"
-            >
-              <span>🔍</span>
-              <span>ابحثي عن خدمة...</span>
-            </button>
-
-          </div>
-
-          {/* Provider */}
+          {/* Provider Dashboard */}
           {isServiceProvider && (
             <Link
               to="/dashboard"
               onClick={closeMenu}
               className="mt-4 flex items-center gap-3 rounded-xl bg-[#6B3038] px-4 py-3.5 text-sm font-semibold text-white"
             >
-              <span>◉</span>
               لوحة التحكم
             </Link>
           )}
 
         </div>
 
-        {/* Bottom */}
+        {/* Drawer Bottom */}
         <div className="border-t border-gray-100 p-5">
 
           {!isServiceProvider && (
