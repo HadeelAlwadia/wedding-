@@ -1,80 +1,184 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import {
+  Heart,
+  MapPin,
+  Star,
+  MessageCircle,
+  Share2,
+  CheckCircle,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Play,
+} from "lucide-react";
 
 const HallDetails = () => {
   const { id } = useParams();
-  const [activeImage, setActiveImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
 
-  // Temporary data
-  // لاحقًا هذه البيانات ستأتي من الـ API
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [activeTab, setActiveTab] = useState("photos");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedReel, setSelectedReel] = useState(null);
+
   const hall = {
     id,
-    name: "قصر الياسمين",
+
+    name: "قاعة ليالي العمر",
+    username: "layali_alomr",
     location: "غزة - الرمال",
     rating: 4.9,
-    reviewsCount: 128,
-    price: 2500,
-    priceLabel: "يبدأ من 2500 ₪",
-    capacity: "حتى 300 شخص",
+    reviewsCount: 184,
+    startingPrice: 1800,
+
+    profileImage:
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=500&q=85",
+
+    coverImage:
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1800&q=90",
 
     description:
-      "قصر الياسمين من الصالات المميزة التي توفر أجواء أنيقة ومريحة للاحتفال بيومك الخاص، مع مساحة واسعة وتجهيزات متكاملة تناسب حفلات الزفاف والمناسبات الكبيرة.",
+      "قاعة ليالي العمر للمناسبات والأفراح، نهتم بتفاصيل يومك من الديكور والإضاءة إلى تنسيق الطاولات والكوشة، لنمنحك أجواء أنيقة وراقية تناسب مناسبتك.",
 
     images: [
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=85",
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=90",
     ],
 
-    features: [
-      "تكييف مركزي",
-      "موقف سيارات",
-      "ديكور",
-      "ضيافة",
-      "إضاءة احترافية",
-      "نظام صوت",
-      "غرفة للعروس",
-      "كوشة زفاف",
+    reels: [
+      {
+        id: 1,
+        title: "جولة داخل القاعة",
+        thumbnail:
+          "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-venue-1576/1080p.mp4",
+      },
+      {
+        id: 2,
+        title: "تجهيز القاعة",
+        thumbnail:
+          "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-decoration-1577/1080p.mp4",
+      },
+      {
+        id: 3,
+        title: "ديكور وكوشة",
+        thumbnail:
+          "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-decoration-1578/1080p.mp4",
+      },
+      {
+        id: 4,
+        title: "تفاصيل الطاولات",
+        thumbnail:
+          "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-table-1579/1080p.mp4",
+      },
+      {
+        id: 5,
+        title: "أجواء ليلة مميزة",
+        thumbnail:
+          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-party-1580/1080p.mp4",
+      },
+      {
+        id: 6,
+        title: "من داخل حفلاتنا",
+        thumbnail:
+          "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-party-1581/1080p.mp4",
+      },
+    ],
+
+    catalog: [
+      {
+        icon: "🏛️",
+        title: "القاعة",
+        description:
+          "قاعة واسعة بتصميم أنيق ومساحة مناسبة لمختلف المناسبات.",
+        price: "يبدأ من 1800 ₪",
+        image:
+          "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        icon: "🌸",
+        title: "الديكور",
+        description:
+          "تنسيقات ديكور متناسقة بألوان وتصاميم مختلفة.",
+        price: "يبدأ من 500 ₪",
+        image:
+          "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        icon: "✨",
+        title: "الإضاءة",
+        description:
+          "إضاءة احترافية تضيف أجواء مميزة للقاعة والتصوير.",
+        price: "يبدأ من 300 ₪",
+        image:
+          "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        icon: "💐",
+        title: "الكوشة",
+        description:
+          "تصاميم كوشات متنوعة تناسب طابع الحفل واختيارك.",
+        price: "يبدأ من 450 ₪",
+        image:
+          "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        icon: "🍽️",
+        title: "الضيافة",
+        description:
+          "خدمات ضيافة وتنسيق للطاولات خلال المناسبة.",
+        price: "يبدأ من 250 ₪",
+        image:
+          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85",
+      },
+      {
+        icon: "🎶",
+        title: "الخدمات الإضافية",
+        description:
+          "خيارات إضافية للصوتيات والموسيقى وتجهيزات الحفل.",
+        price: "حسب الطلب",
+        image:
+          "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=85",
+      },
     ],
 
     packages: [
       {
         name: "الباقة الأساسية",
-        price: "2500 ₪",
-        description: "مناسبة للحفلات الصغيرة والمتوسطة.",
-        features: [
-          "استخدام الصالة",
-          "الطاولات والكراسي",
-          "الإضاءة الأساسية",
-          "نظام الصوت",
-        ],
+        price: 1800,
+        description:
+          "القاعة مع التجهيز الأساسي للطاولات والكراسي.",
       },
       {
-        name: "الباقة المميزة",
-        price: "3500 ₪",
-        description: "كل ما تحتاجينه لحفل أكثر أناقة.",
-        features: [
-          "استخدام الصالة",
-          "ديكور كامل",
-          "كوشة زفاف",
-          "إضاءة احترافية",
-          "ضيافة",
-        ],
+        name: "باقة الأفراح",
+        price: 2500,
+        description:
+          "القاعة والديكور والإضاءة مع تنسيق الطاولات.",
+        popular: true,
       },
       {
         name: "الباقة الملكية",
-        price: "5000 ₪",
-        description: "تجربة متكاملة ليوم لا يُنسى.",
-        features: [
-          "ديكور فاخر",
-          "كوشة مميزة",
-          "إضاءة كاملة",
-          "ضيافة",
-          "غرفة للعروس",
-          "تنسيق كامل للقاعة",
-        ],
+        price: 3500,
+        description:
+          "تجهيز متكامل يشمل القاعة والكوشة والديكور والإضاءة والضيافة.",
       },
     ],
 
@@ -83,494 +187,589 @@ const HallDetails = () => {
         name: "سارة أحمد",
         rating: 5,
         comment:
-          "الصالة جميلة جدًا والتنظيم كان رائع، والموظفين متعاونين جدًا.",
-        date: "منذ أسبوعين",
+          "القاعة جميلة جدًا والتنسيق كان مرتب وأنيق، خصوصًا الإضاءة والكوشة.",
+        date: "منذ أسبوع",
       },
       {
         name: "نور محمد",
         rating: 5,
         comment:
-          "المكان واسع ومرتب والتجهيزات ممتازة. تجربة جميلة جدًا.",
-        date: "منذ شهر",
+          "التعامل ممتاز والقاعة كانت مثل الصور تمامًا، تجربة جميلة جدًا.",
+        date: "منذ أسبوعين",
       },
       {
         name: "ريم علي",
         rating: 4,
         comment:
-          "قاعة جميلة جدًا والخدمة ممتازة، أنصح بها.",
-        date: "منذ شهرين",
+          "المكان واسع ومرتب والديكور كان رائع.",
+        date: "منذ شهر",
       },
     ],
   };
 
+  const tabs = [
+    {
+      id: "photos",
+      label: "الصور",
+    },
+    {
+      id: "reels",
+      label: "الريلز",
+    },
+    {
+      id: "catalog",
+      label: "الكتالوج",
+    },
+    {
+      id: "packages",
+      label: "الباقات",
+    },
+    {
+      id: "reviews",
+      label: "التقييمات",
+    },
+  ];
+
   return (
-    <div className="bg-[#fffaf5]">
-
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#fffaf5] text-[#2d2424]"
+    >
       {/* Breadcrumb */}
-      <div className="border-b border-[#eadfd7] bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Link
-              to="/"
-              className="transition hover:text-[#6B3038]"
-            >
-              الرئيسية
-            </Link>
+      <div className="mx-auto max-w-5xl px-4 pt-6">
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <Link
+            to="/"
+            className="transition hover:text-[#6B3038]"
+          >
+            الرئيسية
+          </Link>
 
-            <span>←</span>
+          <ChevronLeft size={15} />
 
-            <Link
-              to="/halls"
-              className="transition hover:text-[#6B3038]"
-            >
-              صالات الأفراح
-            </Link>
+          <Link
+            to="/halls"
+            className="transition hover:text-[#6B3038]"
+          >
+            صالات الأفراح
+          </Link>
 
-            <span>←</span>
+          <ChevronLeft size={15} />
 
-            <span className="text-[#2d2424]">
-              {hall.name}
-            </span>
-          </div>
+          <span className="text-[#6B3038]">
+            {hall.name}
+          </span>
         </div>
       </div>
 
-      {/* Gallery */}
-      <section className="bg-white px-6 pb-8 pt-8">
-        <div className="mx-auto max-w-7xl">
+      <main className="mx-auto max-w-5xl px-4 pb-16">
+        {/* Profile */}
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          {/* Cover */}
+          <div className="relative h-48 overflow-hidden md:h-64">
+            <img
+              src={hall.coverImage}
+              alt={hall.name}
+              className="h-full w-full object-cover"
+            />
 
-          <div className="grid gap-3 lg:grid-cols-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-            {/* Main Image */}
-            <div className="relative h-[420px] overflow-hidden rounded-3xl lg:col-span-2 lg:h-[540px]">
-
-              <img
-                src={hall.images[activeImage]}
-                alt={hall.name}
-                className="h-full w-full object-cover"
+            <button
+              type="button"
+              onClick={() =>
+                setIsFavorite((prev) => !prev)
+              }
+              className="absolute left-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg backdrop-blur transition hover:bg-white"
+            >
+              <Heart
+                size={20}
+                fill={
+                  isFavorite
+                    ? "currentColor"
+                    : "none"
+                }
               />
+            </button>
+          </div>
 
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent p-6">
-                <span className="rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-[#2d2424]">
-                  صالة مميزة
+          {/* Profile Info */}
+          <div className="px-5 pb-7 md:px-8">
+            <div className="relative flex flex-col items-center md:flex-row md:items-end md:justify-between">
+              {/* Profile Image */}
+              <div className="-mt-14">
+                <div className="h-28 w-28 rounded-full border-4 border-white bg-[#f8eee7] p-1 shadow-lg">
+                  <img
+                    src={hall.profileImage}
+                    alt={hall.name}
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-5 flex w-full gap-3 md:w-auto">
+                <button
+                  type="button"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#6B3038] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#57262D] md:flex-none"
+                >
+                  <MessageCircle size={18} />
+                  تواصل
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsFavorite((prev) => !prev)
+                  }
+                  className="flex items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-[#6B3038] transition hover:bg-[#fff8f3]"
+                >
+                  <Heart
+                    size={19}
+                    fill={
+                      isFavorite
+                        ? "currentColor"
+                        : "none"
+                    }
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  className="hidden items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-gray-500 transition hover:bg-[#fff8f3] sm:flex"
+                >
+                  <Share2 size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Name */}
+            <div className="mt-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold md:text-3xl">
+                  {hall.name}
+                </h1>
+
+                <CheckCircle
+                  size={19}
+                  className="fill-[#6B3038] text-white"
+                />
+              </div>
+
+              <p className="mt-1 text-sm text-gray-400">
+                @{hall.username}
+              </p>
+
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={16} />
+                  {hall.location}
+                </span>
+
+                <span className="flex items-center gap-1.5">
+                  <Star
+                    size={16}
+                    className="fill-[#e5c28d] text-[#e5c28d]"
+                  />
+
+                  <strong className="text-[#2d2424]">
+                    {hall.rating}
+                  </strong>
+
+                  ({hall.reviewsCount} تقييم)
                 </span>
               </div>
 
+              <p className="mt-5 max-w-3xl text-sm leading-8 text-gray-500">
+                {hall.description}
+              </p>
+
+              <p className="mt-3 text-sm font-semibold text-[#6B3038]">
+                تبدأ الأسعار من {hall.startingPrice} ₪
+              </p>
             </div>
 
-            {/* Side Images */}
-            <div className="grid gap-3 lg:col-span-2 lg:grid-cols-2">
-
-              {hall.images.slice(1, 4).map((image, index) => (
-                <button
-                  key={image}
-                  onClick={() => setActiveImage(index + 1)}
-                  className="group relative h-[200px] overflow-hidden rounded-3xl lg:h-auto"
-                >
-                  <img
-                    src={image}
-                    alt={`${hall.name} ${index + 2}`}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-
-                  {index === 2 && (
-                    <span className="absolute bottom-4 left-4 rounded-xl bg-black/60 px-4 py-2 text-xs font-semibold text-white backdrop-blur">
-                      عرض جميع الصور
-                    </span>
-                  )}
-                </button>
-              ))}
-
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="px-6 py-10">
-        <div className="mx-auto max-w-7xl">
-
-          <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
-
-            {/* Content */}
-            <div>
-
-              {/* Title */}
-              <div className="flex flex-col gap-5 border-b border-[#eadfd7] pb-8 sm:flex-row sm:items-start sm:justify-between">
-
-                <div>
-                  <div className="flex flex-wrap items-center gap-3">
-
-                    <h1 className="text-3xl font-bold text-[#2d2424] md:text-4xl">
-                      {hall.name}
-                    </h1>
-
-                    <span className="rounded-full bg-[#f8eee7] px-3 py-1 text-xs font-semibold text-[#6B3038]">
-                      موصى بها
-                    </span>
-
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
-
-                    <span>
-                      📍 {hall.location}
-                    </span>
-
-                    <span className="h-1 w-1 rounded-full bg-gray-300" />
-
-                    <span>
-                      👥 {hall.capacity}
-                    </span>
-
-                    <span className="h-1 w-1 rounded-full bg-gray-300" />
-
-                    <span className="font-semibold text-[#2d2424]">
-                      ⭐ {hall.rating}
-                    </span>
-
-                    <span>
-                      ({hall.reviewsCount} تقييم)
-                    </span>
-
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-
-                  <button
-                    onClick={() => setIsFavorite(!isFavorite)}
-                    className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
-                      isFavorite
-                        ? "border-[#6B3038] bg-[#f8eee7] text-[#6B3038]"
-                        : "border-[#eadfd7] bg-white text-gray-500 hover:border-[#6B3038]"
-                    }`}
-                  >
-                    {isFavorite ? "♥" : "♡"}
-                  </button>
-
-                  <button className="flex h-11 w-11 items-center justify-center rounded-full border border-[#eadfd7] bg-white text-gray-500 transition hover:border-[#6B3038]">
-                    ↗
-                  </button>
-
-                </div>
-
-              </div>
-
-              {/* Description */}
-              <div className="border-b border-[#eadfd7] py-10">
-
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  عن الصالة
-                </h2>
-
-                <p className="mt-5 max-w-3xl text-sm leading-8 text-gray-500 md:text-base">
-                  {hall.description}
+            {/* Stats */}
+            <div className="mt-7 grid grid-cols-3 border-y border-[#f0e7e1] py-5 text-center">
+              <div>
+                <p className="text-xl font-bold">
+                  {hall.images.length}
                 </p>
 
+                <p className="mt-1 text-xs text-gray-400">
+                  صورة
+                </p>
               </div>
 
-              {/* Features */}
-              <div className="border-b border-[#eadfd7] py-10">
+              <div className="border-x border-[#f0e7e1]">
+                <p className="text-xl font-bold">
+                  {hall.reels.length}
+                </p>
 
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  المميزات والخدمات
-                </h2>
+                <p className="mt-1 text-xs text-gray-400">
+                  ريلز
+                </p>
+              </div>
 
-                <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+              <div>
+                <p className="text-xl font-bold">
+                  {hall.reviewsCount}
+                </p>
 
-                  {hall.features.map((feature) => (
-                    <div
-                      key={feature}
-                      className="flex items-center gap-3 rounded-2xl bg-white p-4"
+                <p className="mt-1 text-xs text-gray-400">
+                  تقييم
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tabs */}
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          <div className="grid grid-cols-5 overflow-x-auto border-b border-[#f0e7e1]">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() =>
+                  setActiveTab(tab.id)
+                }
+                className={`relative whitespace-nowrap py-4 text-sm font-semibold transition ${
+                  activeTab === tab.id
+                    ? "text-[#6B3038]"
+                    : "text-gray-400 hover:text-[#6B3038]"
+                }`}
+              >
+                {tab.label}
+
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-1/2 h-0.5 w-12 -translate-x-1/2 bg-[#6B3038]" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4 md:p-7">
+            {/* Photos */}
+            {activeTab === "photos" && (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
+                {hall.images.map(
+                  (image, index) => (
+                    <button
+                      key={image}
+                      type="button"
+                      onClick={() =>
+                        setSelectedImage(index)
+                      }
+                      className="group relative aspect-square overflow-hidden rounded-xl bg-[#f8eee7]"
                     >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#f8eee7] text-sm">
-                        ✓
-                      </span>
+                      <img
+                        src={image}
+                        alt={`${hall.name} ${
+                          index + 1
+                        }`}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      />
 
-                      <span className="text-sm font-medium text-[#2d2424]">
-                        {feature}
+                      <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+                    </button>
+                  )
+                )}
+              </div>
+            )}
+
+            {/* Reels */}
+            {activeTab === "reels" && (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
+                {hall.reels.map((reel) => (
+                  <button
+                    key={reel.id}
+                    type="button"
+                    onClick={() =>
+                      setSelectedReel(reel)
+                    }
+                    className="group relative aspect-[9/14] overflow-hidden rounded-2xl bg-[#f8eee7]"
+                  >
+                    <img
+                      src={reel.thumbnail}
+                      alt={reel.title}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg transition group-hover:scale-110">
+                        <Play
+                          size={22}
+                          fill="currentColor"
+                        />
                       </span>
                     </div>
-                  ))}
 
-                </div>
-
+                    <div className="absolute bottom-0 right-0 left-0 p-4 text-right text-white">
+                      <p className="text-sm font-bold">
+                        {reel.title}
+                      </p>
+                    </div>
+                  </button>
+                ))}
               </div>
+            )}
 
-              {/* Packages */}
-              <div className="border-b border-[#eadfd7] py-10">
+            {/* Catalog */}
+            {activeTab === "catalog" && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {hall.catalog.map(
+                  (item) => (
+                    <div
+                      key={item.title}
+                      className="group overflow-hidden rounded-2xl border border-[#eadfd7] bg-white transition hover:border-[#e5c28d] hover:shadow-sm"
+                    >
+                      <div className="relative h-44 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
 
-                <div className="flex items-end justify-between">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-                  <div>
-                    <span className="text-sm font-semibold text-[#a27643]">
-                      الباقات
-                    </span>
+                        <div className="absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-2xl shadow-sm">
+                          {item.icon}
+                        </div>
+                      </div>
 
-                    <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                      اختاري الباقة المناسبة
-                    </h2>
-                  </div>
+                      <div className="p-5">
+                        <h3 className="font-bold">
+                          {item.title}
+                        </h3>
 
-                </div>
+                        <p className="mt-2 text-sm leading-6 text-gray-400">
+                          {item.description}
+                        </p>
 
-                <div className="mt-7 grid gap-5 md:grid-cols-3">
+                        <div className="mt-4 flex items-center justify-between border-t border-[#f0e7e1] pt-4">
+                          <span className="text-sm font-bold text-[#6B3038]">
+                            {item.price}
+                          </span>
 
-                  {hall.packages.map((pkg, index) => (
+                          <button
+                            type="button"
+                            className="rounded-xl border border-[#eadfd7] px-4 py-2 text-xs font-bold text-[#6B3038] transition hover:bg-[#fffaf5]"
+                          >
+                            استفسار
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+
+            {/* Packages */}
+            {activeTab === "packages" && (
+              <div className="grid gap-4 md:grid-cols-3">
+                {hall.packages.map(
+                  (pkg) => (
                     <div
                       key={pkg.name}
-                      className={`rounded-3xl border p-6 ${
-                        index === 1
-                          ? "border-[#6B3038] bg-[#6B3038] text-white shadow-lg"
-                          : "border-[#eadfd7] bg-white"
+                      className={`relative rounded-2xl border p-5 ${
+                        pkg.popular
+                          ? "border-[#6B3038] bg-[#fffaf5]"
+                          : "border-[#eadfd7]"
                       }`}
                     >
-
-                      {index === 1 && (
-                        <span className="inline-block rounded-full bg-[#e5c28d] px-3 py-1 text-xs font-bold text-[#2d2424]">
+                      {pkg.popular && (
+                        <span className="absolute -top-3 right-5 rounded-full bg-[#6B3038] px-3 py-1 text-[11px] font-bold text-white">
                           الأكثر طلبًا
                         </span>
                       )}
 
-                      <h3
-                        className={`mt-3 text-lg font-bold ${
-                          index === 1
-                            ? "text-white"
-                            : "text-[#2d2424]"
-                        }`}
-                      >
+                      <h3 className="font-bold">
                         {pkg.name}
                       </h3>
 
-                      <div
-                        className={`mt-4 text-2xl font-bold ${
-                          index === 1
-                            ? "text-[#e5c28d]"
-                            : "text-[#6B3038]"
-                        }`}
-                      >
-                        {pkg.price}
+                      <div className="mt-4">
+                        <span className="text-2xl font-bold text-[#6B3038]">
+                          {pkg.price}
+                        </span>
+
+                        <span className="mr-1 text-sm text-gray-400">
+                          ₪
+                        </span>
                       </div>
 
-                      <p
-                        className={`mt-3 text-sm leading-7 ${
-                          index === 1
-                            ? "text-white/70"
-                            : "text-gray-500"
-                        }`}
-                      >
+                      <p className="mt-3 text-sm leading-6 text-gray-400">
                         {pkg.description}
                       </p>
 
-                      <div className="mt-5 space-y-3">
-
-                        {pkg.features.map((feature) => (
-                          <div
-                            key={feature}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <span className="text-[#e5c28d]">
-                              ✓
-                            </span>
-
-                            <span
-                              className={
-                                index === 1
-                                  ? "text-white/80"
-                                  : "text-gray-600"
-                              }
-                            >
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-
-                      </div>
-
-                    </div>
-                  ))}
-
-                </div>
-
-              </div>
-
-              {/* Location */}
-              <div className="border-b border-[#eadfd7] py-10">
-
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  موقع الصالة
-                </h2>
-
-                <div className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white">
-
-                  <div className="flex h-64 items-center justify-center bg-[#eee8e2]">
-                    <div className="text-center">
-                      <div className="text-4xl">📍</div>
-
-                      <p className="mt-3 font-semibold text-[#2d2424]">
-                        {hall.location}
-                      </p>
-
-                      <button className="mt-4 rounded-xl bg-[#6B3038] px-5 py-2.5 text-sm font-semibold text-white">
-                        فتح الموقع
+                      <button
+                        type="button"
+                        className="mt-5 w-full rounded-xl bg-[#6B3038] py-3 text-sm font-bold text-white transition hover:bg-[#57262D]"
+                      >
+                        استفسار عن الباقة
                       </button>
                     </div>
-                  </div>
-
-                </div>
-
+                  )
+                )}
               </div>
+            )}
 
-              {/* Reviews */}
-              <div className="py-10">
-
-                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-
-                  <div>
-                    <span className="text-sm font-semibold text-[#a27643]">
-                      آراء العملاء
-                    </span>
-
-                    <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                      ماذا قالت العرائس؟
-                    </h2>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl font-bold text-[#2d2424]">
+            {/* Reviews */}
+            {activeTab === "reviews" && (
+              <div className="space-y-4">
+                <div className="mb-6 flex items-center gap-4 rounded-2xl bg-[#fffaf5] p-5">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold">
                       {hall.rating}
-                    </span>
+                    </p>
 
-                    <div>
-                      <div className="text-sm">
-                        ⭐⭐⭐⭐⭐
-                      </div>
-
-                      <span className="text-xs text-gray-400">
-                        {hall.reviewsCount} تقييم
-                      </span>
+                    <div className="mt-1 text-sm">
+                      ⭐⭐⭐⭐⭐
                     </div>
-                  </div>
 
+                    <p className="mt-1 text-xs text-gray-400">
+                      {hall.reviewsCount} تقييم
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-7 space-y-4">
-
-                  {hall.reviews.map((review) => (
+                {hall.reviews.map(
+                  (review) => (
                     <div
                       key={review.name}
-                      className="rounded-3xl border border-[#eadfd7] bg-white p-6"
+                      className="rounded-2xl border border-[#eadfd7] p-5"
                     >
-
-                      <div className="flex items-start justify-between">
-
+                      <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-bold text-[#2d2424]">
+                          <h3 className="font-bold">
                             {review.name}
                           </h3>
 
-                          <div className="mt-1 text-sm">
-                            {"⭐".repeat(review.rating)}
-                          </div>
+                          <p className="mt-1 text-xs text-gray-400">
+                            {review.date}
+                          </p>
                         </div>
 
-                        <span className="text-xs text-gray-400">
-                          {review.date}
+                        <span className="text-sm">
+                          {"⭐".repeat(
+                            review.rating
+                          )}
                         </span>
-
                       </div>
 
                       <p className="mt-4 text-sm leading-7 text-gray-500">
                         {review.comment}
                       </p>
-
                     </div>
-                  ))}
-
-                </div>
-
+                  )
+                )}
               </div>
-
-            </div>
-
-            {/* Booking Card */}
-            <aside className="lg:relative">
-
-              <div className="sticky top-6 rounded-3xl border border-[#eadfd7] bg-white p-6 shadow-lg">
-
-                <span className="text-sm text-gray-400">
-                  سعر الباقة يبدأ من
-                </span>
-
-                <div className="mt-2 flex items-end gap-2">
-
-                  <span className="text-3xl font-bold text-[#6B3038]">
-                    {hall.price} ₪
-                  </span>
-
-                  <span className="pb-1 text-sm text-gray-400">
-                    للحفل
-                  </span>
-
-                </div>
-
-                <div className="mt-6 border-t border-[#eadfd7] pt-6">
-
-                  <label className="mb-2 block text-sm font-semibold text-[#2d2424]">
-                    تاريخ الحفل
-                  </label>
-
-                  <input
-                    type="date"
-                    className="w-full rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-4 py-3 text-sm outline-none focus:border-[#6B3038]"
-                  />
-
-                </div>
-
-                <button className="mt-5 w-full rounded-xl bg-[#6B3038] py-4 text-sm font-bold text-white transition hover:bg-[#57262D]">
-                  احجزي موعدًا
-                </button>
-
-                <button className="mt-3 w-full rounded-xl border border-[#6B3038] py-4 text-sm font-bold text-[#6B3038] transition hover:bg-[#f8eee7]">
-                  أرسلي استفسارًا
-                </button>
-
-                <p className="mt-5 text-center text-xs leading-6 text-gray-400">
-                  لا يتم تأكيد الحجز إلا بعد التواصل مع صاحب الصالة.
-                </p>
-
-                <div className="mt-6 rounded-2xl bg-[#f8f4f0] p-4">
-
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                      💬
-                    </span>
-
-                    <div>
-                      <p className="text-sm font-bold text-[#2d2424]">
-                        تحتاجين مساعدة؟
-                      </p>
-
-                      <p className="mt-1 text-xs text-gray-400">
-                        تواصلي معنا وسنساعدك.
-                      </p>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </aside>
-
+            )}
           </div>
+        </section>
+      </main>
 
+      {/* Image Modal */}
+      {selectedImage !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedImage(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedImage((current) =>
+                current === 0
+                  ? hall.images.length - 1
+                  : current - 1
+              );
+            }}
+            className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:right-8"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          <img
+            src={hall.images[selectedImage]}
+            alt={hall.name}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+            className="max-h-[85vh] max-w-full rounded-xl object-contain"
+          />
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedImage((current) =>
+                current === hall.images.length - 1
+                  ? 0
+                  : current + 1
+              );
+            }}
+            className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:left-8"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
+            {selectedImage + 1} / {hall.images.length}
+          </div>
         </div>
-      </section>
+      )}
 
+      {/* Reel Modal */}
+      {selectedReel && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+          onClick={() => setSelectedReel(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedReel(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
+
+          <div
+            className="relative h-[80vh] w-full max-w-md overflow-hidden rounded-2xl bg-black"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <video
+              src={selectedReel.video}
+              poster={selectedReel.thumbnail}
+              controls
+              autoPlay
+              playsInline
+              className="h-full w-full object-contain"
+            />
+
+            <div className="absolute bottom-0 right-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-12">
+              <h3 className="font-bold text-white">
+                {selectedReel.title}
+              </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

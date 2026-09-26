@@ -1,482 +1,790 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  UserRound,
+  Store,
+  Eye,
+  EyeOff,
+  Check,
+  ArrowLeft,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
+
+import logo from "../../assets/logo.ico";
+import { registerUser } from "../../api/authApi";
 
 const Register = () => {
   const navigate = useNavigate();
 
-  const [accountType, setAccountType] = useState("customer");
+  const [accountType, setAccountType] = useState("visitor");
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    whatsapp: "",
+    serviceType: "",
     password: "",
     confirmPassword: "",
-    agreeToTerms: false,
+    bussnisename:'',
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
+  const [result, setResult] = useState({
+    type: "",
+    message: "",
+  });
+
+  const serviceTypes = [
+    { value: "hall", label: "قاعات أفراح" },
+    { value: "beauty", label: "صالونات وتجميل" },
+    { value: "bridal-dresses", label: "فساتين زفاف" },
+    { value: "groom-suits", label: "بدلات رجالية" },
+    { value: "photographers", label: "تصوير" },
+    { value: "wedding-cars", label: "سيارات أفراح" },
+  ];
+
+  // تغيير نوع الحساب
+  const handleAccountType = (type) => {
+    setAccountType(type);
+
+    // تنظيف بيانات النوع الآخر
+    setFormData((prev) => ({
+      ...prev,
+      phone: "",
+      whatsapp: "",
+      serviceType: "",
+    }));
+
+    setResult({
+      type: "",
+      message: "",
+    });
+  };
+
+  // تغيير الحقول
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
 
-    setError("");
+    if (result.message) {
+      setResult({
+        type: "",
+        message: "",
+      });
+    }
   };
 
+  // قوة كلمة المرور
+  const getPasswordStrength = () => {
+    const password = formData.password;
+
+    if (!password) {
+      return {
+        label: "",
+        width: "0%",
+      };
+    }
+
+    if (password.length < 6) {
+      return {
+        label: "ضعيفة",
+        width: "30%",
+      };
+    }
+
+    if (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[^A-Za-z0-9]/.test(password)
+    ) {
+      return {
+        label: "قوية",
+        width: "100%",
+      };
+    }
+
+    return {
+      label: "متوسطة",
+      width: "65%",
+    };
+  };
+
+  const passwordStrength = getPasswordStrength();
+
+  // إرسال النموذج
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      setError("يرجى تعبئة جميع الحقول المطلوبة.");
+    setResult({
+      type: "",
+      message: "",
+    });
+
+    // الاسم
+    if (!formData.name.trim()) {
+      setResult({
+        type: "error",
+        message:
+          accountType === "provider"
+            ? "يرجى إدخال اسم النشاط / مقدم الخدمة."
+            : "يرجى إدخال اسمك.",
+      });
+      return;
+    }
+
+    // البريد
+    if (!formData.email.trim()) {
+      setResult({
+        type: "error",
+        message: "يرجى إدخال البريد الإلكتروني.",
+      });
+      return;
+    }
+
+    // كلمة المرور
+    if (!formData.password) {
+      setResult({
+        type: "error",
+        message: "يرجى إدخال كلمة المرور.",
+      });
       return;
     }
 
     if (formData.password.length < 6) {
-      setError("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
+      setResult({
+        type: "error",
+        message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
+      });
       return;
     }
 
+    // تأكيد كلمة المرور
     if (formData.password !== formData.confirmPassword) {
-      setError("كلمتا المرور غير متطابقتين.");
+      setResult({
+        type: "error",
+        message: "كلمتا المرور غير متطابقتين.",
+      });
       return;
     }
 
-    if (!formData.agreeToTerms) {
-      setError("يرجى الموافقة على الشروط والأحكام.");
-      return;
+    // تحقق خاص بمقدم الخدمة فقط
+    if (accountType === "provider") {
+      if (!formData.phone.trim()) {
+        setResult({
+          type: "error",
+          message: "يرجى إدخال رقم الهاتف.",
+        });
+        return;
+      }
+
+      if (!formData.serviceType) {
+        setResult({
+          type: "error",
+          message: "يرجى اختيار نوع الخدمة.",
+        });
+        return;
+      }
     }
 
     try {
       setLoading(true);
 
-      // مؤقتًا إلى أن نربط Backend
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      /*
+       * مهم:
+       * حساب الزائرة يرسل فقط بيانات الزائرة.
+       * حساب مقدم الخدمة يرسل البيانات التجارية المطلوبة.
+       */
 
-      const userData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        role: accountType,
-      };
+      let payload;
 
-      console.log("Register Data:", userData);
+      if (accountType === "visitor") {
+        payload = {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+          role: "visitor",
+        };
+      } else {
+        payload = {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+          role: "provider",
+          phone: formData.phone.trim(),
+          whatsapp: formData.whatsapp.trim(),
+          serviceType: formData.serviceType,
+        };
+      }
 
-      alert("تم إنشاء حسابك بنجاح 🤍");
+      await registerUser(payload);
 
-      navigate("/login");
-    } catch (err) {
-      setError("حدث خطأ أثناء إنشاء الحساب، حاول مرة أخرى.");
+      // نجاح مقدم الخدمة
+      if (accountType === "provider") {
+        setResult({
+          type: "success",
+          message:
+            "تم إرسال طلبك بنجاح. حسابك الآن قيد المراجعة من إدارة زَفَاف.",
+        });
+
+        setTimeout(() => {
+          navigate("/pending-approval");
+        }, 1800);
+
+        return;
+      }
+
+      // نجاح الزائرة
+      setResult({
+        type: "success",
+        message: "تم إنشاء حسابك بنجاح. أهلًا بكِ في زَفَاف.",
+      });
+
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 1500);
+    } catch (error) {
+      console.error("Register error:", error);
+
+      const message =
+        error?.response?.data?.message ||
+        "حدث خطأ أثناء إنشاء الحساب. حاولي مرة أخرى.";
+
+      setResult({
+        type: "error",
+        message,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-[#FFFAF5] px-4 py-10 md:px-8">
-      <div className="mx-auto flex min-h-[760px] max-w-6xl overflow-hidden rounded-[32px] border border-[#eadbd2] bg-white shadow-[0_25px_80px_rgba(75,38,40,0.12)]">
-        {/* ================= LEFT SIDE ================= */}
-        <div className="relative hidden w-[42%] overflow-hidden bg-[#6B3038] lg:block">
-          {/* Decorative circles */}
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border border-[#e5c28d]/20" />
-          <div className="absolute -right-10 -top-10 h-52 w-52 rounded-full border border-[#e5c28d]/20" />
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#f8eee7] px-4 py-6 sm:px-6 lg:py-10"
+    >
+      <div className="mx-auto flex min-h-[calc(100vh-48px)] max-w-6xl items-center justify-center">
+        <div className="grid w-full overflow-hidden rounded-[34px] bg-white shadow-[0_25px_80px_rgba(70,35,30,0.12)] lg:grid-cols-[0.82fr_1.18fr]">
 
-          <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full border border-white/10" />
+          {/* =========================
+              الصورة الجانبية
+          ========================== */}
+          <div className="relative hidden min-h-[780px] overflow-hidden lg:block">
+            <img
+              src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85"
+              alt="زفاف"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
 
-          {/* Content */}
-          <div className="relative flex h-full flex-col justify-between p-12">
-            <div>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-3xl font-bold text-[#e5c28d]"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#e5c28d]/50 text-xl">
-                  ه
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2d181b]/90 via-[#5c3036]/25 to-transparent" />
+
+            <div className="absolute inset-x-0 bottom-0 p-10 text-white">
+              <div className="mb-5 flex items-center gap-2">
+                <img
+                  src={logo}
+                  alt="زفاف"
+                  className="h-11 w-11 object-contain brightness-0 invert"
+                />
+
+                <span className="text-2xl font-bold tracking-wide">
+                  زَفَاف
                 </span>
-
-                هنا
-              </Link>
-
-              <div className="mt-24">
-                <span className="mb-5 inline-block rounded-full border border-[#e5c28d]/30 bg-white/5 px-4 py-2 text-sm text-[#e5c28d]">
-                  ✦ أهلاً بكِ في هنا
-                </span>
-
-                <h1 className="max-w-md text-5xl font-bold leading-[1.35] text-white">
-                  ابدئي رحلة
-                  <br />
-                  <span className="text-[#e5c28d]">فرحك من هنا</span>
-                </h1>
-
-                <p className="mt-7 max-w-md text-base leading-8 text-white/70">
-                  أنشئي حسابك واكتشفي أفضل صالات الأفراح، فساتين العرائس،
-                  الكوافيرات، المصورين وكل تفاصيل يومك المميز.
-                </p>
               </div>
-            </div>
 
-            {/* Bottom quote */}
-            <div className="border-t border-white/10 pt-7">
-              <p className="text-lg leading-8 text-white/80">
-                "لأن أجمل الذكريات تبدأ من
-                <span className="mx-1 text-[#e5c28d]">هنا</span>."
+              <h2 className="max-w-sm text-4xl font-bold leading-[1.35]">
+                ابدئي رحلتك نحو
+                <span className="block text-[#e5c28d]">
+                  يومك المميز
+                </span>
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-7 text-white/75">
+                اكتشفي أفضل خدمات الزفاف، أو انضمي إلى زَفَاف لتعرضي نشاطك
+                وتوصلي بخدماتك إلى المقبلين على الزواج.
               </p>
 
-              <div className="mt-4 flex items-center gap-3">
-                <div className="h-px w-10 bg-[#e5c28d]" />
-                <span className="text-sm text-white/50">
-                  هنا للزفاف
-                </span>
+              <div className="mt-8 flex items-center gap-3 text-xs text-white/70">
+                <span className="h-px w-10 bg-[#e5c28d]" />
+                كل تفاصيل يومك في مكان واحد
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ================= FORM SIDE ================= */}
-        <div className="flex flex-1 items-center justify-center px-5 py-10 sm:px-10 lg:px-14">
-          <div className="w-full max-w-xl">
-            {/* Mobile Logo */}
-            <div className="mb-8 text-center lg:hidden">
+          {/* =========================
+              الجانب الخاص بالفورم
+          ========================== */}
+          <div className="px-5 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
+
+            {/* Header */}
+            <div className="mb-8 flex items-center justify-between">
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 text-3xl font-bold text-[#6B3038]"
+                className="flex items-center gap-2 lg:hidden"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#6B3038]/30">
-                  ه
+                <img
+                  src={logo}
+                  alt="زفاف"
+                  className="h-9 w-9 object-contain"
+                />
+
+                <span className="text-xl font-bold text-[#6B3038]">
+                  زَفَاف
                 </span>
-                هنا
+              </Link>
+
+              <Link
+                to="/"
+                className="mr-auto flex items-center gap-1 text-xs font-medium text-gray-400 transition hover:text-[#6B3038]"
+              >
+                العودة للرئيسية
+                <ArrowLeft size={15} />
               </Link>
             </div>
 
-            {/* Heading */}
+            {/* العنوان */}
             <div className="mb-8">
-              <p className="mb-2 text-sm font-medium text-[#b18456]">
-                أهلاً بك في هنا ✦
+              <p className="mb-2 text-sm font-bold text-[#6B3038]">
+                أهلًا بكِ في زَفَاف
               </p>
 
-              <h2 className="text-3xl font-bold text-[#2d2424] md:text-4xl">
-                إنشاء حساب جديد
-              </h2>
+              <h1 className="text-3xl font-bold text-[#2d2424]">
+                إنشاء حساب
+              </h1>
 
-              <p className="mt-3 text-sm leading-7 text-[#8b7b7b]">
-                أنشئي حسابك وابدئي باكتشاف كل ما تحتاجينه لفرحك.
+              <p className="mt-2 text-sm leading-6 text-gray-500">
+                اختاري نوع الحساب وابدئي بخطوتك الأولى.
               </p>
             </div>
 
-            {/* Account Type */}
-            <div className="mb-7">
-              <label className="mb-3 block text-sm font-semibold text-[#3b2b2c]">
-                نوع الحساب
-              </label>
+            {/* =========================
+                خطوات التسجيل
+            ========================== */}
+            <div className="mb-8 flex items-center">
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6B3038] text-xs font-bold text-white">
+                  01
+                </div>
+
+                <span className="text-xs font-semibold text-[#6B3038]">
+                  نوع الحساب
+                </span>
+              </div>
+
+              <div className="mx-3 h-px flex-1 bg-[#eadbd1]" />
+
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e5c28d] text-xs font-bold text-[#6B3038]">
+                  02
+                </div>
+
+                <span className="text-xs font-semibold text-[#6B3038]">
+                  البيانات
+                </span>
+              </div>
+            </div>
+
+            {/* =========================
+                اختيار نوع الحساب
+            ========================== */}
+            <div className="mb-8">
+              <p className="mb-3 text-sm font-bold text-[#2d2424]">
+                أريد إنشاء حساب كـ
+              </p>
 
               <div className="grid grid-cols-2 gap-3">
-                {/* Customer */}
+
+                {/* زائرة */}
                 <button
                   type="button"
-                  onClick={() => setAccountType("customer")}
-                  className={`group rounded-2xl border p-4 text-right transition-all duration-300 ${
-                    accountType === "customer"
-                      ? "border-[#6B3038] bg-[#6B3038]/5 shadow-sm"
-                      : "border-[#eadfd9] bg-white hover:border-[#c8aaa0]"
+                  onClick={() => handleAccountType("visitor")}
+                  className={`relative rounded-2xl border p-4 text-right transition-all duration-200 ${
+                    accountType === "visitor"
+                      ? "border-[#6B3038] bg-[#f8eee7]"
+                      : "border-[#eadbd1] bg-white hover:border-[#cdaea1]"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl transition ${
-                        accountType === "customer"
-                          ? "bg-[#6B3038] text-white"
-                          : "bg-[#f8f1ec] text-[#6B3038]"
-                      }`}
-                    >
-                      ♡
+                  {accountType === "visitor" && (
+                    <div className="absolute left-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#6B3038] text-white">
+                      <Check size={12} strokeWidth={3} />
                     </div>
+                  )}
 
-                    <div>
-                      <p className="font-bold text-[#2d2424]">
-                        عميلة
-                      </p>
-                      <p className="mt-1 text-xs text-[#918383]">
-                        أبحث وأحجز خدمات الزفاف
-                      </p>
-                    </div>
+                  <div
+                    className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${
+                      accountType === "visitor"
+                        ? "bg-[#6B3038] text-white"
+                        : "bg-[#f8eee7] text-[#6B3038]"
+                    }`}
+                  >
+                    <UserRound size={19} strokeWidth={1.8} />
                   </div>
+
+                  <p className="text-sm font-bold text-[#2d2424]">
+                    زائرة
+                  </p>
+
+                  <p className="mt-1 text-[11px] leading-5 text-gray-400">
+                    للتصفح وحفظ المفضلة
+                  </p>
                 </button>
 
-                {/* Provider */}
+                {/* مقدم خدمة */}
                 <button
                   type="button"
-                  onClick={() => setAccountType("provider")}
-                  className={`group rounded-2xl border p-4 text-right transition-all duration-300 ${
+                  onClick={() => handleAccountType("provider")}
+                  className={`relative rounded-2xl border p-4 text-right transition-all duration-200 ${
                     accountType === "provider"
-                      ? "border-[#6B3038] bg-[#6B3038]/5 shadow-sm"
-                      : "border-[#eadfd9] bg-white hover:border-[#c8aaa0]"
+                      ? "border-[#6B3038] bg-[#f8eee7]"
+                      : "border-[#eadbd1] bg-white hover:border-[#cdaea1]"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl transition ${
-                        accountType === "provider"
-                          ? "bg-[#6B3038] text-white"
-                          : "bg-[#f8f1ec] text-[#6B3038]"
-                      }`}
-                    >
-                      ✦
+                  {accountType === "provider" && (
+                    <div className="absolute left-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#6B3038] text-white">
+                      <Check size={12} strokeWidth={3} />
                     </div>
+                  )}
 
-                    <div>
-                      <p className="font-bold text-[#2d2424]">
-                        صاحب خدمة
-                      </p>
-                      <p className="mt-1 text-xs text-[#918383]">
-                        أضيف وأدير خدماتي
-                      </p>
-                    </div>
+                  <div
+                    className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${
+                      accountType === "provider"
+                        ? "bg-[#6B3038] text-white"
+                        : "bg-[#f8eee7] text-[#6B3038]"
+                    }`}
+                  >
+                    <Store size={19} strokeWidth={1.8} />
                   </div>
+
+                  <p className="text-sm font-bold text-[#2d2424]">
+                    مقدم خدمة
+                  </p>
+
+                  <p className="mt-1 text-[11px] leading-5 text-gray-400">
+                    لعرض نشاطك وخدماتك
+                  </p>
                 </button>
               </div>
             </div>
 
-            {/* Error */}
-            {error && (
-              <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-                {error}
-              </div>
-            )}
+            {/* =========================
+                الفورم
+            ========================== */}
+            <form onSubmit={handleSubmit}>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name + Phone */}
-              <div className="grid gap-5 sm:grid-cols-2">
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-semibold text-[#3b2b2c]"
-                  >
-                    الاسم الكامل
-                  </label>
+              {/* عنوان البيانات */}
+              <div className="mb-5">
+                <h2 className="text-lg font-bold text-[#2d2424]">
+                  {accountType === "provider"
+                    ? "بيانات النشاط"
+                    : "بياناتك الشخصية"}
+                </h2>
 
-                  <div className="relative">
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a58f91]">
-                      ◯
-                    </span>
-
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="مثال: سارة أحمد"
-                      className="h-13 w-full rounded-xl border border-[#e8ddd7] bg-[#fffdfb] pr-11 pl-4 text-sm text-[#2d2424] outline-none transition placeholder:text-[#b9aaaa] focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
-                    />
-                  </div>
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="mb-2 block text-sm font-semibold text-[#3b2b2c]"
-                  >
-                    رقم الجوال
-                  </label>
-
-                  <div className="relative">
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a58f91]">
-                      ☎
-                    </span>
-
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="059 xxx xxxx"
-                      className="h-13 w-full rounded-xl border border-[#e8ddd7] bg-[#fffdfb] pr-11 pl-4 text-sm text-[#2d2424] outline-none transition placeholder:text-[#b9aaaa] focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
-                    />
-                  </div>
-                </div>
+                <p className="mt-1 text-xs text-gray-400">
+                  {accountType === "provider"
+                    ? "أدخلي بيانات نشاطك كما تريدين ظهورها على المنصة."
+                    : "أدخلي بياناتك لإنشاء حسابك الشخصي."}
+                </p>
               </div>
 
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-[#3b2b2c]"
-                >
+              {/* الاسم */}
+              <div className="mb-5">
+                <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                  {accountType === "provider"
+                    ? "اسم النشاط / مقدم الخدمة"
+                    : "الاسم"}
+                </label>
+
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder={
+                    accountType === "provider"
+                      ? "مثال: قاعة ليالي العمر"
+                      : "مثال: سارة أحمد"
+                  }
+                  className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                />
+              </div>
+
+              {/* البريد الإلكتروني */}
+              <div className="mb-5">
+                <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   البريد الإلكتروني
                 </label>
 
-                <div className="relative">
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a58f91]">
-                    @
-                  </span>
-
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="example@email.com"
-                    className="h-13 w-full rounded-xl border border-[#e8ddd7] bg-[#fffdfb] pr-11 pl-4 text-sm text-[#2d2424] outline-none transition placeholder:text-[#b9aaaa] focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
-                  />
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="example@email.com"
+                  dir="ltr"
+                  className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                />
               </div>
 
-              {/* Password */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="mb-2 block text-sm font-semibold text-[#3b2b2c]"
-                >
+              {/* =========================
+                  حقول مقدم الخدمة فقط
+              ========================== */}
+              {accountType === "provider" && (
+                <>
+                  {/* الهاتف والواتساب */}
+                  <div className="mb-5 grid gap-4 sm:grid-cols-2">
+
+                    {/* الهاتف */}
+                    <div>
+                      <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                        رقم الهاتف
+                      </label>
+
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="059xxxxxxx"
+                        dir="ltr"
+                        className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                      />
+                    </div>
+
+                    {/* واتساب */}
+                    <div>
+                      <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                        واتساب
+
+                        <span className="mr-1 font-normal text-gray-400">
+                          (اختياري)
+                        </span>
+                      </label>
+
+                      <input
+                        type="tel"
+                        name="whatsapp"
+                        value={formData.whatsapp}
+                        onChange={handleChange}
+                        placeholder="059xxxxxxx"
+                        dir="ltr"
+                        className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                      />
+                    </div>
+                  </div>
+
+                  {/* نوع الخدمة */}
+                  <div className="mb-5">
+                    <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                      نوع الخدمة
+                    </label>
+
+                    <select
+                      name="serviceType"
+                      value={formData.serviceType}
+                      onChange={handleChange}
+                      className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm text-[#2d2424] outline-none transition focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                    >
+                      <option value="">
+                        اختاري نوع الخدمة
+                      </option>
+
+                      {serviceTypes.map((service) => (
+                        <option
+                          key={service.value}
+                          value={service.value}
+                        >
+                          {service.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* =========================
+                  كلمة المرور
+              ========================== */}
+              <div className="mb-5">
+                <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   كلمة المرور
                 </label>
 
                 <div className="relative">
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a58f91]">
-                    ◆
-                  </span>
-
                   <input
-                    id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
+                    name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="6 أحرف على الأقل"
-                    className="h-13 w-full rounded-xl border border-[#e8ddd7] bg-[#fffdfb] px-12 text-sm text-[#2d2424] outline-none transition placeholder:text-[#b9aaaa] focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#8e7779] transition hover:text-[#6B3038]"
-                  >
-                    {showPassword ? "إخفاء" : "إظهار"}
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="mb-2 block text-sm font-semibold text-[#3b2b2c]"
-                >
-                  تأكيد كلمة المرور
-                </label>
-
-                <div className="relative">
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a58f91]">
-                    ◆
-                  </span>
-
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    placeholder="أعيدي كتابة كلمة المرور"
-                    className="h-13 w-full rounded-xl border border-[#e8ddd7] bg-[#fffdfb] px-12 text-sm text-[#2d2424] outline-none transition placeholder:text-[#b9aaaa] focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+                    placeholder="أدخلي كلمة مرور قوية"
+                    dir="ltr"
+                    className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 pl-12 text-sm outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
                   />
 
                   <button
                     type="button"
                     onClick={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
+                      setShowPassword((prev) => !prev)
                     }
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#8e7779] transition hover:text-[#6B3038]"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-[#6B3038]"
                   >
-                    {showConfirmPassword ? "إخفاء" : "إظهار"}
+                    {showPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
                   </button>
                 </div>
+
+                {/* قوة كلمة المرور */}
+                {formData.password && (
+                  <div className="mt-2">
+                    <div className="h-1 overflow-hidden rounded-full bg-[#eee5df]">
+                      <div
+                        className="h-full rounded-full bg-[#6B3038] transition-all duration-300"
+                        style={{
+                          width: passwordStrength.width,
+                        }}
+                      />
+                    </div>
+
+                    <p className="mt-1 text-[10px] text-gray-400">
+                      قوة كلمة المرور:{" "}
+                      <span className="font-bold text-[#6B3038]">
+                        {passwordStrength.label}
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* Terms */}
-              <label className="flex cursor-pointer items-start gap-3 pt-1">
-                <input
-                  type="checkbox"
-                  name="agreeToTerms"
-                  checked={formData.agreeToTerms}
-                  onChange={handleChange}
-                  className="mt-1 h-4 w-4 cursor-pointer accent-[#6B3038]"
-                />
+              {/* =========================
+                  تأكيد كلمة المرور
+              ========================== */}
+              <div className="mb-6">
+                <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                  تأكيد كلمة المرور
+                </label>
 
-                <span className="text-xs leading-6 text-[#8b7b7b]">
-                  أوافق على{" "}
+                <div className="relative">
+                  <input
+                    type={
+                      showConfirmPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="أعيدي كتابة كلمة المرور"
+                    dir="ltr"
+                    className={`h-12 w-full rounded-xl border bg-[#fffdfb] px-4 pl-12 text-sm outline-none transition placeholder:text-gray-300 focus:ring-4 ${
+                      formData.confirmPassword &&
+                      formData.confirmPassword !==
+                        formData.password
+                        ? "border-red-300 focus:border-red-400 focus:ring-red-400/5"
+                        : "border-[#eadbd1] focus:border-[#6B3038] focus:ring-[#6B3038]/5"
+                    }`}
+                  />
+
                   <button
                     type="button"
-                    className="font-semibold text-[#6B3038] hover:underline"
+                    onClick={() =>
+                      setShowConfirmPassword(
+                        (prev) => !prev
+                      )
+                    }
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-[#6B3038]"
                   >
-                    الشروط والأحكام
-                  </button>{" "}
-                  و{" "}
-                  <button
-                    type="button"
-                    className="font-semibold text-[#6B3038] hover:underline"
-                  >
-                    سياسة الخصوصية
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
                   </button>
-                </span>
-              </label>
+                </div>
 
-              {/* Submit */}
+                {formData.confirmPassword &&
+                  formData.confirmPassword !==
+                    formData.password && (
+                    <p className="mt-2 text-[11px] text-red-500">
+                      كلمتا المرور غير متطابقتين.
+                    </p>
+                  )}
+              </div>
+
+              {/* =========================
+                  رسالة النتيجة
+              ========================== */}
+              {result.message && (
+                <div
+                  className={`mb-5 flex items-start gap-3 rounded-xl border p-4 ${
+                    result.type === "success"
+                      ? "border-green-100 bg-green-50 text-green-700"
+                      : "border-red-100 bg-red-50 text-red-600"
+                  }`}
+                >
+                  {result.type === "success" ? (
+                    <CheckCircle2
+                      size={18}
+                      className="mt-0.5 shrink-0"
+                    />
+                  ) : (
+                    <AlertCircle
+                      size={18}
+                      className="mt-0.5 shrink-0"
+                    />
+                  )}
+
+                  <p className="text-xs leading-6">
+                    {result.message}
+                  </p>
+                </div>
+              )}
+
+              {/* =========================
+                  زر التسجيل
+              ========================== */}
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative mt-2 flex h-14 w-full items-center justify-center overflow-hidden rounded-xl bg-[#6B3038] font-semibold text-white shadow-[0_10px_25px_rgba(107,48,56,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#57262d] hover:shadow-[0_14px_30px_rgba(107,48,56,0.28)] disabled:cursor-not-allowed disabled:opacity-70"
+                className="group flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#6B3038] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#6B3038]/10 transition hover:bg-[#57262D] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                {loading
+                  ? "جارٍ إنشاء الحساب..."
+                  : accountType === "provider"
+                  ? "إرسال طلب التسجيل"
+                  : "إنشاء الحساب"}
 
-                {loading ? (
-                  <div className="flex items-center gap-3">
-                    <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    جاري إنشاء الحساب...
-                  </div>
-                ) : (
-                  <span className="relative flex items-center gap-2">
-                    إنشاء حساب
-                    <span className="text-[#e5c28d]">←</span>
-                  </span>
+                {!loading && (
+                  <ArrowLeft
+                    size={17}
+                    className="transition group-hover:-translate-x-1"
+                  />
                 )}
               </button>
             </form>
 
-            {/* Login */}
-            <div className="mt-7 text-center">
-              <p className="text-sm text-[#8b7b7b]">
-                لديك حساب بالفعل؟{" "}
+            {/* تسجيل الدخول */}
+            <div className="mt-6 border-t border-[#eee5df] pt-6 text-center">
+              <p className="text-xs text-gray-400">
+                لديكِ حساب بالفعل؟{" "}
                 <Link
-                  to="/login"
-                  className="font-bold text-[#6B3038] transition hover:text-[#b18456]"
+                  to="/auth/login"
+                  className="font-bold text-[#6B3038] transition hover:underline"
                 >
                   تسجيل الدخول
                 </Link>
               </p>
-            </div>
-
-            {/* Footer mini text */}
-            <div className="mt-8 flex items-center justify-center gap-3 text-xs text-[#b1a2a2]">
-              <span className="h-px w-10 bg-[#eadfd9]" />
-              <span>هنا للزفاف</span>
-              <span className="h-px w-10 bg-[#eadfd9]" />
             </div>
           </div>
         </div>
@@ -486,3 +794,4 @@ const Register = () => {
 };
 
 export default Register;
+

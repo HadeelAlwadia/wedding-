@@ -1,73 +1,140 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import {
+  Heart,
+  MapPin,
+  Star,
+  MessageCircle,
+  Share2,
+  CheckCircle,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Play,
+} from "lucide-react";
 
 const PhotographerDetails = () => {
   const { id } = useParams();
 
-  const [activeImage, setActiveImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [activeTab, setActiveTab] = useState("photos");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedReel, setSelectedReel] = useState(null);
 
-  // بيانات تجريبية مؤقتة
   const photographer = {
     id,
+
     name: "عدسة ليان",
+    username: "adset_layan",
     location: "غزة - الرمال",
     rating: 4.9,
     reviewsCount: 142,
     startingPrice: 1200,
 
-    description:
-      "متخصصون في تصوير حفلات الزفاف وتوثيق أجمل التفاصيل بأسلوب أنيق وطبيعي. نهتم بالمشاعر واللحظات العفوية لنقدم لكِ صورًا تبقى ذكرى جميلة لسنوات طويلة.",
+    profileImage:
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=500&q=85",
 
     coverImage:
       "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=90",
 
+    description:
+      "متخصصون في تصوير حفلات الزفاف وتوثيق أجمل التفاصيل بأسلوب أنيق وطبيعي. نهتم بالمشاعر واللحظات العفوية لنقدم لكِ صورًا تبقى ذكرى جميلة لسنوات طويلة.",
+
     images: [
-      "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=90",
-      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=90",
-      "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=1600&q=90",
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=90",
-      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1600&q=90",
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=90",
+      "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=90",
     ],
 
-    services: [
+    reels: [
+      {
+        id: 1,
+        title: "لحظات من حفل زفاف",
+        thumbnail:
+          "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-a-wedding-couple-1576/1080p.mp4",
+      },
+      {
+        id: 2,
+        title: "جلسة العروسين",
+        thumbnail:
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-bride-and-groom-1578/1080p.mp4",
+      },
+      {
+        id: 3,
+        title: "تفاصيل يوم الزفاف",
+        thumbnail:
+          "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-dance-1577/1080p.mp4",
+      },
+      {
+        id: 4,
+        title: "أجمل اللحظات",
+        thumbnail:
+          "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-couple-1579/1080p.mp4",
+      },
+      {
+        id: 5,
+        title: "من خلف الكواليس",
+        thumbnail:
+          "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-wedding-1580/1080p.mp4",
+      },
+      {
+        id: 6,
+        title: "جلسة تصوير خارجية",
+        thumbnail:
+          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-couple-walking-1581/1080p.mp4",
+      },
+    ],
+
+    catalog: [
       {
         icon: "📸",
         title: "تصوير فوتوغرافي",
-        description:
-          "توثيق كامل للحفل وأجمل اللحظات والتفاصيل.",
+        description: "توثيق كامل للحفل وأجمل اللحظات.",
+        price: "يبدأ من 1200 ₪",
+        image:
+          "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85",
       },
       {
         icon: "🎥",
         title: "تصوير فيديو",
-        description:
-          "فيديو احترافي يوثق قصة يومك بطريقة سينمائية.",
+        description: "فيديو احترافي بطريقة سينمائية.",
+        price: "يبدأ من 1500 ₪",
+        image:
+          "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=800&q=85",
       },
       {
         icon: "💍",
-        title: "جلسة تصوير العروسين",
-        description:
-          "جلسة خاصة قبل أو بعد الحفل في المكان الذي تختارينه.",
+        title: "جلسة العروسين",
+        description: "جلسة خاصة للعروسين في أجواء جميلة.",
+        price: "يبدأ من 500 ₪",
+        image:
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=85",
       },
       {
         icon: "📖",
         title: "ألبوم زفاف",
-        description:
-          "تصميم وطباعة ألبوم أنيق لأجمل صور يومك.",
-      },
-      {
-        icon: "🎞️",
-        title: "مونتاج",
-        description:
-          "مونتاج احترافي لأجمل لحظات الحفل.",
-      },
-      {
-        icon: "✨",
-        title: "تصوير التفاصيل",
-        description:
-          "تصوير الفستان والخاتم والديكور وكل التفاصيل الصغيرة.",
+        description: "تصميم وطباعة ألبوم أنيق يحتفظ بأجمل الذكريات.",
+        price: "يبدأ من 350 ₪",
+        image:
+          "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=85",
       },
     ],
 
@@ -75,74 +142,18 @@ const PhotographerDetails = () => {
       {
         name: "الباقة الأساسية",
         price: 1200,
-        description: "اختيار مناسب لمن تريد توثيقًا أنيقًا ومميزًا.",
-        features: [
-          "مصور واحد",
-          "تصوير الحفل",
-          "تسليم الصور الرقمية",
-          "تعديل احترافي للصور",
-        ],
+        description: "لتوثيق الحفل بشكل أنيق ومميز.",
       },
       {
         name: "باقة العروسين",
         price: 1800,
-        description:
-          "باقة متكاملة لتوثيق يوم الزفاف من البداية للنهاية.",
-        features: [
-          "مصوران",
-          "تصوير التحضيرات",
-          "تصوير الحفل",
-          "جلسة تصوير للعروسين",
-          "تعديل احترافي",
-          "تسليم الصور الرقمية",
-        ],
+        description: "توثيق متكامل ليوم الزفاف.",
         popular: true,
       },
       {
         name: "الباقة الملكية",
         price: 2800,
-        description:
-          "تجربة تصوير متكاملة مع الصور والفيديو والألبوم.",
-        features: [
-          "مصوران",
-          "تصوير فيديو سينمائي",
-          "جلسة تصوير خارجية",
-          "تصوير كامل للحفل",
-          "مونتاج فيديو",
-          "ألبوم زفاف",
-          "تسليم جميع الصور الرقمية",
-        ],
-      },
-    ],
-
-    workingHours: [
-      {
-        day: "السبت",
-        hours: "10:00 ص - 9:00 م",
-      },
-      {
-        day: "الأحد",
-        hours: "10:00 ص - 9:00 م",
-      },
-      {
-        day: "الإثنين",
-        hours: "10:00 ص - 9:00 م",
-      },
-      {
-        day: "الثلاثاء",
-        hours: "10:00 ص - 9:00 م",
-      },
-      {
-        day: "الأربعاء",
-        hours: "10:00 ص - 9:00 م",
-      },
-      {
-        day: "الخميس",
-        hours: "10:00 ص - 10:00 م",
-      },
-      {
-        day: "الجمعة",
-        hours: "حسب الحجز",
+        description: "صور وفيديو وألبوم زفاف.",
       },
     ],
 
@@ -151,7 +162,7 @@ const PhotographerDetails = () => {
         name: "سارة أحمد",
         rating: 5,
         comment:
-          "الصور طلعت أجمل مما توقعنا! المصور كان محترفًا جدًا ويعرف كيف يلتقط اللحظات الحلوة بدون ما نحس.",
+          "الصور طلعت أجمل مما توقعنا! المصور كان محترفًا جدًا.",
         date: "منذ أسبوع",
       },
       {
@@ -164,725 +175,577 @@ const PhotographerDetails = () => {
       {
         name: "ريم علي",
         rating: 4,
-        comment:
-          "التصوير كان مرتب والنتيجة جميلة جدًا والتسليم كان ممتاز.",
+        comment: "التصوير كان مرتب والنتيجة جميلة جدًا.",
         date: "منذ شهر",
       },
     ],
   };
 
+  const tabs = [
+    {
+      id: "photos",
+      label: "الصور",
+    },
+    {
+      id: "reels",
+      label: "الريلز",
+    },
+    {
+      id: "catalog",
+      label: "الكتالوج",
+    },
+    {
+      id: "packages",
+      label: "الباقات",
+    },
+    {
+      id: "reviews",
+      label: "التقييمات",
+    },
+  ];
+
   return (
-    <div className="bg-[#fffaf5]">
-
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#fffaf5] text-[#2d2424]"
+    >
       {/* Breadcrumb */}
-      <section className="px-6 pt-8">
-        <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-5xl px-4 pt-6">
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <Link
+            to="/"
+            className="transition hover:text-[#6B3038]"
+          >
+            الرئيسية
+          </Link>
 
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Link
-              to="/"
-              className="transition hover:text-[#6B3038]"
+          <ChevronLeft size={15} />
+
+          <Link
+            to="/photographers"
+            className="transition hover:text-[#6B3038]"
+          >
+            المصورون
+          </Link>
+
+          <ChevronLeft size={15} />
+
+          <span className="text-[#6B3038]">
+            {photographer.name}
+          </span>
+        </div>
+      </div>
+
+      {/* Profile */}
+      <main className="mx-auto max-w-5xl px-4 pb-16">
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          {/* Cover */}
+          <div className="relative h-48 overflow-hidden md:h-64">
+            <img
+              src={photographer.coverImage}
+              alt={photographer.name}
+              className="h-full w-full object-cover"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+
+            <button
+              type="button"
+              onClick={() =>
+                setIsFavorite((prev) => !prev)
+              }
+              className="absolute left-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg backdrop-blur transition hover:bg-white"
             >
-              الرئيسية
-            </Link>
-
-            <span>←</span>
-
-            <Link
-              to="/photographers"
-              className="transition hover:text-[#6B3038]"
-            >
-              المصورون
-            </Link>
-
-            <span>←</span>
-
-            <span className="text-[#6B3038]">
-              {photographer.name}
-            </span>
+              <Heart
+                size={20}
+                fill={
+                  isFavorite ? "currentColor" : "none"
+                }
+              />
+            </button>
           </div>
 
-        </div>
-      </section>
-
-      {/* Photographer Header */}
-      <section className="px-6 py-8">
-        <div className="mx-auto max-w-7xl">
-
-          <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-
-            {/* Gallery */}
-            <div>
-
-              <div className="relative overflow-hidden rounded-[2rem] bg-[#2d2424]">
-
-                <img
-                  src={photographer.images[activeImage]}
-                  alt={photographer.name}
-                  className="h-[500px] w-full object-cover md:h-[620px]"
-                />
-
-                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 to-transparent" />
-
-                {/* Image counter */}
-                <div className="absolute bottom-6 right-6 rounded-full bg-black/40 px-4 py-2 text-sm text-white backdrop-blur">
-                  {activeImage + 1} / {photographer.images.length}
+          {/* Profile Info */}
+          <div className="px-5 pb-7 md:px-8">
+            <div className="relative flex flex-col items-center md:flex-row md:items-end md:justify-between">
+              {/* Profile Image */}
+              <div className="-mt-14">
+                <div className="h-28 w-28 rounded-full border-4 border-white bg-[#f8eee7] p-1 shadow-lg">
+                  <img
+                    src={photographer.profileImage}
+                    alt={photographer.name}
+                    className="h-full w-full rounded-full object-cover"
+                  />
                 </div>
+              </div>
 
-                {/* Favorite */}
+              {/* Buttons */}
+              <div className="mt-5 flex w-full gap-3 md:w-auto">
+                <button
+                  type="button"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#6B3038] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#57262D] md:flex-none"
+                >
+                  <MessageCircle size={18} />
+                  تواصل
+                </button>
+
                 <button
                   type="button"
                   onClick={() =>
-                    setIsFavorite(!isFavorite)
+                    setIsFavorite((prev) => !prev)
                   }
-                  className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-xl shadow-lg backdrop-blur transition hover:bg-white"
+                  className="flex items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-[#6B3038] transition hover:bg-[#fff8f3]"
                 >
-                  {isFavorite ? "♥" : "♡"}
+                  <Heart
+                    size={19}
+                    fill={
+                      isFavorite
+                        ? "currentColor"
+                        : "none"
+                    }
+                  />
                 </button>
 
+                <button
+                  type="button"
+                  className="hidden items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-gray-500 transition hover:bg-[#fff8f3] sm:flex"
+                >
+                  <Share2 size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Name */}
+            <div className="mt-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold md:text-3xl">
+                  {photographer.name}
+                </h1>
+
+                <CheckCircle
+                  size={19}
+                  className="fill-[#6B3038] text-white"
+                />
               </div>
 
-              {/* Thumbnails */}
-              <div className="mt-4 grid grid-cols-6 gap-2">
+              <p className="mt-1 text-sm text-gray-400">
+                @{photographer.username}
+              </p>
 
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={16} />
+                  {photographer.location}
+                </span>
+
+                <span className="flex items-center gap-1.5">
+                  <Star
+                    size={16}
+                    className="fill-[#e5c28d] text-[#e5c28d]"
+                  />
+
+                  <strong className="text-[#2d2424]">
+                    {photographer.rating}
+                  </strong>
+
+                  ({photographer.reviewsCount} تقييم)
+                </span>
+              </div>
+
+              <p className="mt-5 max-w-3xl text-sm leading-8 text-gray-500">
+                {photographer.description}
+              </p>
+
+              <p className="mt-3 text-sm font-semibold text-[#6B3038]">
+                تبدأ الأسعار من {photographer.startingPrice} ₪
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="mt-7 grid grid-cols-3 border-y border-[#f0e7e1] py-5 text-center">
+              <div>
+                <p className="text-xl font-bold">
+                  {photographer.images.length}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-400">
+                  صورة
+                </p>
+              </div>
+
+              <div className="border-x border-[#f0e7e1]">
+                <p className="text-xl font-bold">
+                  {photographer.reels.length}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-400">
+                  ريلز
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xl font-bold">
+                  {photographer.reviewsCount}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-400">
+                  تقييم
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tabs */}
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          <div className="grid grid-cols-5 overflow-x-auto border-b border-[#f0e7e1]">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() =>
+                  setActiveTab(tab.id)
+                }
+                className={`relative whitespace-nowrap py-4 text-sm font-semibold transition ${
+                  activeTab === tab.id
+                    ? "text-[#6B3038]"
+                    : "text-gray-400 hover:text-[#6B3038]"
+                }`}
+              >
+                {tab.label}
+
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-1/2 h-0.5 w-12 -translate-x-1/2 bg-[#6B3038]" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4 md:p-7">
+            {/* Photos */}
+            {activeTab === "photos" && (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
                 {photographer.images.map(
                   (image, index) => (
                     <button
                       key={image}
                       type="button"
                       onClick={() =>
-                        setActiveImage(index)
+                        setSelectedImage(index)
                       }
-                      className={`overflow-hidden rounded-xl ${
-                        activeImage === index
-                          ? "ring-2 ring-[#6B3038] ring-offset-2"
-                          : ""
-                      }`}
+                      className="group relative aspect-square overflow-hidden rounded-xl bg-[#f8eee7]"
                     >
                       <img
                         src={image}
-                        alt=""
-                        className="h-20 w-full object-cover transition hover:scale-105"
+                        alt={`${photographer.name} ${
+                          index + 1
+                        }`}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                       />
+
+                      <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                     </button>
                   )
                 )}
-
               </div>
-
-            </div>
-
-            {/* Info Card */}
-            <div className="h-fit rounded-[2rem] border border-[#eadfd7] bg-white p-7 shadow-sm">
-
-              <div className="flex items-start justify-between gap-4">
-
-                <div>
-
-                  <span className="text-xs font-semibold tracking-[2px] text-[#a27643]">
-                    مصور زفاف
-                  </span>
-
-                  <h1 className="mt-3 text-3xl font-bold text-[#2d2424]">
-                    {photographer.name}
-                  </h1>
-
-                </div>
-
-                <span className="rounded-full bg-[#f8eee7] px-3 py-2 text-sm font-bold text-[#6B3038]">
-                  ✓ موثوق
-                </span>
-
-              </div>
-
-              <div className="mt-5 space-y-3 text-sm text-gray-500">
-
-                <p>
-                  📍 {photographer.location}
-                </p>
-
-                <p>
-                  ⭐{" "}
-                  <span className="font-bold text-[#2d2424]">
-                    {photographer.rating}
-                  </span>{" "}
-                  <span>
-                    ({photographer.reviewsCount} تقييم)
-                  </span>
-                </p>
-
-                <p>
-                  📸 تصوير فوتوغرافي + فيديو
-                </p>
-
-              </div>
-
-              <div className="my-7 border-t border-[#f0e7e1]" />
-
-              <div>
-
-                <span className="text-xs text-gray-400">
-                  تبدأ الباقات من
-                </span>
-
-                <div className="mt-1 flex items-end gap-2">
-
-                  <span className="text-3xl font-bold text-[#6B3038]">
-                    {photographer.startingPrice} ₪
-                  </span>
-
-                </div>
-
-              </div>
-
-              <button
-                type="button"
-                className="mt-7 w-full rounded-xl bg-[#6B3038] py-4 text-sm font-bold text-white transition hover:bg-[#57262D]"
-              >
-                احجزي موعدًا
-              </button>
-
-              <button
-                type="button"
-                className="mt-3 w-full rounded-xl border border-[#6B3038] py-4 text-sm font-bold text-[#6B3038] transition hover:bg-[#fff8f3]"
-              >
-                أرسلي استفسارًا
-              </button>
-
-              <p className="mt-5 text-center text-xs leading-6 text-gray-400">
-                لا يتم تأكيد الحجز إلا بعد التواصل مع المصور.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* About */}
-      <section className="px-6 py-14">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="max-w-4xl">
-
-            <span className="text-sm font-semibold text-[#a27643]">
-              عن المصور
-            </span>
-
-            <h2 className="mt-3 text-3xl font-bold text-[#2d2424]">
-              نحفظ اللحظة قبل أن تصبح ذكرى
-            </h2>
-
-            <p className="mt-5 text-base leading-9 text-gray-500">
-              {photographer.description}
-            </p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* Services */}
-      <section className="bg-[#f8f4f0] px-6 py-16">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="text-center">
-
-            <span className="text-sm font-semibold text-[#a27643]">
-              ماذا نقدم؟
-            </span>
-
-            <h2 className="mt-3 text-3xl font-bold text-[#2d2424]">
-              خدمات التصوير
-            </h2>
-
-          </div>
-
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
-            {photographer.services.map(
-              (service) => (
-                <div
-                  key={service.title}
-                  className="rounded-3xl border border-[#eadfd7] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                >
-
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f8eee7] text-2xl">
-                    {service.icon}
-                  </div>
-
-                  <h3 className="mt-5 text-lg font-bold text-[#2d2424]">
-                    {service.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-7 text-gray-400">
-                    {service.description}
-                  </p>
-
-                </div>
-              )
             )}
 
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* Portfolio */}
-      <section className="px-6 py-16">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-
-            <div>
-
-              <span className="text-sm font-semibold text-[#a27643]">
-                أعمالنا
-              </span>
-
-              <h2 className="mt-3 text-3xl font-bold text-[#2d2424]">
-                من ألبوم الذكريات
-              </h2>
-
-            </div>
-
-            <p className="max-w-md text-sm leading-7 text-gray-400">
-              مجموعة من اللحظات التي تم توثيقها في حفلات
-              زفاف ومناسبات مختلفة.
-            </p>
-
-          </div>
-
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
-
-            {photographer.images.map(
-              (image, index) => (
-                <button
-                  key={image}
-                  type="button"
-                  onClick={() =>
-                    setActiveImage(index)
-                  }
-                  className={`group overflow-hidden rounded-3xl ${
-                    index === 0
-                      ? "md:row-span-2"
-                      : ""
-                  }`}
-                >
-
-                  <img
-                    src={image}
-                    alt=""
-                    className={`w-full object-cover transition duration-700 group-hover:scale-105 ${
-                      index === 0
-                        ? "h-[500px]"
-                        : "h-60"
-                    }`}
-                  />
-
-                </button>
-              )
-            )}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* Packages */}
-      <section className="bg-[#f5ebe3] px-6 py-16">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="text-center">
-
-            <span className="text-sm font-semibold text-[#a27643]">
-              اختاري ما يناسبك
-            </span>
-
-            <h2 className="mt-3 text-3xl font-bold text-[#2d2424]">
-              باقات التصوير
-            </h2>
-
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-gray-500">
-              باقات مختلفة لتختاري منها ما يناسب تفاصيل
-              وميزانية يومك.
-            </p>
-
-          </div>
-
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-
-            {photographer.packages.map(
-              (pkg) => (
-                <div
-                  key={pkg.name}
-                  className={`relative rounded-[2rem] border bg-white p-7 ${
-                    pkg.popular
-                      ? "border-[#6B3038] shadow-xl"
-                      : "border-[#eadfd7]"
-                  }`}
-                >
-
-                  {pkg.popular && (
-                    <span className="absolute -top-3 right-7 rounded-full bg-[#6B3038] px-4 py-1.5 text-xs font-bold text-white">
-                      الأكثر طلبًا
-                    </span>
-                  )}
-
-                  <h3 className="text-xl font-bold text-[#2d2424]">
-                    {pkg.name}
-                  </h3>
-
-                  <p className="mt-3 min-h-12 text-sm leading-6 text-gray-400">
-                    {pkg.description}
-                  </p>
-
-                  <div className="mt-6">
-
-                    <span className="text-3xl font-bold text-[#6B3038]">
-                      {pkg.price}
-                    </span>
-
-                    <span className="mr-1 text-sm text-gray-400">
-                      ₪
-                    </span>
-
-                  </div>
-
-                  <div className="my-6 border-t border-[#f0e7e1]" />
-
-                  <ul className="space-y-4">
-
-                    {pkg.features.map(
-                      (feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center gap-3 text-sm text-gray-600"
-                        >
-                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f8eee7] text-xs text-[#6B3038]">
-                            ✓
-                          </span>
-
-                          {feature}
-                        </li>
-                      )
-                    )}
-
-                  </ul>
-
+            {/* Reels */}
+            {activeTab === "reels" && (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
+                {photographer.reels.map((reel) => (
                   <button
+                    key={reel.id}
                     type="button"
                     onClick={() =>
-                      setSelectedPackage(pkg)
+                      setSelectedReel(reel)
                     }
-                    className={`mt-8 w-full rounded-xl py-3.5 text-sm font-bold transition ${
-                      pkg.popular
-                        ? "bg-[#6B3038] text-white hover:bg-[#57262D]"
-                        : "border border-[#6B3038] text-[#6B3038] hover:bg-[#fff8f3]"
-                    }`}
+                    className="group relative aspect-[9/14] overflow-hidden rounded-2xl bg-[#f8eee7]"
                   >
-                    اختاري هذه الباقة
-                  </button>
+                    <img
+                      src={reel.thumbnail}
+                      alt={reel.title}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
 
-                </div>
-              )
-            )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* Working Hours + Location */}
-      <section className="px-6 py-16">
-
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
-
-          {/* Hours */}
-          <div className="rounded-[2rem] border border-[#eadfd7] bg-white p-7">
-
-            <span className="text-sm font-semibold text-[#a27643]">
-              أوقات العمل
-            </span>
-
-            <h2 className="mt-3 text-2xl font-bold text-[#2d2424]">
-              متى يمكن التواصل؟
-            </h2>
-
-            <div className="mt-7 space-y-3">
-
-              {photographer.workingHours.map(
-                (item) => (
-                  <div
-                    key={item.day}
-                    className="flex items-center justify-between rounded-xl bg-[#fffaf5] px-5 py-4"
-                  >
-
-                    <span className="text-sm font-semibold text-[#2d2424]">
-                      {item.day}
-                    </span>
-
-                    <span className="text-sm text-gray-400">
-                      {item.hours}
-                    </span>
-
-                  </div>
-                )
-              )}
-
-            </div>
-
-          </div>
-
-          {/* Location */}
-          <div className="rounded-[2rem] border border-[#eadfd7] bg-white p-7">
-
-            <span className="text-sm font-semibold text-[#a27643]">
-              الموقع
-            </span>
-
-            <h2 className="mt-3 text-2xl font-bold text-[#2d2424]">
-              أين نجدك؟
-            </h2>
-
-            <div className="mt-7 flex h-72 items-center justify-center overflow-hidden rounded-2xl bg-[#f8f4f0]">
-
-              <div className="text-center">
-
-                <div className="text-5xl">
-                  📍
-                </div>
-
-                <p className="mt-4 font-bold text-[#2d2424]">
-                  {photographer.location}
-                </p>
-
-                <p className="mt-2 text-sm text-gray-400">
-                  الموقع على الخريطة سيظهر هنا
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* Reviews */}
-      <section className="bg-[#f8f4f0] px-6 py-16">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-
-            <div>
-
-              <span className="text-sm font-semibold text-[#a27643]">
-                آراء العملاء
-              </span>
-
-              <h2 className="mt-3 text-3xl font-bold text-[#2d2424]">
-                ماذا قالوا عن تجربتهم؟
-              </h2>
-
-            </div>
-
-            <div className="rounded-2xl bg-white px-6 py-4">
-
-              <div className="text-center">
-
-                <div className="text-2xl font-bold text-[#2d2424]">
-                  ⭐ {photographer.rating}
-                </div>
-
-                <p className="mt-1 text-xs text-gray-400">
-                  {photographer.reviewsCount} تقييم
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-
-            {photographer.reviews.map(
-              (review) => (
-                <div
-                  key={review.name}
-                  className="rounded-3xl border border-[#eadfd7] bg-white p-7"
-                >
-
-                  <div className="flex items-center justify-between">
-
-                    <div>
-
-                      <h3 className="font-bold text-[#2d2424]">
-                        {review.name}
-                      </h3>
-
-                      <p className="mt-1 text-xs text-gray-400">
-                        {review.date}
-                      </p>
-
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg transition group-hover:scale-110">
+                        <Play
+                          size={22}
+                          fill="currentColor"
+                        />
+                      </span>
                     </div>
 
-                    <span className="text-sm">
-                      {"⭐".repeat(review.rating)}
-                    </span>
-
-                  </div>
-
-                  <p className="mt-5 text-sm leading-8 text-gray-500">
-                    “{review.comment}”
-                  </p>
-
-                </div>
-              )
+                    <div className="absolute bottom-0 right-0 left-0 p-4 text-right text-white">
+                      <p className="text-sm font-bold">
+                        {reel.title}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
             )}
 
+            {/* Catalog */}
+            {activeTab === "catalog" && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {photographer.catalog.map(
+                  (item) => (
+                    <div
+                      key={item.title}
+                      className="group overflow-hidden rounded-2xl border border-[#eadfd7] bg-white transition hover:border-[#e5c28d] hover:shadow-sm"
+                    >
+                      <div className="relative h-44 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+
+                        <div className="absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-2xl shadow-sm">
+                          {item.icon}
+                        </div>
+                      </div>
+
+                      <div className="p-5">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h3 className="font-bold">
+                              {item.title}
+                            </h3>
+
+                            <p className="mt-2 text-sm leading-6 text-gray-400">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 flex items-center justify-between border-t border-[#f0e7e1] pt-4">
+                          <span className="text-sm font-bold text-[#6B3038]">
+                            {item.price}
+                          </span>
+
+                          <button
+                            type="button"
+                            className="rounded-xl border border-[#eadfd7] px-4 py-2 text-xs font-bold text-[#6B3038] transition hover:bg-[#fffaf5]"
+                          >
+                            استفسار
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+
+            {/* Packages */}
+            {activeTab === "packages" && (
+              <div className="grid gap-4 md:grid-cols-3">
+                {photographer.packages.map(
+                  (pkg) => (
+                    <div
+                      key={pkg.name}
+                      className={`relative rounded-2xl border p-5 ${
+                        pkg.popular
+                          ? "border-[#6B3038] bg-[#fffaf5]"
+                          : "border-[#eadfd7]"
+                      }`}
+                    >
+                      {pkg.popular && (
+                        <span className="absolute -top-3 right-5 rounded-full bg-[#6B3038] px-3 py-1 text-[11px] font-bold text-white">
+                          الأكثر طلبًا
+                        </span>
+                      )}
+
+                      <h3 className="font-bold">
+                        {pkg.name}
+                      </h3>
+
+                      <div className="mt-4">
+                        <span className="text-2xl font-bold text-[#6B3038]">
+                          {pkg.price}
+                        </span>
+
+                        <span className="mr-1 text-sm text-gray-400">
+                          ₪
+                        </span>
+                      </div>
+
+                      <p className="mt-3 text-sm leading-6 text-gray-400">
+                        {pkg.description}
+                      </p>
+
+                      <button
+                        type="button"
+                        className="mt-5 w-full rounded-xl bg-[#6B3038] py-3 text-sm font-bold text-white transition hover:bg-[#57262D]"
+                      >
+                        استفسار عن الباقة
+                      </button>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+
+            {/* Reviews */}
+            {activeTab === "reviews" && (
+              <div className="space-y-4">
+                <div className="mb-6 flex items-center gap-4 rounded-2xl bg-[#fffaf5] p-5">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold">
+                      {photographer.rating}
+                    </p>
+
+                    <div className="mt-1 text-sm">
+                      ⭐⭐⭐⭐⭐
+                    </div>
+
+                    <p className="mt-1 text-xs text-gray-400">
+                      {photographer.reviewsCount} تقييم
+                    </p>
+                  </div>
+                </div>
+
+                {photographer.reviews.map(
+                  (review) => (
+                    <div
+                      key={review.name}
+                      className="rounded-2xl border border-[#eadfd7] p-5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-bold">
+                            {review.name}
+                          </h3>
+
+                          <p className="mt-1 text-xs text-gray-400">
+                            {review.date}
+                          </p>
+                        </div>
+
+                        <span className="text-sm">
+                          {"⭐".repeat(review.rating)}
+                        </span>
+                      </div>
+
+                      <p className="mt-4 text-sm leading-7 text-gray-500">
+                        {review.comment}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
           </div>
+        </section>
+      </main>
 
-        </div>
-
-      </section>
-
-      {/* Bottom CTA */}
-      <section className="bg-[#f5ebe3] px-6 py-16">
-
-        <div className="mx-auto max-w-5xl rounded-[2rem] bg-[#6B3038] px-6 py-14 text-center text-white md:px-12">
-
-          <span className="text-3xl">
-            📸
-          </span>
-
-          <h2 className="mt-4 text-3xl font-bold md:text-4xl">
-            جاهزة توثقي أجمل يوم؟
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-8 text-white/70">
-            اختاري الباقة المناسبة وتواصلي مع المصور
-            لمعرفة التفاصيل وتأكيد الموعد.
-          </p>
+      {/* Image Modal */}
+      {selectedImage !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedImage(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
 
           <button
             type="button"
-            className="mt-7 rounded-xl bg-[#e5c28d] px-8 py-4 text-sm font-bold text-[#2d2424] transition hover:bg-[#f0d5aa]"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedImage((current) =>
+                current === 0
+                  ? photographer.images.length - 1
+                  : current - 1
+              );
+            }}
+            className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:right-8"
           >
-            ابدئي الحجز الآن
+            <ChevronRight size={24} />
           </button>
 
+          <img
+            src={photographer.images[selectedImage]}
+            alt={photographer.name}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+            className="max-h-[85vh] max-w-full rounded-xl object-contain"
+          />
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedImage((current) =>
+                current ===
+                photographer.images.length - 1
+                  ? 0
+                  : current + 1
+              );
+            }}
+            className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:left-8"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
+            {selectedImage + 1} /{" "}
+            {photographer.images.length}
+          </div>
         </div>
+      )}
 
-      </section>
-
-      {/* Package Modal */}
-      {selectedPackage && (
+      {/* Reel Modal */}
+      {selectedReel && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-5 backdrop-blur-sm"
-          onClick={() => setSelectedPackage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+          onClick={() => setSelectedReel(null)}
         >
+          <button
+            type="button"
+            onClick={() => setSelectedReel(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
 
           <div
-            className="w-full max-w-lg rounded-[2rem] bg-white p-7 shadow-2xl"
+            className="relative h-[80vh] w-full max-w-md overflow-hidden rounded-2xl bg-black"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
+            <video
+              src={selectedReel.video}
+              poster={selectedReel.thumbnail}
+              controls
+              autoPlay
+              playsInline
+              className="h-full w-full object-contain"
+            />
 
-            <div className="flex items-start justify-between">
-
-              <div>
-
-                <span className="text-xs font-semibold text-[#a27643]">
-                  الباقة المختارة
-                </span>
-
-                <h3 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                  {selectedPackage.name}
-                </h3>
-
-              </div>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setSelectedPackage(null)
-                }
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f8f4f0] text-gray-500"
-              >
-                ×
-              </button>
-
+            <div className="absolute bottom-0 right-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-12">
+              <h3 className="font-bold text-white">
+                {selectedReel.title}
+              </h3>
             </div>
-
-            <div className="mt-6 rounded-2xl bg-[#fffaf5] p-5">
-
-              <span className="text-sm text-gray-400">
-                السعر
-              </span>
-
-              <div className="mt-1 text-3xl font-bold text-[#6B3038]">
-                {selectedPackage.price} ₪
-              </div>
-
-            </div>
-
-            <label className="mt-6 block">
-
-              <span className="text-sm font-bold text-[#2d2424]">
-                تاريخ المناسبة
-              </span>
-
-              <input
-                type="date"
-                className="mt-2 w-full rounded-xl border border-[#eadfd7] px-4 py-3 text-sm outline-none focus:border-[#6B3038]"
-              />
-
-            </label>
-
-            <label className="mt-4 block">
-
-              <span className="text-sm font-bold text-[#2d2424]">
-                ملاحظات
-              </span>
-
-              <textarea
-                rows="4"
-                placeholder="اكتبي أي تفاصيل تريدين إخبار المصور بها..."
-                className="mt-2 w-full resize-none rounded-xl border border-[#eadfd7] px-4 py-3 text-sm outline-none focus:border-[#6B3038]"
-              />
-
-            </label>
-
-            <button
-              type="button"
-              onClick={() =>
-                setSelectedPackage(null)
-              }
-              className="mt-6 w-full rounded-xl bg-[#6B3038] py-4 text-sm font-bold text-white transition hover:bg-[#57262D]"
-            >
-              إرسال طلب الحجز
-            </button>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 };

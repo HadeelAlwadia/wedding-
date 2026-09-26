@@ -1,699 +1,647 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
-const car = {
-  id: 1,
-  name: "Mercedes S-Class",
-  company: "Royal Wedding Cars",
-  location: "غزة - الرمال",
-  price: 900,
-  rating: 4.9,
-  reviewsCount: 41,
-  category: "سيارة فاخرة",
-  type: "Mercedes S-Class",
-  year: 2023,
-  seats: 4,
-  driver: true,
-  available: true,
-
-  images: [
-    "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1400&q=80",
-    "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=80",
-  ],
-
-  description:
-    "سيارة Mercedes S-Class فاخرة ومجهزة خصيصًا لمناسبات الزفاف، تجمع بين الفخامة والراحة والأناقة لتكون جزءًا مميزًا من يومك.",
-
-  features: [
-    "مقاعد جلدية فاخرة",
-    "تكييف مركزي",
-    "نظام صوتي مميز",
-    "إضاءة داخلية فاخرة",
-    "زجاج معتم",
-    "سائق محترف",
-    "تنظيف وتجهيز قبل المناسبة",
-    "تزيين السيارة حسب الطلب",
-  ],
-
-  services: [
-    {
-      name: "نقل العروس والعريس",
-      description: "رحلة الزفاف الأساسية من المنزل إلى القاعة.",
-      price: 900,
-    },
-    {
-      name: "جولة تصوير",
-      description: "استخدام السيارة أثناء جلسة تصوير العروسين.",
-      price: 500,
-    },
-    {
-      name: "الباقة الكاملة",
-      description: "نقل + تصوير + تزيين السيارة.",
-      price: 1200,
-      popular: true,
-    },
-  ],
-
-  workingHours: [
-    ["السبت - الخميس", "9:00 ص - 10:00 م"],
-    ["الجمعة", "2:00 م - 10:00 م"],
-  ],
-
-  reviews: [
-    {
-      name: "سارة محمد",
-      rating: 5,
-      date: "منذ أسبوع",
-      comment:
-        "السيارة كانت فخمة جدًا ونظيفة، والسائق كان محترم وملتزم بالموعد.",
-    },
-    {
-      name: "ريم أحمد",
-      rating: 5,
-      date: "منذ شهر",
-      comment:
-        "التجربة كانت رائعة جدًا، والسيارة أعطت صور الزفاف شكل جميل.",
-    },
-    {
-      name: "نور علي",
-      rating: 4,
-      date: "منذ شهرين",
-      comment:
-        "الخدمة ممتازة والسيارة كانت مثل الصور تمامًا.",
-    },
-  ],
-};
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  Heart,
+  MapPin,
+  MessageCircle,
+  Share2,
+  Star,
+  X,
+} from "lucide-react";
 
 const WeddingCarDetails = () => {
   const { id } = useParams();
 
-  const [selectedImage, setSelectedImage] = useState(car.images[0]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [showBookingModal, setShowBookingModal] = useState(false);
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
 
-  const [selectedService, setSelectedService] = useState(
-    car.services[2].name
-  );
+  const cars = {
+    1: {
+      id: 1,
+      name: "مرسيدس S-Class",
+      store: "Royal Wedding Cars",
+      username: "royal_wedding",
+      location: "غزة - الرمال",
+      price: 900,
+      rating: 4.9,
+      reviews: 86,
+      type: "سيارة زفاف",
+      model: "S-Class",
+      year: "2023",
+      color: "أسود",
+      seats: "5 مقاعد",
+      description:
+        "مرسيدس S-Class بإطلالة فاخرة وأنيقة، مناسبة للعروسين في يوم الزفاف والمناسبات الخاصة. تصميم راقٍ ومساحة داخلية مريحة تمنحك تجربة مميزة.",
+      images: [
+        "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "سيارة فاخرة ومجهزة للزفاف",
+        "سائق محترف",
+        "تصوير السيارة قبل المناسبة",
+        "تزيين السيارة حسب الطلب",
+      ],
+    },
 
-  const [bookingData, setBookingData] = useState({
-    date: "",
-    startTime: "",
-    hours: "4",
-    notes: "",
-  });
+    2: {
+      id: 2,
+      name: "Mercedes E-Class",
+      store: "Wedding Drive",
+      username: "wedding_drive",
+      location: "غزة - النصر",
+      price: 700,
+      rating: 4.8,
+      reviews: 64,
+      type: "سيارة زفاف",
+      model: "E-Class",
+      year: "2022",
+      color: "أبيض",
+      seats: "5 مقاعد",
+      description:
+        "مرسيدس E-Class بتصميم أنيق وهادئ، خيار مناسب للعروسين الذين يبحثون عن سيارة مرتبة وفخمة لمرافقتهم في يوم الزفاف.",
+      images: [
+        "https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "سيارة نظيفة ومجهزة",
+        "سائق محترف",
+        "تزيين حسب الطلب",
+        "مناسبة للزفاف والتصوير",
+      ],
+    },
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+    3: {
+      id: 3,
+      name: "BMW 7 Series",
+      store: "Luxury Ride",
+      username: "luxury_ride",
+      location: "خانيونس",
+      price: 1000,
+      rating: 4.9,
+      reviews: 51,
+      type: "سيارة فاخرة",
+      model: "BMW 7 Series",
+      year: "2023",
+      color: "أسود",
+      seats: "5 مقاعد",
+      description:
+        "BMW 7 Series بتصميم فاخر وحضور مميز، مناسبة للعروسين ومحبي السيارات الفخمة في جلسات التصوير ويوم الزفاف.",
+      images: [
+        "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "تصميم فاخر",
+        "مناسبة لجلسات التصوير",
+        "سائق محترف",
+        "تزيين السيارة حسب الطلب",
+      ],
+    },
 
-    setBookingData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    4: {
+      id: 4,
+      name: "Range Rover",
+      store: "Elite Wedding",
+      username: "elite_wedding",
+      location: "غزة - تل الهوى",
+      price: 1200,
+      rating: 4.7,
+      reviews: 43,
+      type: "جيب فاخر",
+      model: "Range Rover",
+      year: "2023",
+      color: "أبيض",
+      seats: "5 مقاعد",
+      description:
+        "Range Rover فاخرة بحضور قوي وتصميم أنيق، مناسبة للعروسين الذين يفضلون سيارات الجيب والإطلالة المميزة في يوم الزفاف.",
+      images: [
+        "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "جيب فاخر",
+        "مساحة داخلية واسعة",
+        "سائق محترف",
+        "مناسبة للتصوير والزفاف",
+      ],
+    },
+
+    5: {
+      id: 5,
+      name: "Mercedes C-Class",
+      store: "White Car",
+      username: "white_car",
+      location: "دير البلح",
+      price: 650,
+      rating: 4.6,
+      reviews: 38,
+      type: "سيارة زفاف",
+      model: "C-Class",
+      year: "2022",
+      color: "أبيض",
+      seats: "5 مقاعد",
+      description:
+        "مرسيدس C-Class بتصميم بسيط وأنيق، مناسبة للعروسين الذين يبحثون عن سيارة جميلة ومرتبة بسعر مناسب.",
+      images: [
+        "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "تصميم أنيق",
+        "سائق محترف",
+        "تزيين حسب الطلب",
+        "مناسبة ليوم الزفاف",
+      ],
+    },
+
+    6: {
+      id: 6,
+      name: "Lexus ES",
+      store: "Golden Ride",
+      username: "golden_ride",
+      location: "رفح",
+      price: 850,
+      rating: 4.8,
+      reviews: 57,
+      type: "سيارة فاخرة",
+      model: "Lexus ES",
+      year: "2023",
+      color: "ذهبي",
+      seats: "5 مقاعد",
+      description:
+        "Lexus ES بإطلالة راقية ومميزة، تجمع بين الراحة والفخامة لتكون جزءًا جميلًا من تفاصيل يوم الزفاف.",
+      images: [
+        "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=90",
+        "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1400&q=90",
+      ],
+      features: [
+        "تصميم فاخر",
+        "مقاعد مريحة",
+        "سائق محترف",
+        "مناسبة للتصوير والزفاف",
+      ],
+    },
   };
 
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
+  const car = cars[id] || cars[1];
 
-    if (!bookingData.date) {
-      alert("يرجى اختيار تاريخ الحجز");
-      return;
+  const nextImage = () => {
+    setActiveImage((current) =>
+      current === car.images.length - 1 ? 0 : current + 1
+    );
+  };
+
+  const previousImage = () => {
+    setActiveImage((current) =>
+      current === 0 ? car.images.length - 1 : current - 1
+    );
+  };
+
+  const shareCar = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: car.name,
+          text: `شوفي ${car.name} من ${car.store}`,
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("تم نسخ رابط السيارة");
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    if (!bookingData.startTime) {
-      alert("يرجى اختيار وقت الحجز");
-      return;
-    }
-
-    console.log({
-      carId: id,
-      car: car.name,
-      service: selectedService,
-      ...bookingData,
-    });
-
-    alert("تم إرسال طلب الحجز بنجاح 🚘🤍");
-
-    setShowBookingModal(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFAF5]">
-      {/* Breadcrumb */}
-      <div className="border-b border-[#eaded4] bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
-            <Link
-              to="/"
-              className="transition hover:text-[#6B3038]"
-            >
-              الرئيسية
-            </Link>
-
-            <span>←</span>
-
-            <Link
-              to="/wedding-cars"
-              className="transition hover:text-[#6B3038]"
-            >
-              سيارات الزفاف
-            </Link>
-
-            <span>←</span>
-
-            <span className="text-[#6B3038]">
-              {car.name}
-            </span>
-          </div>
-        </div>
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#fffaf5] text-[#2d2424]"
+    >
+      {/* =====================================================
+          Breadcrumb
+      ====================================================== */}
+      <div className="mx-auto max-w-6xl px-5 pt-6 md:px-8">
+        <Link
+          to="/wedding-cars"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-[#6B3038]"
+        >
+          <ArrowRight size={17} />
+          العودة إلى سيارات الزفاف
+        </Link>
       </div>
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
-        {/* Main */}
-        <section className="grid gap-10 lg:grid-cols-2">
-          {/* Gallery */}
-          <div>
-            <div className="relative overflow-hidden rounded-3xl bg-[#f5ebe3]">
+      {/* =====================================================
+          Main Details
+      ====================================================== */}
+      <section className="mx-auto max-w-6xl px-5 pb-16 pt-6 md:px-8 md:pt-8">
+        <div className="grid overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm lg:grid-cols-[1.05fr_0.95fr]">
+
+          {/* =================================================
+              Images
+          ================================================== */}
+          <div className="bg-[#f4ebe5] p-3 md:p-5">
+
+            <div
+              className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl bg-[#eee5df]"
+              onClick={() => setShowImageModal(true)}
+            >
               <img
-                src={selectedImage}
+                src={car.images[activeImage]}
                 alt={car.name}
-                className="h-[580px] w-full object-cover"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.02]"
               />
 
+              {/* Previous */}
               <button
-                onClick={() =>
-                  setIsFavorite(!isFavorite)
-                }
-                className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl shadow-lg transition hover:scale-105"
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  previousImage();
+                }}
+                className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#2d2424] shadow-sm transition hover:bg-white"
+                aria-label="الصورة السابقة"
               >
-                {isFavorite ? "♥" : "♡"}
+                <ChevronRight size={19} />
               </button>
 
-              <div className="absolute right-5 top-5 rounded-full bg-[#6B3038] px-4 py-2 text-sm font-semibold text-white">
-                {car.category}
-              </div>
+              {/* Next */}
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  nextImage();
+                }}
+                className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#2d2424] shadow-sm transition hover:bg-white"
+                aria-label="الصورة التالية"
+              >
+                <ChevronLeft size={19} />
+              </button>
 
-              {car.available && (
-                <div className="absolute bottom-5 right-5 rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white">
-                  متاحة للحجز
-                </div>
-              )}
+              {/* Counter */}
+              <div className="absolute bottom-4 left-4 rounded-full bg-black/45 px-3 py-1.5 text-xs text-white backdrop-blur">
+                {activeImage + 1} / {car.images.length}
+              </div>
             </div>
 
             {/* Thumbnails */}
-            <div className="mt-4 grid grid-cols-4 gap-3">
+            <div className="mt-3 grid grid-cols-4 gap-2">
               {car.images.map((image, index) => (
                 <button
-                  key={image}
-                  onClick={() => setSelectedImage(image)}
-                  className={`overflow-hidden rounded-2xl border-2 ${
-                    selectedImage === image
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => setActiveImage(index)}
+                  className={`relative aspect-[4/3] overflow-hidden rounded-xl border-2 transition ${
+                    activeImage === index
                       ? "border-[#6B3038]"
                       : "border-transparent"
                   }`}
                 >
                   <img
                     src={image}
-                    alt={`${car.name} ${index + 1}`}
-                    className="h-24 w-full object-cover"
+                    alt=""
+                    className="h-full w-full object-cover"
                   />
+
+                  {activeImage !== index && (
+                    <div className="absolute inset-0 bg-black/5" />
+                  )}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Info */}
-          <div>
-            <p className="mb-3 text-sm font-semibold text-[#a77b4f]">
-              {car.company}
-            </p>
+          {/* =================================================
+              Details
+          ================================================== */}
+          <div className="flex flex-col p-6 md:p-8 lg:p-10">
 
-            <h1 className="text-4xl font-bold text-[#2d2424] md:text-5xl">
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-2">
+
+              <button
+                type="button"
+                onClick={() => setIsFavorite((current) => !current)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f8eee7] transition hover:bg-[#f1e3da]"
+                aria-label="المفضلة"
+              >
+                <Heart
+                  size={18}
+                  className={
+                    isFavorite
+                      ? "fill-[#6B3038] text-[#6B3038]"
+                      : "text-[#6B3038]"
+                  }
+                />
+              </button>
+
+              <button
+                type="button"
+                onClick={shareCar}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f8eee7] text-[#6B3038] transition hover:bg-[#f1e3da]"
+                aria-label="مشاركة"
+              >
+                <Share2 size={17} />
+              </button>
+
+            </div>
+
+            {/* =================================================
+                Store / Company
+            ================================================== */}
+            <div className="mt-5">
+
+              <h2 className="text-lg font-bold text-[#6B3038]">
+                {car.store}
+              </h2>
+
+              <p className="mt-1 text-xs text-gray-400">
+                @{car.username}
+              </p>
+
+            </div>
+
+            {/* Car Name */}
+            <h1 className="mt-5 text-2xl font-bold leading-9 md:text-3xl">
               {car.name}
             </h1>
 
-            {/* Rating */}
-            <div className="mt-5 flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-lg text-yellow-500">
-                  ★
-                </span>
+            {/* Rating + Location */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
 
-                <span className="font-bold">
+              <div className="flex items-center gap-1.5">
+
+                <Star
+                  size={16}
+                  className="fill-[#e5c28d] text-[#e5c28d]"
+                />
+
+                <span className="text-sm font-bold">
                   {car.rating}
                 </span>
 
-                <span className="text-gray-500">
-                  ({car.reviewsCount} تقييم)
+                <span className="text-xs text-gray-400">
+                  ({car.reviews} تقييم)
                 </span>
+
               </div>
 
-              <span className="h-5 w-px bg-gray-300" />
+              <div className="flex items-center gap-1.5 text-sm text-gray-400">
+                <MapPin size={15} />
+                <span>{car.location}</span>
+              </div>
 
-              <span className="text-gray-500">
-                📍 {car.location}
-              </span>
             </div>
 
             {/* Price */}
-            <div className="my-7 border-y border-[#eaded4] py-6">
-              <p className="text-3xl font-bold text-[#6B3038]">
-                {car.price.toLocaleString()} ₪
+            <div className="mt-7 border-y border-[#f0e7e1] py-6">
+
+              <p className="text-xs text-gray-400">
+                السعر يبدأ من
               </p>
 
-              <p className="mt-2 text-sm text-gray-500">
-                السعر يبدأ من / يوم
-              </p>
+              <div className="mt-1 flex items-end gap-2">
+
+                <span className="text-3xl font-bold text-[#6B3038]">
+                  {car.price}
+                </span>
+
+                <span className="mb-1 text-sm text-gray-400">
+                  ₪
+                </span>
+
+              </div>
+
             </div>
 
-            {/* Quick info */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl bg-white p-4 text-center shadow-sm">
-                <div className="text-2xl">🚘</div>
-                <p className="mt-2 text-xs text-gray-500">
+            {/* Description */}
+            <div className="mt-6">
+
+              <h2 className="text-base font-bold">
+                عن السيارة
+              </h2>
+
+              <p className="mt-3 text-sm leading-8 text-gray-500">
+                {car.description}
+              </p>
+
+            </div>
+
+            {/* Car Info */}
+            <div className="mt-6 grid grid-cols-2 gap-3">
+
+              <div className="rounded-2xl bg-[#fffaf5] p-4">
+                <p className="text-xs text-gray-400">
                   النوع
                 </p>
-                <p className="mt-1 text-sm font-semibold">
+
+                <p className="mt-2 text-sm font-bold">
                   {car.type}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-center shadow-sm">
-                <div className="text-2xl">📅</div>
-                <p className="mt-2 text-xs text-gray-500">
+              <div className="rounded-2xl bg-[#fffaf5] p-4">
+                <p className="text-xs text-gray-400">
                   الموديل
                 </p>
-                <p className="mt-1 text-sm font-semibold">
+
+                <p className="mt-2 text-sm font-bold">
+                  {car.model}
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-[#fffaf5] p-4">
+                <p className="text-xs text-gray-400">
+                  السنة
+                </p>
+
+                <p className="mt-2 text-sm font-bold">
                   {car.year}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-center shadow-sm">
-                <div className="text-2xl">👥</div>
-                <p className="mt-2 text-xs text-gray-500">
-                  المقاعد
+              <div className="rounded-2xl bg-[#fffaf5] p-4">
+                <p className="text-xs text-gray-400">
+                  اللون
                 </p>
-                <p className="mt-1 text-sm font-semibold">
-                  {car.seats}
+
+                <p className="mt-2 text-sm font-bold">
+                  {car.color}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-center shadow-sm">
-                <div className="text-2xl">👨‍✈️</div>
-                <p className="mt-2 text-xs text-gray-500">
-                  السائق
-                </p>
-                <p className="mt-1 text-sm font-semibold">
-                  {car.driver ? "متوفر" : "غير متوفر"}
-                </p>
-              </div>
             </div>
 
-            {/* Description */}
-            <div className="mt-8">
-              <h2 className="mb-3 text-xl font-bold text-[#2d2424]">
-                عن السيارة
+            {/* Seats */}
+            <div className="mt-6 rounded-2xl border border-[#eadfd7] bg-white p-4">
+
+              <p className="text-xs text-gray-400">
+                عدد المقاعد
+              </p>
+
+              <p className="mt-2 text-sm font-bold">
+                {car.seats}
+              </p>
+
+            </div>
+
+            {/* Features */}
+            <div className="mt-7">
+
+              <h2 className="text-sm font-bold">
+                تفاصيل الخدمة
               </h2>
 
-              <p className="leading-8 text-gray-600">
-                {car.description}
-              </p>
-            </div>
+              <div className="mt-3 space-y-3">
 
-            {/* Buttons */}
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <button
-                onClick={() => setShowBookingModal(true)}
-                className="rounded-2xl bg-[#6B3038] px-6 py-4 font-semibold text-white transition hover:bg-[#57262d]"
-              >
-                احجزي السيارة
-              </button>
+                {car.features.map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-center gap-3 text-sm text-gray-500"
+                  >
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f8eee7] text-[#6B3038]">
+                      <Check size={13} />
+                    </span>
 
-              <button
-                onClick={() => setShowInquiryModal(true)}
-                className="rounded-2xl border border-[#6B3038] bg-white px-6 py-4 font-semibold text-[#6B3038] transition hover:bg-[#f8eeee]"
-              >
-                استفسار
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Features */}
-        <section className="mt-16">
-          <div className="rounded-3xl bg-white p-7 shadow-sm">
-            <p className="mb-2 text-sm font-semibold text-[#a77b4f]">
-              مواصفات السيارة
-            </p>
-
-            <h2 className="text-2xl font-bold text-[#2d2424]">
-              ماذا توفر لك السيارة؟
-            </h2>
-
-            <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {car.features.map((feature) => (
-                <div
-                  key={feature}
-                  className="flex items-center gap-3 rounded-2xl bg-[#FFFAF5] p-4"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5ebe3] text-[#6B3038]">
-                    ✓
-                  </span>
-
-                  <span className="text-sm text-gray-700">
                     {feature}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Services */}
-        <section className="mt-16">
-          <div className="mb-7">
-            <p className="mb-2 text-sm font-semibold text-[#a77b4f]">
-              اختاري الخدمة المناسبة
-            </p>
-
-            <h2 className="text-3xl font-bold text-[#2d2424]">
-              خدمات تأجير السيارة
-            </h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {car.services.map((service) => (
-              <div
-                key={service.name}
-                className={`relative rounded-3xl border bg-white p-7 ${
-                  service.popular
-                    ? "border-[#6B3038] shadow-lg"
-                    : "border-[#eaded4]"
-                }`}
-              >
-                {service.popular && (
-                  <span className="absolute right-5 top-5 rounded-full bg-[#6B3038] px-3 py-1 text-xs font-semibold text-white">
-                    الأكثر طلبًا
-                  </span>
-                )}
-
-                <h3 className="text-xl font-bold text-[#2d2424]">
-                  {service.name}
-                </h3>
-
-                <p className="mt-4 min-h-14 leading-7 text-gray-500">
-                  {service.description}
-                </p>
-
-                <p className="mt-5 text-2xl font-bold text-[#6B3038]">
-                  {service.price.toLocaleString()} ₪
-                </p>
-
-                <button
-                  onClick={() => {
-                    setSelectedService(service.name);
-                    setShowBookingModal(true);
-                  }}
-                  className={`mt-6 w-full rounded-xl px-5 py-3 font-semibold transition ${
-                    service.popular
-                      ? "bg-[#6B3038] text-white hover:bg-[#57262d]"
-                      : "border border-[#6B3038] text-[#6B3038] hover:bg-[#f8eeee]"
-                  }`}
-                >
-                  اختيار الخدمة
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Location + Hours */}
-        <section className="mt-16 grid gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl bg-white p-7 shadow-sm">
-            <h2 className="text-2xl font-bold text-[#2d2424]">
-              أوقات العمل
-            </h2>
-
-            <div className="mt-6 space-y-4">
-              {car.workingHours.map(([day, hours]) => (
-                <div
-                  key={day}
-                  className="flex justify-between border-b border-gray-100 pb-4"
-                >
-                  <span className="text-gray-600">
-                    {day}
-                  </span>
-
-                  <span className="font-medium text-[#6B3038]">
-                    {hours}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-3xl bg-white p-7 shadow-sm">
-            <h2 className="text-2xl font-bold text-[#2d2424]">
-              موقع الشركة
-            </h2>
-
-            <div className="mt-6 rounded-2xl bg-[#FFFAF5] p-6">
-              <p className="text-sm text-gray-500">
-                العنوان
-              </p>
-
-              <p className="mt-2 font-semibold text-[#2d2424]">
-                📍 {car.location}
-              </p>
-
-              <button className="mt-5 text-sm font-semibold text-[#6B3038] underline">
-                عرض الموقع على الخريطة
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Reviews */}
-        <section className="mt-16">
-          <div className="mb-7">
-            <p className="mb-2 text-sm font-semibold text-[#a77b4f]">
-              آراء العملاء
-            </p>
-
-            <h2 className="text-3xl font-bold text-[#2d2424]">
-              تقييمات السيارة
-            </h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {car.reviews.map((review) => (
-              <div
-                key={review.name}
-                className="rounded-3xl bg-white p-6 shadow-sm"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-[#2d2424]">
-                      {review.name}
-                    </h3>
-
-                    <p className="mt-1 text-xs text-gray-400">
-                      {review.date}
-                    </p>
                   </div>
+                ))}
 
-                  <span className="text-yellow-500">
-                    {"★".repeat(review.rating)}
-                  </span>
-                </div>
-
-                <p className="mt-5 leading-7 text-gray-600">
-                  {review.comment}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="mt-16 overflow-hidden rounded-3xl bg-[#6B3038] px-7 py-12 text-center text-white">
-          <h2 className="text-3xl font-bold">
-            جاهزة تختاري سيارة زفافك؟ 🚘🤍
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-xl leading-8 text-white/70">
-            احجزي سيارتك الآن وخلي وصولك إلى ليلة العمر
-            مميزًا مثل باقي تفاصيل فرحك.
-          </p>
-
-          <button
-            onClick={() => setShowBookingModal(true)}
-            className="mt-7 rounded-xl bg-[#e5c28d] px-8 py-3 font-bold text-[#2d2424] transition hover:opacity-90"
-          >
-            احجزي الآن
-          </button>
-        </section>
-      </main>
-
-      {/* Booking Modal */}
-      {showBookingModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-7">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  حجز السيارة
-                </h2>
-
-                <p className="mt-1 text-sm text-gray-500">
-                  {car.name}
-                </p>
               </div>
 
-              <button
-                onClick={() => setShowBookingModal(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-xl"
-              >
-                ×
-              </button>
             </div>
 
-            <form
-              onSubmit={handleBookingSubmit}
-              className="mt-7 space-y-5"
-            >
-              {/* Service */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  الخدمة
-                </label>
+            {/* Contact */}
+            <div className="mt-8">
 
-                <select
-                  value={selectedService}
-                  onChange={(e) =>
-                    setSelectedService(e.target.value)
-                  }
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#6B3038]"
-                >
-                  {car.services.map((service) => (
-                    <option key={service.name}>
-                      {service.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Date */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  تاريخ الحجز
-                </label>
-
-                <input
-                  type="date"
-                  name="date"
-                  value={bookingData.date}
-                  onChange={handleChange}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#6B3038]"
-                />
-              </div>
-
-              {/* Time */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  وقت البداية
-                </label>
-
-                <input
-                  type="time"
-                  name="startTime"
-                  value={bookingData.startTime}
-                  onChange={handleChange}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#6B3038]"
-                />
-              </div>
-
-              {/* Hours */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  عدد الساعات
-                </label>
-
-                <select
-                  name="hours"
-                  value={bookingData.hours}
-                  onChange={handleChange}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#6B3038]"
-                >
-                  <option value="2">ساعتان</option>
-                  <option value="4">4 ساعات</option>
-                  <option value="6">6 ساعات</option>
-                  <option value="8">8 ساعات</option>
-                  <option value="12">12 ساعة</option>
-                </select>
-              </div>
-
-              {/* Notes */}
-              <div>
-                <label className="mb-2 block text-sm font-semibold">
-                  ملاحظات
-                </label>
-
-                <textarea
-                  name="notes"
-                  value={bookingData.notes}
-                  onChange={handleChange}
-                  rows="4"
-                  placeholder="مثلاً: أحتاج تزيين السيارة بالورد..."
-                  className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#6B3038]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-[#6B3038] py-3 font-semibold text-white transition hover:bg-[#57262d]"
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(
+                  `مرحباً، أريد الاستفسار عن ${car.name} من ${car.store}`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#6B3038] px-4 py-4 text-sm font-bold text-white transition hover:bg-[#57262D]"
               >
-                تأكيد طلب الحجز
-              </button>
-            </form>
+                <MessageCircle size={18} />
+                استفسر عن السيارة
+              </a>
+
+            </div>
+
           </div>
         </div>
-      )}
+      </section>
 
-      {/* Inquiry Modal */}
-      {showInquiryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-md rounded-3xl bg-white p-7">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-[#2d2424]">
-                استفسار عن السيارة
-              </h2>
+      {/* =====================================================
+          Gallery
+      ====================================================== */}
+      <section className="mx-auto max-w-6xl px-5 pb-16 md:px-8">
 
-              <button
-                onClick={() => setShowInquiryModal(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-xl"
-              >
-                ×
-              </button>
-            </div>
+        <div className="mb-5">
 
-            <p className="mt-4 leading-7 text-gray-500">
-              يمكنك إرسال استفسار إلى {car.company} حول
-              السعر، التوفر، التزيين أو أي تفاصيل أخرى.
-            </p>
+          <h2 className="text-xl font-bold">
+            صور السيارة
+          </h2>
 
-            <textarea
-              rows="5"
-              placeholder="اكتبي استفسارك هنا..."
-              className="mt-5 w-full resize-none rounded-xl border border-gray-200 p-4 outline-none focus:border-[#6B3038]"
-            />
+          <p className="mt-1 text-sm text-gray-400">
+            شوفي السيارة من أكثر من زاوية
+          </p>
 
-            <button className="mt-4 w-full rounded-xl bg-[#6B3038] py-3 font-semibold text-white">
-              إرسال الاستفسار
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+
+          {car.images.map((image, index) => (
+            <button
+              key={`${image}-gallery-${index}`}
+              type="button"
+              onClick={() => {
+                setActiveImage(index);
+                setShowImageModal(true);
+              }}
+              className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#f3e9e2]"
+            >
+              <img
+                src={image}
+                alt={`${car.name} ${index + 1}`}
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+              />
+
+              <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
             </button>
-          </div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* =====================================================
+          Image Modal
+      ====================================================== */}
+      {showImageModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setShowImageModal(false)}
+        >
+
+          {/* Close */}
+          <button
+            type="button"
+            onClick={() => setShowImageModal(false)}
+            className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+            aria-label="إغلاق"
+          >
+            <X size={22} />
+          </button>
+
+          {/* Previous */}
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              previousImage();
+            }}
+            className="absolute right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:right-8"
+            aria-label="الصورة السابقة"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Image */}
+          <img
+            src={car.images[activeImage]}
+            alt={car.name}
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-[88vh] max-w-[90vw] rounded-2xl object-contain"
+          />
+
+          {/* Next */}
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              nextImage();
+            }}
+            className="absolute left-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:left-8"
+            aria-label="الصورة التالية"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
         </div>
       )}
     </div>

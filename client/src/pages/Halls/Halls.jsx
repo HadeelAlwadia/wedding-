@@ -1,261 +1,317 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { Heart, MapPin, Search, Star } from "lucide-react";
 
 const Halls = () => {
+  const [search, setSearch] = useState("");
+  const [favorites, setFavorites] = useState([]);
+
   const halls = [
     {
       id: 1,
-      name: "قصر الياسمين",
+      name: "قاعة ليالي العمر",
+      username: "@layali_alomr",
       location: "غزة - الرمال",
-      price: "يبدأ من 2500 ₪",
-      capacity: "300 شخص",
+      price: 1800,
+      rating: 4.9,
+      reviews: 184,
+      type: "قاعة أفراح",
       image:
-        "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1000&q=80",
-      rating: 4.8,
+        "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=90",
     },
     {
       id: 2,
-      name: "قاعة ليالي",
+      name: "قاعة الياسمين",
+      username: "@alyasmeen_hall",
       location: "غزة - النصر",
-      price: "يبدأ من 2000 ₪",
-      capacity: "250 شخص",
+      price: 1500,
+      rating: 4.8,
+      reviews: 126,
+      type: "قاعة أفراح",
       image:
-        "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1000&q=80",
-      rating: 4.7,
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=90",
     },
     {
       id: 3,
-      name: "قصر الأميرات",
+      name: "قصر النخبة",
+      username: "@elite_palace",
       location: "خانيونس",
-      price: "يبدأ من 3000 ₪",
-      capacity: "400 شخص",
-      image:
-        "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1000&q=80",
+      price: 2200,
       rating: 4.9,
+      reviews: 98,
+      type: "قصر مناسبات",
+      image:
+        "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=90",
     },
     {
       id: 4,
-      name: "قاعة النخبة",
+      name: "قاعة روز",
+      username: "@rose_hall",
       location: "غزة - تل الهوى",
-      price: "يبدأ من 2200 ₪",
-      capacity: "280 شخص",
+      price: 1300,
+      rating: 4.7,
+      reviews: 84,
+      type: "قاعة أفراح",
       image:
-        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=80",
-      rating: 4.6,
+        "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1200&q=90",
     },
     {
       id: 5,
-      name: "قاعة روز",
+      name: "قاعة اللؤلؤة",
+      username: "@al_loloa_hall",
       location: "دير البلح",
-      price: "يبدأ من 1800 ₪",
-      capacity: "200 شخص",
+      price: 1100,
+      rating: 4.6,
+      reviews: 61,
+      type: "قاعة مناسبات",
       image:
-        "https://images.unsplash.com/photo-1478146896981-b80fe463b330?auto=format&fit=crop&w=1000&q=80",
-      rating: 4.8,
+        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=90",
     },
     {
       id: 6,
-      name: "ليالي القمر",
+      name: "قصر السلطانة",
+      username: "@sultana_palace",
       location: "رفح",
-      price: "يبدأ من 1700 ₪",
-      capacity: "180 شخص",
+      price: 2000,
+      rating: 4.8,
+      reviews: 73,
+      type: "قصر أفراح",
       image:
-        "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1000&q=80",
-      rating: 4.5,
+        "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=90",
     },
   ];
 
-  return (
-    <div className="bg-[#fffaf5]">
+  const filteredHalls = useMemo(() => {
+    const value = search.trim().toLowerCase();
 
-      {/* Hero */}
-      <section className="bg-[#f5ebe3] px-6 py-20">
+    if (!value) return halls;
+
+    return halls.filter((hall) => {
+      return (
+        hall.name.toLowerCase().includes(value) ||
+        hall.username.toLowerCase().includes(value) ||
+        hall.location.toLowerCase().includes(value) ||
+        hall.type.toLowerCase().includes(value)
+      );
+    });
+  }, [search]);
+
+  const toggleFavorite = (id) => {
+    setFavorites((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  };
+
+  return (
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#fffaf5] text-[#2d2424]"
+    >
+      {/* Header */}
+      <section className="px-5 pb-8 pt-10 md:px-8 md:pt-14">
         <div className="mx-auto max-w-7xl">
 
-          <div className="max-w-3xl">
-            <span className="text-sm font-semibold tracking-wide text-[#a27643]">
-              صالات الأفراح
-            </span>
+          <div className="flex items-end justify-between gap-5">
 
-            <h1 className="mt-4 text-4xl font-bold leading-tight text-[#2d2424] md:text-6xl">
-              اختاري المكان الذي
-              <br />
-              يبدأ فيه أجمل يوم
-            </h1>
+            <div>
+              <span className="text-xs font-semibold tracking-[2px] text-[#a27643]">
+                WEDDING VENUES
+              </span>
 
-            <p className="mt-6 max-w-2xl text-base leading-8 text-gray-500 md:text-lg">
-              اكتشفي مجموعة من صالات الأفراح، وتعرّفي على
-              الأسعار والمواقع والسعة والتقييمات قبل اختيارك.
-            </p>
+              <h1 className="mt-2 text-3xl font-bold md:text-4xl">
+                صالات الأفراح
+              </h1>
+
+              <p className="mt-2 text-sm leading-7 text-gray-400">
+                اكتشفي المكان الذي يشبه حلمك ويكمل يومك.
+              </p>
+            </div>
+
+            <div className="hidden h-12 w-12 items-center justify-center rounded-full bg-[#f8eee7] text-xl text-[#6B3038] sm:flex">
+              ♡
+            </div>
+
           </div>
 
-        </div>
-      </section>
-
-      {/* Search & Filters */}
-      <section className="border-b border-[#eadfd7] bg-white px-6 py-6">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row">
-
           {/* Search */}
-          <div className="flex flex-1 items-center rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-4">
-            <span className="ml-3 text-lg">🔎</span>
+          <div className="mt-7 flex items-center rounded-2xl border border-[#eadfd7] bg-white px-4 shadow-sm">
+
+            <Search
+              size={19}
+              className="shrink-0 text-gray-400"
+            />
 
             <input
               type="text"
-              placeholder="ابحثي عن اسم الصالة..."
-              className="w-full bg-transparent py-3.5 text-sm text-gray-700 outline-none"
+              value={search}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
+              placeholder="ابحثي عن قاعة أو مكان..."
+              className="w-full bg-transparent px-3 py-4 text-sm outline-none placeholder:text-gray-400"
             />
+
           </div>
-
-          {/* Location */}
-          <select className="rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-5 py-3.5 text-sm text-gray-600 outline-none">
-            <option>كل المناطق</option>
-            <option>غزة</option>
-            <option>خانيونس</option>
-            <option>دير البلح</option>
-            <option>رفح</option>
-          </select>
-
-          {/* Price */}
-          <select className="rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-5 py-3.5 text-sm text-gray-600 outline-none">
-            <option>كل الأسعار</option>
-            <option>أقل من 2000 ₪</option>
-            <option>2000 - 3000 ₪</option>
-            <option>أكثر من 3000 ₪</option>
-          </select>
-
-          <button className="rounded-xl bg-[#6B3038] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#57262D]">
-            بحث
-          </button>
 
         </div>
       </section>
 
-      {/* Halls */}
-      <section className="px-6 py-16">
+      {/* Content */}
+      <section className="px-5 pb-16 md:px-8">
         <div className="mx-auto max-w-7xl">
 
-          {/* Header */}
-          <div className="mb-8 flex items-end justify-between">
+          {/* Results Header */}
+          <div className="mb-5 flex items-center justify-between">
 
             <div>
-              <span className="text-sm font-semibold text-[#a27643]">
-                الصالات المتاحة
-              </span>
-
-              <h2 className="mt-2 text-2xl font-bold text-[#2d2424] md:text-3xl">
-                اكتشفي الصالة المناسبة لكِ
+              <h2 className="text-lg font-bold">
+                أماكن مميزة
               </h2>
+
+              <p className="mt-1 text-xs text-gray-400">
+                {filteredHalls.length} صالات
+              </p>
             </div>
 
-            <span className="hidden text-sm text-gray-400 sm:block">
-              {halls.length} صالات
+            <span className="text-xs text-gray-400">
+              اكتشفي المزيد
             </span>
 
           </div>
 
-          {/* Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Halls Grid */}
+          {filteredHalls.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:gap-6">
 
-            {halls.map((hall) => (
-              <Link
-                key={hall.id}
-                to={`/halls/${hall.id}`}
-                className="group overflow-hidden rounded-3xl border border-[#eadfd7] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
+              {filteredHalls.map((hall) => {
+                const isFavorite =
+                  favorites.includes(hall.id);
 
-                {/* Image */}
-                <div className="relative h-64 overflow-hidden">
-
-                  <img
-                    src={hall.image}
-                    alt={hall.name}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-
-                  {/* Favorite */}
-                  <button
-                    onClick={(event) => event.preventDefault()}
-                    className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm backdrop-blur transition hover:bg-white"
+                return (
+                  <Link
+                    key={hall.id}
+                    to={`/halls/${hall.id}`}
+                    className="group block"
                   >
-                    ♡
-                  </button>
+                    {/* Image */}
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#f3e9e2] sm:rounded-3xl">
 
-                  {/* Rating */}
-                  <div className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#2d2424] backdrop-blur">
-                    ⭐ {hall.rating}
-                  </div>
+                      <img
+                        src={hall.image}
+                        alt={hall.name}
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      />
 
-                </div>
+                      {/* Soft Gradient */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                {/* Content */}
-                <div className="p-6">
+                      {/* Favorite */}
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleFavorite(hall.id);
+                        }}
+                        className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur transition hover:bg-white sm:h-10 sm:w-10"
+                        aria-label="المفضلة"
+                      >
+                        <Heart
+                          size={17}
+                          strokeWidth={1.8}
+                          className={
+                            isFavorite
+                              ? "fill-[#6B3038] text-[#6B3038]"
+                              : "text-[#6B3038]"
+                          }
+                        />
+                      </button>
 
-                  <h3 className="text-xl font-bold text-[#2d2424]">
-                    {hall.name}
-                  </h3>
+                      {/* Rating */}
+                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5 text-white">
 
-                  <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
-                    <span>📍</span>
-                    <span>{hall.location}</span>
-                  </div>
+                        <Star
+                          size={13}
+                          className="fill-[#e5c28d] text-[#e5c28d]"
+                        />
 
-                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                    <span>👥</span>
-                    <span>{hall.capacity}</span>
-                  </div>
+                        <span className="text-xs font-semibold">
+                          {hall.rating}
+                        </span>
 
-                  <div className="mt-5 flex items-center justify-between border-t border-[#f0e7e1] pt-5">
+                      </div>
 
-                    <div>
-                      <span className="block text-xs text-gray-400">
-                        السعر
-                      </span>
-
-                      <span className="mt-1 block text-sm font-bold text-[#6B3038]">
-                        {hall.price}
-                      </span>
                     </div>
 
-                    <span className="text-sm font-semibold text-[#6B3038] transition group-hover:text-[#a27643]">
-                      التفاصيل ←
-                    </span>
+                    {/* Info */}
+                    <div className="px-1 pt-3">
 
-                  </div>
+                      <div className="flex items-start justify-between gap-2">
 
-                </div>
+                        <div className="min-w-0">
 
-              </Link>
-            ))}
+                          <h3 className="truncate text-sm font-bold text-[#2d2424] sm:text-base">
+                            {hall.name}
+                          </h3>
 
-          </div>
+                          <p className="mt-1 truncate text-xs text-gray-400">
+                            {hall.username}
+                          </p>
+
+                        </div>
+
+                        <span className="shrink-0 text-sm font-bold text-[#6B3038]">
+                          {hall.price} ₪
+                        </span>
+
+                      </div>
+
+                      <div className="mt-2 flex items-center gap-1 text-[11px] text-gray-400">
+
+                        <MapPin size={12} />
+
+                        <span>
+                          {hall.location}
+                        </span>
+
+                      </div>
+
+                    </div>
+                  </Link>
+                );
+              })}
+
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-[#eadfd7] bg-white px-6 py-20 text-center">
+
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8eee7] text-2xl">
+                🏛️
+              </div>
+
+              <h3 className="mt-5 text-lg font-bold">
+                ما لقينا صالات مطابقة
+              </h3>
+
+              <p className="mt-2 text-sm text-gray-400">
+                جربي البحث باسم آخر.
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="mt-5 text-sm font-semibold text-[#6B3038]"
+              >
+                عرض كل الصالات
+              </button>
+
+            </div>
+          )}
 
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="bg-[#f5ebe3] px-6 py-16">
-        <div className="mx-auto max-w-4xl rounded-[2rem] bg-[#6B3038] px-6 py-14 text-center text-white md:px-12">
-
-          <span className="text-3xl">✨</span>
-
-          <h2 className="mt-4 text-3xl font-bold md:text-4xl">
-            لم تجدي ما تبحثين عنه؟
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-8 text-white/70">
-            اكتشفي باقي خدمات الزفاف في هنا واكملي تجهيز تفاصيل يومك.
-          </p>
-
-          <Link
-            to="/beauty"
-            className="mt-7 inline-flex rounded-xl bg-[#e5c28d] px-7 py-3.5 text-sm font-bold text-[#2d2424] transition hover:bg-[#f0d5aa]"
-          >
-            اكتشفي باقي الخدمات
-          </Link>
-
-        </div>
-      </section>
-
     </div>
   );
 };

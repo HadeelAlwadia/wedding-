@@ -1,64 +1,144 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import {
+  Heart,
+  MapPin,
+  Star,
+  MessageCircle,
+  Share2,
+  CheckCircle,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Play,
+} from "lucide-react";
 
 const BeautyDetails = () => {
   const { id } = useParams();
 
-  const [activeImage, setActiveImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [activeTab, setActiveTab] = useState("photos");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedReel, setSelectedReel] = useState(null);
 
-  // بيانات تجريبية مؤقتة
-  // لاحقًا ستأتي من الـ API
-  const salon = {
+  const beauty = {
     id,
+
     name: "لَمسَة بيوتي",
+    username: "lamset_beauty",
     location: "غزة - الرمال",
     rating: 4.9,
     reviewsCount: 156,
-    price: 250,
-    priceLabel: "يبدأ من 250 ₪",
+    startingPrice: 250,
+
+    profileImage:
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=500&q=85",
+
+    coverImage:
+      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1800&q=90",
 
     description:
-      "لَمسَة بيوتي هي مساحة متخصصة في جمال العروس وإطلالتها، نقدم خدمات المكياج والتسريحات والعناية بالجمال بأيدي متخصصات، مع الاهتمام بكل تفصيلة لتظهري بإطلالة تليق بيومك المميز.",
+      "نهتم بإطلالة العروس بكل تفاصيلها، من المكياج وتسريحات الشعر إلى اللمسات النهائية. نقدم لكِ إطلالة أنيقة وناعمة تناسبك وتبقى جميلة في صور يومك المميز.",
 
     images: [
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1600&q=85",
-      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1600&q=85",
+      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=90",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=90",
     ],
 
-    services: [
+    reels: [
+      {
+        id: 1,
+        title: "إطلالة عروس ناعمة",
+        thumbnail:
+          "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-woman-getting-ready-1576/1080p.mp4",
+      },
+      {
+        id: 2,
+        title: "مكياج العروس",
+        thumbnail:
+          "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-woman-putting-on-makeup-1578/1080p.mp4",
+      },
+      {
+        id: 3,
+        title: "تسريحة زفاف",
+        thumbnail:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-woman-hair-1577/1080p.mp4",
+      },
+      {
+        id: 4,
+        title: "من داخل الاستوديو",
+        thumbnail:
+          "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-beauty-salon-1579/1080p.mp4",
+      },
+      {
+        id: 5,
+        title: "لمسات ما قبل الزفاف",
+        thumbnail:
+          "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-woman-beauty-1580/1080p.mp4",
+      },
+      {
+        id: 6,
+        title: "تجهيز العروس",
+        thumbnail:
+          "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=85",
+        video:
+          "https://cdn.coverr.co/videos/coverr-woman-getting-ready-1581/1080p.mp4",
+      },
+    ],
+
+    catalog: [
       {
         icon: "💄",
         title: "مكياج العروس",
-        description: "إطلالة متكاملة تناسب ملامحك وتفاصيل فستانك.",
+        description:
+          "إطلالة عروس متكاملة بمكياج ناعم وأنيق يناسب ملامحك.",
+        price: "يبدأ من 250 ₪",
+        image:
+          "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85",
       },
       {
         icon: "💇‍♀️",
-        title: "تسريحات العروس",
-        description: "تسريحات متنوعة تناسب مختلف أنواع الشعر.",
+        title: "تسريحة العروس",
+        description:
+          "تسريحات زفاف متنوعة تناسب الفستان وشكل الوجه.",
+        price: "يبدأ من 200 ₪",
+        image:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=85",
       },
       {
         icon: "✨",
-        title: "مكياج مناسبات",
-        description: "إطلالات أنيقة للمناسبات والحفلات.",
+        title: "رموش ومكياج ناعم",
+        description:
+          "لمسات بسيطة وأنيقة للمناسبات والإطلالات الخاصة.",
+        price: "يبدأ من 120 ₪",
+        image:
+          "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=85",
       },
       {
-        icon: "💅",
-        title: "العناية بالأظافر",
-        description: "خدمات عناية وتجميل للأظافر.",
-      },
-      {
-        icon: "🧖‍♀️",
+        icon: "💆‍♀️",
         title: "العناية بالبشرة",
-        description: "جلسات تحضير البشرة قبل المناسبة.",
-      },
-      {
-        icon: "👁️",
-        title: "رموش وحواجب",
-        description: "تفاصيل بسيطة تكمل إطلالتك.",
+        description:
+          "جلسة عناية وتحضير للبشرة قبل المناسبة.",
+        price: "يبدأ من 150 ₪",
+        image:
+          "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=85",
       },
     ],
 
@@ -66,49 +146,22 @@ const BeautyDetails = () => {
       {
         name: "الباقة الأساسية",
         price: 250,
-        description: "اختيار مناسب لإطلالة بسيطة وأنيقة.",
-        features: [
-          "مكياج عروس",
-          "تسريحة شعر",
-          "تركيب رموش",
-        ],
+        description:
+          "مكياج ناعم وتسريحة بسيطة للمناسبة.",
       },
       {
         name: "باقة العروس",
         price: 400,
-        description: "الإطلالة المتكاملة ليوم الزفاف.",
-        features: [
-          "مكياج عروس فاخر",
-          "تسريحة شعر",
-          "رموش وحواجب",
-          "تحضير البشرة",
-          "تعديل الإطلالة",
-        ],
+        description:
+          "مكياج وتسريحة عروس مع اللمسات النهائية.",
         popular: true,
       },
       {
         name: "الباقة الملكية",
         price: 550,
-        description: "تجربة جمال متكاملة من البداية للنهاية.",
-        features: [
-          "جلسة تحضير البشرة",
-          "مكياج فاخر",
-          "تسريحة متقدمة",
-          "رموش وحواجب",
-          "عناية بالأظافر",
-          "جلسة تعديل",
-        ],
+        description:
+          "إطلالة متكاملة مع عناية وتجهيز شامل للعروس.",
       },
-    ],
-
-    workingHours: [
-      { day: "السبت", hours: "10:00 ص - 8:00 م" },
-      { day: "الأحد", hours: "10:00 ص - 8:00 م" },
-      { day: "الإثنين", hours: "10:00 ص - 8:00 م" },
-      { day: "الثلاثاء", hours: "10:00 ص - 8:00 م" },
-      { day: "الأربعاء", hours: "10:00 ص - 8:00 م" },
-      { day: "الخميس", hours: "10:00 ص - 9:00 م" },
-      { day: "الجمعة", hours: "مغلق" },
     ],
 
     reviews: [
@@ -116,681 +169,590 @@ const BeautyDetails = () => {
         name: "سارة أحمد",
         rating: 5,
         comment:
-          "المكياج كان جميل جدًا وناسب ملامحي، والتعامل كان راقيًا جدًا.",
+          "المكياج كان رائع جدًا وطلع ناعم مثل ما كنت أتمنى.",
         date: "منذ أسبوع",
       },
       {
         name: "نور محمد",
         rating: 5,
         comment:
-          "التسريحة والمكياج طلعوا أحلى مما توقعت. تجربة ممتازة.",
-        date: "منذ 3 أسابيع",
+          "التعامل جميل جدًا والتسريحة والمكياج كانوا ممتازين.",
+        date: "منذ أسبوعين",
       },
       {
         name: "ريم علي",
         rating: 4,
         comment:
-          "مكان مرتب والخدمة ممتازة والنتيجة كانت جميلة.",
+          "شغل مرتب والنتيجة كانت جميلة جدًا.",
         date: "منذ شهر",
       },
     ],
   };
 
+  const tabs = [
+    {
+      id: "photos",
+      label: "الصور",
+    },
+    {
+      id: "reels",
+      label: "الريلز",
+    },
+    {
+      id: "catalog",
+      label: "الكتالوج",
+    },
+    {
+      id: "packages",
+      label: "الباقات",
+    },
+    {
+      id: "reviews",
+      label: "التقييمات",
+    },
+  ];
+
   return (
-    <div className="bg-[#fffaf5]">
-
+    <div
+      dir="rtl"
+      className="min-h-screen bg-[#fffaf5] text-[#2d2424]"
+    >
       {/* Breadcrumb */}
-      <div className="border-b border-[#eadfd7] bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-4">
+      <div className="mx-auto max-w-5xl px-4 pt-6">
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <Link
+            to="/"
+            className="transition hover:text-[#6B3038]"
+          >
+            الرئيسية
+          </Link>
 
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-400">
+          <ChevronLeft size={15} />
 
-            <Link
-              to="/"
-              className="transition hover:text-[#6B3038]"
-            >
-              الرئيسية
-            </Link>
+          <Link
+            to="/beauty"
+            className="transition hover:text-[#6B3038]"
+          >
+            الكوافيرات
+          </Link>
 
-            <span>←</span>
+          <ChevronLeft size={15} />
 
-            <Link
-              to="/beauty"
-              className="transition hover:text-[#6B3038]"
-            >
-              الكوافيرات والتجميل
-            </Link>
-
-            <span>←</span>
-
-            <span className="text-[#2d2424]">
-              {salon.name}
-            </span>
-
-          </div>
-
+          <span className="text-[#6B3038]">
+            {beauty.name}
+          </span>
         </div>
       </div>
 
-      {/* Gallery */}
-      <section className="bg-white px-6 pb-8 pt-8">
+      {/* Profile */}
+      <main className="mx-auto max-w-5xl px-4 pb-16">
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          {/* Cover */}
+          <div className="relative h-48 overflow-hidden md:h-64">
+            <img
+              src={beauty.coverImage}
+              alt={beauty.name}
+              className="h-full w-full object-cover"
+            />
 
-        <div className="mx-auto max-w-7xl">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-          <div className="grid gap-3 lg:grid-cols-4">
-
-            {/* Main Image */}
-            <div className="relative h-[420px] overflow-hidden rounded-[2rem] lg:col-span-2 lg:h-[540px]">
-
-              <img
-                src={salon.images[activeImage]}
-                alt={salon.name}
-                className="h-full w-full object-cover"
+            <button
+              type="button"
+              onClick={() =>
+                setIsFavorite((prev) => !prev)
+              }
+              className="absolute left-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg backdrop-blur transition hover:bg-white"
+            >
+              <Heart
+                size={20}
+                fill={
+                  isFavorite
+                    ? "currentColor"
+                    : "none"
+                }
               />
-
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-7">
-
-                <span className="rounded-full bg-[#e5c28d] px-4 py-2 text-xs font-bold text-[#2d2424]">
-                  كوافير مميزة
-                </span>
-
-              </div>
-
-            </div>
-
-            {/* Gallery Images */}
-            <div className="grid gap-3 lg:col-span-2 lg:grid-cols-2">
-
-              {salon.images.slice(1, 4).map((image, index) => (
-                <button
-                  key={image}
-                  onClick={() => setActiveImage(index + 1)}
-                  className="group relative h-[200px] overflow-hidden rounded-[2rem] lg:h-auto"
-                >
-                  <img
-                    src={image}
-                    alt={`${salon.name} ${index + 2}`}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-
-                  {index === 2 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-
-                      <span className="rounded-xl bg-black/60 px-5 py-3 text-xs font-bold text-white backdrop-blur">
-                        عرض جميع الصور
-                      </span>
-
-                    </div>
-                  )}
-
-                </button>
-              ))}
-
-            </div>
-
+            </button>
           </div>
 
-        </div>
-
-      </section>
-
-      {/* Main */}
-      <section className="px-6 py-10">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
-
-            {/* Main Content */}
-            <div>
-
-              {/* Header */}
-              <div className="flex flex-col gap-5 border-b border-[#eadfd7] pb-8 sm:flex-row sm:items-start sm:justify-between">
-
-                <div>
-
-                  <div className="flex flex-wrap items-center gap-3">
-
-                    <h1 className="text-3xl font-bold text-[#2d2424] md:text-4xl">
-                      {salon.name}
-                    </h1>
-
-                    <span className="rounded-full bg-[#f8eee7] px-3 py-1 text-xs font-semibold text-[#6B3038]">
-                      موصى بها
-                    </span>
-
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
-
-                    <span>
-                      📍 {salon.location}
-                    </span>
-
-                    <span className="h-1 w-1 rounded-full bg-gray-300" />
-
-                    <span className="font-semibold text-[#2d2424]">
-                      ⭐ {salon.rating}
-                    </span>
-
-                    <span>
-                      ({salon.reviewsCount} تقييم)
-                    </span>
-
-                  </div>
-
+          {/* Profile Info */}
+          <div className="px-5 pb-7 md:px-8">
+            <div className="relative flex flex-col items-center md:flex-row md:items-end md:justify-between">
+              {/* Profile Image */}
+              <div className="-mt-14">
+                <div className="h-28 w-28 rounded-full border-4 border-white bg-[#f8eee7] p-1 shadow-lg">
+                  <img
+                    src={beauty.profileImage}
+                    alt={beauty.name}
+                    className="h-full w-full rounded-full object-cover"
+                  />
                 </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-
-                  <button
-                    onClick={() => setIsFavorite(!isFavorite)}
-                    className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
-                      isFavorite
-                        ? "border-[#6B3038] bg-[#f8eee7] text-[#6B3038]"
-                        : "border-[#eadfd7] bg-white text-gray-500 hover:border-[#6B3038]"
-                    }`}
-                  >
-                    {isFavorite ? "♥" : "♡"}
-                  </button>
-
-                  <button className="flex h-11 w-11 items-center justify-center rounded-full border border-[#eadfd7] bg-white text-gray-500 transition hover:border-[#6B3038]">
-                    ↗
-                  </button>
-
-                </div>
-
               </div>
 
-              {/* About */}
-              <div className="border-b border-[#eadfd7] py-10">
+              {/* Buttons */}
+              <div className="mt-5 flex w-full gap-3 md:w-auto">
+                <button
+                  type="button"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#6B3038] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#57262D] md:flex-none"
+                >
+                  <MessageCircle size={18} />
+                  تواصل
+                </button>
 
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  عن {salon.name}
-                </h2>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsFavorite((prev) => !prev)
+                  }
+                  className="flex items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-[#6B3038] transition hover:bg-[#fff8f3]"
+                >
+                  <Heart
+                    size={19}
+                    fill={
+                      isFavorite
+                        ? "currentColor"
+                        : "none"
+                    }
+                  />
+                </button>
 
-                <p className="mt-5 max-w-3xl text-sm leading-8 text-gray-500 md:text-base">
-                  {salon.description}
+                <button
+                  type="button"
+                  className="hidden items-center justify-center rounded-xl border border-[#eadfd7] px-4 py-3 text-gray-500 transition hover:bg-[#fff8f3] sm:flex"
+                >
+                  <Share2 size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Name */}
+            <div className="mt-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold md:text-3xl">
+                  {beauty.name}
+                </h1>
+
+                <CheckCircle
+                  size={19}
+                  className="fill-[#6B3038] text-white"
+                />
+              </div>
+
+              <p className="mt-1 text-sm text-gray-400">
+                @{beauty.username}
+              </p>
+
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={16} />
+                  {beauty.location}
+                </span>
+
+                <span className="flex items-center gap-1.5">
+                  <Star
+                    size={16}
+                    className="fill-[#e5c28d] text-[#e5c28d]"
+                  />
+
+                  <strong className="text-[#2d2424]">
+                    {beauty.rating}
+                  </strong>
+
+                  ({beauty.reviewsCount} تقييم)
+                </span>
+              </div>
+
+              <p className="mt-5 max-w-3xl text-sm leading-8 text-gray-500">
+                {beauty.description}
+              </p>
+
+              <p className="mt-3 text-sm font-semibold text-[#6B3038]">
+                تبدأ الأسعار من {beauty.startingPrice} ₪
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="mt-7 grid grid-cols-3 border-y border-[#f0e7e1] py-5 text-center">
+              <div>
+                <p className="text-xl font-bold">
+                  {beauty.images.length}
                 </p>
 
+                <p className="mt-1 text-xs text-gray-400">
+                  صورة
+                </p>
               </div>
 
-              {/* Services */}
-              <div className="border-b border-[#eadfd7] py-10">
+              <div className="border-x border-[#f0e7e1]">
+                <p className="text-xl font-bold">
+                  {beauty.reels.length}
+                </p>
 
-                <span className="text-sm font-semibold text-[#a27643]">
-                  خدماتنا
-                </span>
+                <p className="mt-1 text-xs text-gray-400">
+                  ريلز
+                </p>
+              </div>
 
-                <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                  كل ما تحتاجينه لإطلالتك
-                </h2>
+              <div>
+                <p className="text-xl font-bold">
+                  {beauty.reviewsCount}
+                </p>
 
-                <div className="mt-7 grid gap-4 sm:grid-cols-2">
+                <p className="mt-1 text-xs text-gray-400">
+                  تقييم
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                  {salon.services.map((service) => (
-                    <div
-                      key={service.title}
-                      className="rounded-3xl border border-[#eadfd7] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
+        {/* Tabs */}
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white shadow-sm">
+          <div className="grid grid-cols-5 overflow-x-auto border-b border-[#f0e7e1]">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() =>
+                  setActiveTab(tab.id)
+                }
+                className={`relative whitespace-nowrap py-4 text-sm font-semibold transition ${
+                  activeTab === tab.id
+                    ? "text-[#6B3038]"
+                    : "text-gray-400 hover:text-[#6B3038]"
+                }`}
+              >
+                {tab.label}
+
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-1/2 h-0.5 w-12 -translate-x-1/2 bg-[#6B3038]" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4 md:p-7">
+            {/* Photos */}
+            {activeTab === "photos" && (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
+                {beauty.images.map(
+                  (image, index) => (
+                    <button
+                      key={image}
+                      type="button"
+                      onClick={() =>
+                        setSelectedImage(index)
+                      }
+                      className="group relative aspect-square overflow-hidden rounded-xl bg-[#f8eee7]"
                     >
+                      <img
+                        src={image}
+                        alt={`${beauty.name} ${
+                          index + 1
+                        }`}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      />
 
-                      <div className="flex items-start gap-4">
+                      <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+                    </button>
+                  )
+                )}
+              </div>
+            )}
 
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f8eee7] text-xl">
-                          {service.icon}
+            {/* Reels */}
+            {activeTab === "reels" && (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
+                {beauty.reels.map((reel) => (
+                  <button
+                    key={reel.id}
+                    type="button"
+                    onClick={() =>
+                      setSelectedReel(reel)
+                    }
+                    className="group relative aspect-[9/14] overflow-hidden rounded-2xl bg-[#f8eee7]"
+                  >
+                    <img
+                      src={reel.thumbnail}
+                      alt={reel.title}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-[#6B3038] shadow-lg transition group-hover:scale-110">
+                        <Play
+                          size={22}
+                          fill="currentColor"
+                        />
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-0 right-0 left-0 p-4 text-right text-white">
+                      <p className="text-sm font-bold">
+                        {reel.title}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Catalog */}
+            {activeTab === "catalog" && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {beauty.catalog.map(
+                  (item) => (
+                    <div
+                      key={item.title}
+                      className="group overflow-hidden rounded-2xl border border-[#eadfd7] bg-white transition hover:border-[#e5c28d] hover:shadow-sm"
+                    >
+                      <div className="relative h-44 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+
+                        <div className="absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-2xl shadow-sm">
+                          {item.icon}
                         </div>
-
-                        <div>
-
-                          <h3 className="font-bold text-[#2d2424]">
-                            {service.title}
-                          </h3>
-
-                          <p className="mt-2 text-sm leading-6 text-gray-400">
-                            {service.description}
-                          </p>
-
-                        </div>
-
                       </div>
 
+                      <div className="p-5">
+                        <h3 className="font-bold">
+                          {item.title}
+                        </h3>
+
+                        <p className="mt-2 text-sm leading-6 text-gray-400">
+                          {item.description}
+                        </p>
+
+                        <div className="mt-4 flex items-center justify-between border-t border-[#f0e7e1] pt-4">
+                          <span className="text-sm font-bold text-[#6B3038]">
+                            {item.price}
+                          </span>
+
+                          <button
+                            type="button"
+                            className="rounded-xl border border-[#eadfd7] px-4 py-2 text-xs font-bold text-[#6B3038] transition hover:bg-[#fffaf5]"
+                          >
+                            استفسار
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-
-                </div>
-
+                  )
+                )}
               </div>
+            )}
 
-              {/* Packages */}
-              <div className="border-b border-[#eadfd7] py-10">
-
-                <span className="text-sm font-semibold text-[#a27643]">
-                  الباقات والأسعار
-                </span>
-
-                <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                  اختاري الإطلالة التي تناسبك
-                </h2>
-
-                <div className="mt-7 grid gap-5 md:grid-cols-3">
-
-                  {salon.packages.map((pkg) => (
-
+            {/* Packages */}
+            {activeTab === "packages" && (
+              <div className="grid gap-4 md:grid-cols-3">
+                {beauty.packages.map(
+                  (pkg) => (
                     <div
                       key={pkg.name}
-                      className={`relative rounded-3xl border p-6 transition ${
+                      className={`relative rounded-2xl border p-5 ${
                         pkg.popular
-                          ? "border-[#6B3038] bg-[#6B3038] text-white shadow-xl"
-                          : "border-[#eadfd7] bg-white"
+                          ? "border-[#6B3038] bg-[#fffaf5]"
+                          : "border-[#eadfd7]"
                       }`}
                     >
-
                       {pkg.popular && (
-                        <span className="absolute right-5 top-5 rounded-full bg-[#e5c28d] px-3 py-1 text-[10px] font-bold text-[#2d2424]">
+                        <span className="absolute -top-3 right-5 rounded-full bg-[#6B3038] px-3 py-1 text-[11px] font-bold text-white">
                           الأكثر طلبًا
                         </span>
                       )}
 
-                      <h3
-                        className={`text-lg font-bold ${
-                          pkg.popular
-                            ? "text-white"
-                            : "text-[#2d2424]"
-                        }`}
-                      >
+                      <h3 className="font-bold">
                         {pkg.name}
                       </h3>
 
-                      <div
-                        className={`mt-5 text-3xl font-bold ${
-                          pkg.popular
-                            ? "text-[#e5c28d]"
-                            : "text-[#6B3038]"
-                        }`}
-                      >
-                        {pkg.price} ₪
+                      <div className="mt-4">
+                        <span className="text-2xl font-bold text-[#6B3038]">
+                          {pkg.price}
+                        </span>
+
+                        <span className="mr-1 text-sm text-gray-400">
+                          ₪
+                        </span>
                       </div>
 
-                      <p
-                        className={`mt-3 text-sm leading-7 ${
-                          pkg.popular
-                            ? "text-white/65"
-                            : "text-gray-400"
-                        }`}
-                      >
+                      <p className="mt-3 text-sm leading-6 text-gray-400">
                         {pkg.description}
                       </p>
 
-                      <div className="mt-6 space-y-3">
-
-                        {pkg.features.map((feature) => (
-                          <div
-                            key={feature}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <span className="text-[#e5c28d]">
-                              ✓
-                            </span>
-
-                            <span
-                              className={
-                                pkg.popular
-                                  ? "text-white/80"
-                                  : "text-gray-600"
-                              }
-                            >
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-
-                      </div>
-
                       <button
-                        onClick={() => setSelectedPackage(pkg)}
-                        className={`mt-7 w-full rounded-xl py-3 text-sm font-bold transition ${
-                          pkg.popular
-                            ? "bg-[#e5c28d] text-[#2d2424] hover:bg-[#f0d5aa]"
-                            : "border border-[#6B3038] text-[#6B3038] hover:bg-[#f8eee7]"
-                        }`}
+                        type="button"
+                        className="mt-5 w-full rounded-xl bg-[#6B3038] py-3 text-sm font-bold text-white transition hover:bg-[#57262D]"
                       >
-                        اختيار الباقة
+                        استفسار عن الباقة
                       </button>
-
                     </div>
-
-                  ))}
-
-                </div>
-
+                  )
+                )}
               </div>
+            )}
 
-              {/* Working Hours */}
-              <div className="border-b border-[#eadfd7] py-10">
+            {/* Reviews */}
+            {activeTab === "reviews" && (
+              <div className="space-y-4">
+                <div className="mb-6 flex items-center gap-4 rounded-2xl bg-[#fffaf5] p-5">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold">
+                      {beauty.rating}
+                    </p>
 
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  أوقات العمل
-                </h2>
-
-                <div className="mt-6 max-w-xl overflow-hidden rounded-3xl border border-[#eadfd7] bg-white">
-
-                  {salon.workingHours.map((item) => (
-                    <div
-                      key={item.day}
-                      className="flex items-center justify-between border-b border-[#f0e7e1] px-5 py-4 last:border-b-0"
-                    >
-
-                      <span className="text-sm font-semibold text-[#2d2424]">
-                        {item.day}
-                      </span>
-
-                      <span
-                        className={`text-sm ${
-                          item.hours === "مغلق"
-                            ? "text-red-400"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {item.hours}
-                      </span>
-
-                    </div>
-                  ))}
-
-                </div>
-
-              </div>
-
-              {/* Location */}
-              <div className="border-b border-[#eadfd7] py-10">
-
-                <h2 className="text-2xl font-bold text-[#2d2424]">
-                  الموقع
-                </h2>
-
-                <div className="mt-6 overflow-hidden rounded-3xl border border-[#eadfd7] bg-white">
-
-                  <div className="flex h-64 items-center justify-center bg-[#eee8e2]">
-
-                    <div className="text-center">
-
-                      <div className="text-4xl">
-                        📍
-                      </div>
-
-                      <p className="mt-3 font-semibold text-[#2d2424]">
-                        {salon.location}
-                      </p>
-
-                      <button className="mt-4 rounded-xl bg-[#6B3038] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#57262D]">
-                        فتح الموقع
-                      </button>
-
+                    <div className="mt-1 text-sm">
+                      ⭐⭐⭐⭐⭐
                     </div>
 
+                    <p className="mt-1 text-xs text-gray-400">
+                      {beauty.reviewsCount} تقييم
+                    </p>
                   </div>
-
                 </div>
 
-              </div>
-
-              {/* Reviews */}
-              <div className="py-10">
-
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-
-                  <div>
-
-                    <span className="text-sm font-semibold text-[#a27643]">
-                      آراء العميلات
-                    </span>
-
-                    <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                      تجارب من اختاروا {salon.name}
-                    </h2>
-
-                  </div>
-
-                  <div className="flex items-center gap-3">
-
-                    <span className="text-3xl font-bold text-[#2d2424]">
-                      {salon.rating}
-                    </span>
-
-                    <div>
-
-                      <div className="text-sm">
-                        ⭐⭐⭐⭐⭐
-                      </div>
-
-                      <span className="text-xs text-gray-400">
-                        {salon.reviewsCount} تقييم
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-                <div className="mt-7 space-y-4">
-
-                  {salon.reviews.map((review) => (
+                {beauty.reviews.map(
+                  (review) => (
                     <div
                       key={review.name}
-                      className="rounded-3xl border border-[#eadfd7] bg-white p-6"
+                      className="rounded-2xl border border-[#eadfd7] p-5"
                     >
-
-                      <div className="flex items-start justify-between gap-4">
-
+                      <div className="flex items-center justify-between">
                         <div>
-
-                          <h3 className="font-bold text-[#2d2424]">
+                          <h3 className="font-bold">
                             {review.name}
                           </h3>
 
-                          <div className="mt-1 text-sm">
-                            {"⭐".repeat(review.rating)}
-                          </div>
-
+                          <p className="mt-1 text-xs text-gray-400">
+                            {review.date}
+                          </p>
                         </div>
 
-                        <span className="text-xs text-gray-400">
-                          {review.date}
+                        <span className="text-sm">
+                          {"⭐".repeat(
+                            review.rating
+                          )}
                         </span>
-
                       </div>
 
                       <p className="mt-4 text-sm leading-7 text-gray-500">
                         {review.comment}
                       </p>
-
                     </div>
-                  ))}
-
-                </div>
-
+                  )
+                )}
               </div>
-
-            </div>
-
-            {/* Booking Sidebar */}
-            <aside>
-
-              <div className="sticky top-6 rounded-3xl border border-[#eadfd7] bg-white p-6 shadow-lg">
-
-                <div>
-
-                  <span className="text-sm text-gray-400">
-                    الخدمات تبدأ من
-                  </span>
-
-                  <div className="mt-2">
-
-                    <span className="text-3xl font-bold text-[#6B3038]">
-                      {salon.price} ₪
-                    </span>
-
-                  </div>
-
-                </div>
-
-                <div className="mt-6 border-t border-[#eadfd7] pt-6">
-
-                  <label className="mb-2 block text-sm font-bold text-[#2d2424]">
-                    تاريخ الموعد
-                  </label>
-
-                  <input
-                    type="date"
-                    className="w-full rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-4 py-3 text-sm outline-none focus:border-[#6B3038]"
-                  />
-
-                </div>
-
-                <div className="mt-4">
-
-                  <label className="mb-2 block text-sm font-bold text-[#2d2424]">
-                    الخدمة
-                  </label>
-
-                  <select className="w-full rounded-xl border border-[#eadfd7] bg-[#fffaf5] px-4 py-3 text-sm text-gray-600 outline-none focus:border-[#6B3038]">
-
-                    <option>
-                      اختاري الخدمة
-                    </option>
-
-                    {salon.services.map((service) => (
-                      <option key={service.title}>
-                        {service.title}
-                      </option>
-                    ))}
-
-                  </select>
-
-                </div>
-
-                <button className="mt-5 w-full rounded-xl bg-[#6B3038] py-4 text-sm font-bold text-white transition hover:bg-[#57262D]">
-                  احجزي موعدًا
-                </button>
-
-                <button className="mt-3 w-full rounded-xl border border-[#6B3038] py-4 text-sm font-bold text-[#6B3038] transition hover:bg-[#f8eee7]">
-                  أرسلي استفسارًا
-                </button>
-
-                <p className="mt-5 text-center text-xs leading-6 text-gray-400">
-                  لا يتم تأكيد الموعد إلا بعد التواصل مع الكوافير.
-                </p>
-
-                <div className="mt-6 rounded-2xl bg-[#f8f4f0] p-4">
-
-                  <div className="flex items-center gap-3">
-
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                      💬
-                    </div>
-
-                    <div>
-
-                      <p className="text-sm font-bold text-[#2d2424]">
-                        لديكِ سؤال؟
-                      </p>
-
-                      <p className="mt-1 text-xs text-gray-400">
-                        تواصلي مع الكوافير مباشرة.
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </aside>
-
+            )}
           </div>
+        </section>
+      </main>
 
-        </div>
+      {/* Image Modal */}
+      {selectedImage !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedImage(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
 
-      </section>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
 
-      {/* Package Modal */}
-      {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6">
+              setSelectedImage((current) =>
+                current === 0
+                  ? beauty.images.length - 1
+                  : current - 1
+              );
+            }}
+            className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:right-8"
+          >
+            <ChevronRight size={24} />
+          </button>
 
-          <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl">
+          <img
+            src={beauty.images[selectedImage]}
+            alt={beauty.name}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+            className="max-h-[85vh] max-w-full rounded-xl object-contain"
+          />
 
-            <div className="flex items-start justify-between">
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
 
-              <div>
+              setSelectedImage((current) =>
+                current === beauty.images.length - 1
+                  ? 0
+                  : current + 1
+              );
+            }}
+            className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:left-8"
+          >
+            <ChevronLeft size={24} />
+          </button>
 
-                <span className="text-sm text-[#a27643]">
-                  الباقة المختارة
-                </span>
-
-                <h2 className="mt-2 text-2xl font-bold text-[#2d2424]">
-                  {selectedPackage.name}
-                </h2>
-
-              </div>
-
-              <button
-                onClick={() => setSelectedPackage(null)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f8f4f0] text-gray-500"
-              >
-                ✕
-              </button>
-
-            </div>
-
-            <div className="mt-6 rounded-2xl bg-[#f8eee7] p-5">
-
-              <span className="text-sm text-gray-500">
-                السعر
-              </span>
-
-              <div className="mt-1 text-2xl font-bold text-[#6B3038]">
-                {selectedPackage.price} ₪
-              </div>
-
-            </div>
-
-            <p className="mt-5 text-sm leading-7 text-gray-500">
-              {selectedPackage.description}
-            </p>
-
-            <div className="mt-5 space-y-3">
-
-              {selectedPackage.features.map((feature) => (
-                <div
-                  key={feature}
-                  className="flex items-center gap-3 text-sm text-gray-600"
-                >
-                  <span className="text-[#6B3038]">
-                    ✓
-                  </span>
-
-                  {feature}
-                </div>
-              ))}
-
-            </div>
-
-            <button
-              onClick={() => setSelectedPackage(null)}
-              className="mt-7 w-full rounded-xl bg-[#6B3038] py-4 text-sm font-bold text-white transition hover:bg-[#57262D]"
-            >
-              متابعة الحجز
-            </button>
-
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
+            {selectedImage + 1} /{" "}
+            {beauty.images.length}
           </div>
-
         </div>
       )}
 
+      {/* Reel Modal */}
+      {selectedReel && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+          onClick={() => setSelectedReel(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedReel(null)}
+            className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20"
+          >
+            <X size={22} />
+          </button>
+
+          <div
+            className="relative h-[80vh] w-full max-w-md overflow-hidden rounded-2xl bg-black"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <video
+              src={selectedReel.video}
+              poster={selectedReel.thumbnail}
+              controls
+              autoPlay
+              playsInline
+              className="h-full w-full object-contain"
+            />
+
+            <div className="absolute bottom-0 right-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-12">
+              <h3 className="font-bold text-white">
+                {selectedReel.title}
+              </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
