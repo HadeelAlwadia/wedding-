@@ -1,19 +1,32 @@
 const express = require("express");
 
 const {
-  createBusiness,
-  getMyBusiness,
-  updateMyBusiness,
+  getBusinessesByServiceType,
+  getBusinessById,
+  getCatalogByServiceType,
+  getSpecificCatalogItem,
 } = require("../controllers/businessController");
-
-const protect = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post("/", protect, createBusiness);
+// =========================================================
+// Get all businesses by service type
+// =========================================================
 
-router.get("/my-business", protect, getMyBusiness);
+router.get("/", getBusinessesByServiceType);
 
-router.put("/my-business", protect, updateMyBusiness);
+// =========================================================
+// Get ALL catalog items from ALL businesses by service type
+// IMPORTANT: must be before /:id
+// =========================================================
+
+router.get("/catalog", getCatalogByServiceType);
+
+// =========================================================
+// Get one business
+// =========================================================
+
+router.get("/:id", getBusinessById);
+router.get("/catalog/:id", getSpecificCatalogItem);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const { sendProviderApprovalEmail } = require("../utils/email");
 const { createBusiness } = require("./providerController");
 
 // ========================================
@@ -23,90 +24,119 @@ const getPendingRequests = async (req, res) => {
   }
 };
 
+
 // ========================================
 // Approve provider
 // ========================================
-const approveProvider = async (req, res) => {
-  try {
+
+// ======================================== 
+// Approve provider 
+// ======================================== 
+const approveProvider = async (req, res) => { 
+  try { 
+    // ======================================== 
+    // Find Provider 
+    // ======================================== 
+ 
+    const provider = await User.findOne({ 
+      _id: req.params.id, 
+      role: "provider", 
+    }); 
+ 
+    if (!provider) { 
+      return res.status(404).json({ 
+        success: false, 
+        message: "لم يتم العثور على مقدم الخدمة", 
+      }); 
+    } 
+ 
+    // ======================================== 
+    // Check if already approved 
+    // ======================================== 
+ 
+    if (provider.isApproved) { 
+      return res.status(400).json({ 
+        success: false, 
+        message: "هذا الحساب معتمد مسبقًا", 
+      }); 
+    } 
+ 
+    // ======================================== 
+    // Approve Provider 
+    // ======================================== 
+ 
+    provider.isApproved = true; 
+ 
+    await provider.save(); 
+ 
+    // ======================================== 
+    // Create Business 
+    // ======================================== 
+ 
+    const { 
+      businessName, 
+      serviceType,id 
+    } = provider; 
+ 
+ 
+  createBusiness(id, 
+  businessName, 
+  serviceType) 
+    // ======================================== 
+    // Remove password from response 
+    // ======================================== 
+ 
+    const providerResponse = provider.toObject(); 
+ 
+    delete providerResponse.password; 
+ 
+    // ======================================== 
+    // Response 
+    // ======================================== 
+ 
+    
     // ========================================
-    // Find Provider
+    // Send Email
     // ========================================
 
-    const provider = await User.findOne({
-      _id: req.params.id,
-      role: "provider",
-    });
+    /*let emailSent = false;
 
-    if (!provider) {
-      return res.status(404).json({
-        success: false,
-        message: "لم يتم العثور على مقدم الخدمة",
+    try {
+      await sendProviderApprovalEmail({
+        email: provider.email,
+        providerName:provider.name||['ahmed'],
       });
+
+      emailSent = true;
+
+    } catch (emailError) {
+      console.error(
+        "❌ Approval email error:",
+        emailError
+      );
     }
+*/
 
-    // ========================================
-    // Check if already approved
-    // ========================================
-
-    if (provider.isApproved) {
-      return res.status(400).json({
-        success: false,
-        message: "هذا الحساب معتمد مسبقًا",
-      });
-    }
-
-    // ========================================
-    // Approve Provider
-    // ========================================
-
-    provider.isApproved = true;
-
-    await provider.save();
-
-    // ========================================
-    // Create Business
-    // ========================================
-
-    const {
-      businessName,
-      serviceType,id
-    } = provider;
-
-
-  createBusiness(id,
-  businessName,
-  serviceType)
-    // ========================================
-    // Remove password from response
-    // ========================================
-
-    const providerResponse = provider.toObject();
-
-    delete providerResponse.password;
-
-    // ========================================
-    // Response
-    // ========================================
-
-    return res.status(200).json({
-      success: true,
-      message: "تم اعتماد الحساب وإنشاء النشاط بنجاح",
-      provider: providerResponse,
-
-    });
-
-  } catch (error) {
-    console.error(
-      "Approve provider error:",
-      error
-    );
-
-    return res.status(500).json({
-      success: false,
-      message: "حدث خطأ أثناء اعتماد الحساب",
-    });
-  }
-};
+    return res.status(200).json({ 
+      success: true, 
+      message: "تم اعتماد الحساب وإنشاء النشاط بنجاح", 
+      provider: providerResponse, 
+ 
+    }); 
+ 
+  } catch (error) { 
+    console.error( 
+      "Approve provider error:", 
+      error 
+    ); 
+ 
+    return res.status(500).json({ 
+      success: false, 
+      message: "حدث خطأ أثناء اعتماد الحساب", 
+    }); 
+  } 
+}; 
+ 
 
 
 // ========================================

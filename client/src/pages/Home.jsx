@@ -229,17 +229,25 @@ const Home = () => {
                   اكتشفي الخدمات المناسبة لفرحك، قارني خياراتك،
                   وتواصلي مباشرة مع أصحاب الخدمات بدون زيارات عشوائية.
                 </p>
+<div className="mt-9 flex flex-wrap items-center gap-4">
+  {/* PlanningButton — سيتم تفعيله في الخطوة القادمة */}
+<Link
+  to="/services"
+  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-[#6B3038] px-7 py-3.5 text-sm font-bold text-white shadow-[0_10px_30px_rgba(107,48,56,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#7b3841] hover:shadow-[0_14px_38px_rgba(107,48,56,0.45)]"
+>
+  {/* اللمعة */}
+  <span className="absolute inset-y-0 -right-12 w-8 rotate-12 bg-white/25 blur-sm transition-all duration-700 group-hover:right-[110%]" />
 
-                <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <PlanningButton />
+  <span className="relative z-10">
+    استكشفي الخدمات
+  </span>
 
-                  <Link
-                    to="/halls"
-                    className="rounded-full border border-white/40 px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:border-white hover:bg-white/10"
-                  >
-                    استكشفي الخدمات
-                  </Link>
-                </div>
+  <ArrowLeft
+    size={17}
+    className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1"
+  />
+</Link>
+</div>
               </div>
 
               {/* Side Badge */}
@@ -403,43 +411,56 @@ const Home = () => {
           </div>
         </div>
       </section>
+{/* =====================================================
+    FINAL CTA
+====================================================== */}
 
-      {/* =====================================================
-          FINAL CTA
-      ====================================================== */}
+<section className="px-5 py-14 md:px-8 md:py-18">
+  <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-[#6B3038]">
+    {/* Decorative */}
 
-      <section className="px-6 py-24 lg:px-10">
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-[#6B3038]">
-          {/* Decorative */}
+    <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full border border-[#e5c28d]/15" />
 
-          <div className="absolute -left-32 -top-32 h-[350px] w-[350px] rounded-full border border-[#e5c28d]/15" />
+    <div className="absolute -bottom-28 -right-20 h-72 w-72 rounded-full border border-white/10" />
 
-          <div className="absolute -bottom-32 -right-32 h-[400px] w-[400px] rounded-full border border-white/10" />
+    <div className="absolute right-1/2 top-0 h-full w-px bg-white/[0.03]" />
 
-          <div className="relative z-10 px-7 py-20 text-center sm:px-12 sm:py-24">
-            <p className="text-sm tracking-wide text-[#e5c28d]">
-              زَفَاف
-            </p>
+    {/* Content */}
 
-            <h2 className="mt-5 text-4xl font-bold leading-[1.3] text-white sm:text-6xl">
-              خيارات أقل،
-              <br />
-              <span className="text-[#e5c28d]">
-                قرار أسهل.
-              </span>
-            </h2>
+    <div className="relative z-10 px-6 py-12 text-center sm:px-10 sm:py-14">
+      <p className="text-xs font-medium tracking-wide text-[#e5c28d]">
+        زَفَاف
+      </p>
 
-            <p className="mx-auto mt-6 max-w-lg leading-8 text-white/70">
-              ابدئي بتحديد احتياجاتك ودعي زَفَاف يساعدك
-              توصلي لما يناسب فرحك.
-            </p>
+      <h2 className="mx-auto mt-3 max-w-xl text-2xl font-bold leading-tight text-white sm:text-4xl">
+        خلي بداية تجهيز فرحك
+        <span className="text-[#e5c28d]"> أسهل.</span>
+      </h2>
 
-            <div className="mt-9 flex justify-center">
-              <PlanningButton light />
-            </div>
-          </div>
-        </div>
-      </section>
+      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-white/65">
+        اكتشفي الخدمات، قارني الخيارات، واختاري اللي يناسبك.
+      </p>
+
+      <Link
+        to="/services"
+        className="group relative mt-7 inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-6 py-3 text-sm font-bold text-[#6B3038] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#fdf8f3]"
+      >
+        {/* Shine */}
+
+        <span className="absolute inset-y-0 -right-10 w-7 rotate-12 bg-[#e5c28d]/40 blur-sm transition-all duration-700 group-hover:right-[110%]" />
+
+        <span className="relative z-10">
+          استكشفي الخدمات
+        </span>
+
+        <ArrowLeft
+          size={16}
+          className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1"
+        />
+      </Link>
+    </div>
+  </div>
+</section>
     </main>
   );
 };

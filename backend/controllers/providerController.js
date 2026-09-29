@@ -46,7 +46,6 @@ const createBusiness = async (
 
       businessProfile: {
         name: businessName,
-          businessName,
       serviceType,
       },
 

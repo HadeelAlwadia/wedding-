@@ -1,161 +1,237 @@
 const Business = require("../models/Business");
 
-// ==================== CREATE BUSINESS ====================
+// =========================================================
+// Get Businesses By Service Type
+// =========================================================
 
-const createBusiness = async (req, res) => {
+const getBusinessesByServiceType = async (req, res) => {
   try {
-    const {
-      businessName,
-      description,
-      logo,
-      coverImage,
-      address,
-      city,
-      location,
-      services,
-    } = req.body;
+    const { serviceType } = req.query;
 
-    if (!businessName) {
+    if (!serviceType) {
       return res.status(400).json({
-        message: "اسم النشاط مطلوب",
+        success: false,
+        message: "serviceType is required",
       });
     }
 
-    const existingBusiness = await Business.findOne({
-      owner: req.user._id,
-    });
+    const businesses = await Business.find({
+      "businessProfile.serviceType": serviceType,
+    })
+      .select(
+        "businessProfile catalog packages gallery reels"
+      )
+      .lean();
 
-    if (existingBusiness) {
-      return res.status(400).json({
-        message: "لديك نشاط تجاري بالفعل",
-      });
-    }
-
-    const business = await Business.create({
-      owner: req.user._id,
-      businessName,
-      description,
-      logo,
-      coverImage,
-      address,
-      city,
-      location,
-      services,
-    });
-
-    res.status(201).json({
-      message: "تم إنشاء النشاط بنجاح",
-      business,
+    res.status(200).json({
+      success: true,
+      count: businesses.length,
+      businesses,
     });
   } catch (error) {
-    console.error("Create business error:", error);
-
-    res.status(500).json({
-      message: "حدث خطأ أثناء إنشاء النشاط",
-    });
-  }
-};
-
-// ==================== GET MY BUSINESS ====================
-
-const getMyBusiness = async (req, res) => {
-  try {
-    const business = await Business.findOne({
-      owner: req.user._id,
-    }).populate(
-      "owner",
-      "name email phone whatsapp serviceType"
+    console.error(
+      "getBusinessesByServiceType:",
+      error
     );
 
-    if (!business) {
-      return res.status(404).json({
-        message: "لم يتم إنشاء نشاطك بعد",
-      });
-    }
-
-    res.status(200).json({
-      business,
-    });
-  } catch (error) {
-    console.error("Get business error:", error);
-
     res.status(500).json({
-      message: "حدث خطأ أثناء جلب بيانات النشاط",
+      success: false,
+      message: "حدث خطأ أثناء جلب مقدمي الخدمات",
     });
   }
 };
 
-// ==================== UPDATE MY BUSINESS ====================
+// =========================================================
+// Get ALL Catalog By Service Type
+// =========================================================
 
-const updateMyBusiness = async (req, res) => {
+const getCatalogByServiceType = async (req, res) => {
   try {
-    const business = await Business.findOne({
-      owner: req.user._id,
-    });
+    const { serviceType } = req.query;
 
-    if (!business) {
-      return res.status(404).json({
-        message: "النشاط غير موجود",
+    if (!serviceType) {
+      return res.status(400).json({
+        success: false,
+        message: "serviceType is required",
       });
     }
 
-    const {
-      businessName,
-      description,
-      logo,
-      coverImage,
-      address,
-      city,
-      location,
-      services,
-      isPublished,
-    } = req.body;
+    const businesses = await Business.find({
+      "businessProfile.serviceType": serviceType,
+    }).select(
+      "businessProfile catalog"
+    );
 
-    business.businessName =
-      businessName ?? business.businessName;
+    const catalog = businesses.flatMap((business) => {
+      const profile = business.businessProfile || {};
 
-    business.description =
-      description ?? business.description;
+      return (business.catalog || []).map((item) => ({
+        _id: item._id,
+        type: item.type,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        priceType: item.priceType,
+        images: item.images || [],
+        data: item.data || {},
+        features: item.features || [],
+        isActive: item.isActive,
 
-    business.logo =
-      logo ?? business.logo;
-
-    business.coverImage =
-      coverImage ?? business.coverImage;
-
-    business.address =
-      address ?? business.address;
-
-    business.city =
-      city ?? business.city;
-
-    business.location =
-      location ?? business.location;
-
-    business.services =
-      services ?? business.services;
-
-    business.isPublished =
-      isPublished ?? business.isPublished;
-
-    await business.save();
+        // Business information
+        businessId: business._id,
+        businessName: profile.name || "",
+        serviceType: profile.serviceType || "",
+        businessLogo: profile.logo || "",
+        businessAddress:
+          profile.address ||
+          profile.governorate ||
+          "",
+        businessRating:
+          profile.ratingAverage || 0,
+        businessRatingCount:
+          profile.ratingCount || 0,
+      }));
+    });
 
     res.status(200).json({
-      message: "تم تحديث النشاط بنجاح",
-      business,
+      success: true,
+      count: catalog.length,
+      catalog,
     });
   } catch (error) {
-    console.error("Update business error:", error);
+    console.error(
+      "getCatalogByServiceType:",
+      error
+    );
 
     res.status(500).json({
-      message: "حدث خطأ أثناء تحديث النشاط",
+      success: false,
+      message: "حدث خطأ أثناء جلب الكتالوج",
     });
   }
 };
 
+// =========================================================
+// Get ALL Catalog By Service Type
+// =========================================================
+
+const getSpecificCatalogItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { serviceType } = req.query;
+    if (!serviceType) {
+      return res.status(400).json({
+        success: false,
+        message: "serviceType is required",
+      });
+    }
+
+    const business = await Business.findOne({
+      "businessProfile.serviceType": serviceType,
+    })
+      .select("businessProfile catalog")
+      .lean();
+  console.log(business)
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: "عنصر الكتالوج غير موجود",
+      });
+    }
+
+    const item = business.catalog.find(
+      (catalogItem) => catalogItem._id.toString() === id
+    );
+
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        message: "عنصر الكتالوج غير موجود",
+      });
+    }
+
+    const profile = business.businessProfile || {};
+
+    res.status(200).json({
+      success: true,
+      item: {
+        _id: item._id,
+        type: item.type,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        priceType: item.priceType,
+        images: item.images || [],
+        data: item.data || {},
+        features: item.features || [],
+        isActive: item.isActive,
+
+        businessId: business._id,
+        businessName: profile.name || "",
+        serviceType: profile.serviceType || "",
+        businessLogo: profile.logo || "",
+        businessAddress:
+          profile.address || profile.governorate || "",
+        businessPhone: profile.phone || "",
+        businessWhatsapp: profile.whatsapp || "",
+        businessRating: profile.ratingAverage || 0,
+        businessRatingCount: profile.ratingCount || 0,
+      },
+    });
+  } catch (error) {
+    console.error("getSpecificCatalogItem:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "حدث خطأ أثناء جلب عنصر الكتالوج",
+    });
+  }
+};
+// =========================================================
+// Get Business By ID
+// =========================================================
+
+const getBusinessById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const business = await Business.findById(id)
+      .populate(
+        "owner",
+        "name email phone"
+      )
+      .populate(
+        "reviews.user",
+        "name"
+      )
+      .lean();
+
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: "مقدم الخدمة غير موجود",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      business,
+    });
+  } catch (error) {
+    console.error(
+      "getBusinessById:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "حدث خطأ أثناء جلب بيانات مقدم الخدمة",
+    });
+  }
+};
 
 module.exports = {
-  createBusiness,
-  getMyBusiness,
-  updateMyBusiness,
+  getBusinessesByServiceType,
+  getCatalogByServiceType,
+  getBusinessById,getSpecificCatalogItem
 };

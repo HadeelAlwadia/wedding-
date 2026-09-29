@@ -28,11 +28,12 @@ const Register = () => {
     serviceType: "",
     password: "",
     confirmPassword: "",
-    bussnisename:'',
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const [result, setResult] = useState({
@@ -43,19 +44,22 @@ const Register = () => {
   const serviceTypes = [
     { value: "hall", label: "قاعات أفراح" },
     { value: "beauty", label: "صالونات وتجميل" },
-    { value: "bridal-dresses", label: "فساتين زفاف" },
-    { value: "groom-suits", label: "بدلات رجالية" },
-    { value: "photographers", label: "تصوير" },
-    { value: "wedding-cars", label: "سيارات أفراح" },
+    { value: "bridal-dresse", label: "فساتين زفاف" },
+    { value: "groom-suit", label: "بدلات رجالية" },
+    { value: "photographer", label: "تصوير" },
+    { value: "wedding-car", label: "سيارات أفراح" },
   ];
 
+  // =========================================================
   // تغيير نوع الحساب
+  // =========================================================
+
   const handleAccountType = (type) => {
     setAccountType(type);
 
-    // تنظيف بيانات النوع الآخر
     setFormData((prev) => ({
       ...prev,
+      name: "",
       phone: "",
       whatsapp: "",
       serviceType: "",
@@ -67,7 +71,10 @@ const Register = () => {
     });
   };
 
+  // =========================================================
   // تغيير الحقول
+  // =========================================================
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -84,7 +91,10 @@ const Register = () => {
     }
   };
 
+  // =========================================================
   // قوة كلمة المرور
+  // =========================================================
+
   const getPasswordStrength = () => {
     const password = formData.password;
 
@@ -122,7 +132,10 @@ const Register = () => {
 
   const passwordStrength = getPasswordStrength();
 
+  // =========================================================
   // إرسال النموذج
+  // =========================================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -131,7 +144,10 @@ const Register = () => {
       message: "",
     });
 
+    // =======================================================
     // الاسم
+    // =======================================================
+
     if (!formData.name.trim()) {
       setResult({
         type: "error",
@@ -140,51 +156,70 @@ const Register = () => {
             ? "يرجى إدخال اسم النشاط / مقدم الخدمة."
             : "يرجى إدخال اسمك.",
       });
+
       return;
     }
 
+    // =======================================================
     // البريد
+    // =======================================================
+
     if (!formData.email.trim()) {
       setResult({
         type: "error",
         message: "يرجى إدخال البريد الإلكتروني.",
       });
+
       return;
     }
 
+    // =======================================================
     // كلمة المرور
+    // =======================================================
+
     if (!formData.password) {
       setResult({
         type: "error",
         message: "يرجى إدخال كلمة المرور.",
       });
+
       return;
     }
 
     if (formData.password.length < 6) {
       setResult({
         type: "error",
-        message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
+        message:
+          "كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
       });
+
       return;
     }
 
+    // =======================================================
     // تأكيد كلمة المرور
+    // =======================================================
+
     if (formData.password !== formData.confirmPassword) {
       setResult({
         type: "error",
         message: "كلمتا المرور غير متطابقتين.",
       });
+
       return;
     }
 
-    // تحقق خاص بمقدم الخدمة فقط
+    // =======================================================
+    // تحقق مقدم الخدمة
+    // =======================================================
+
     if (accountType === "provider") {
       if (!formData.phone.trim()) {
         setResult({
           type: "error",
           message: "يرجى إدخال رقم الهاتف.",
         });
+
         return;
       }
 
@@ -193,20 +228,23 @@ const Register = () => {
           type: "error",
           message: "يرجى اختيار نوع الخدمة.",
         });
+
         return;
       }
     }
 
+    // =======================================================
+    // إرسال البيانات
+    // =======================================================
+
     try {
       setLoading(true);
 
-      /*
-       * مهم:
-       * حساب الزائرة يرسل فقط بيانات الزائرة.
-       * حساب مقدم الخدمة يرسل البيانات التجارية المطلوبة.
-       */
-
       let payload;
+
+      // =====================================================
+      // Visitor
+      // =====================================================
 
       if (accountType === "visitor") {
         payload = {
@@ -215,7 +253,13 @@ const Register = () => {
           password: formData.password,
           role: "visitor",
         };
-      } else {
+      }
+
+      // =====================================================
+      // Provider
+      // =====================================================
+
+      else {
         payload = {
           name: formData.name.trim(),
           email: formData.email.trim(),
@@ -227,9 +271,14 @@ const Register = () => {
         };
       }
 
+      console.log("Register payload:", payload);
+
       await registerUser(payload);
 
+      // =====================================================
       // نجاح مقدم الخدمة
+      // =====================================================
+
       if (accountType === "provider") {
         setResult({
           type: "success",
@@ -244,10 +293,14 @@ const Register = () => {
         return;
       }
 
+      // =====================================================
       // نجاح الزائرة
+      // =====================================================
+
       setResult({
         type: "success",
-        message: "تم إنشاء حسابك بنجاح. أهلًا بكِ في زَفَاف.",
+        message:
+          "تم إنشاء حسابك بنجاح. أهلًا بكِ في زَفَاف.",
       });
 
       setTimeout(() => {
@@ -277,9 +330,10 @@ const Register = () => {
       <div className="mx-auto flex min-h-[calc(100vh-48px)] max-w-6xl items-center justify-center">
         <div className="grid w-full overflow-hidden rounded-[34px] bg-white shadow-[0_25px_80px_rgba(70,35,30,0.12)] lg:grid-cols-[0.82fr_1.18fr]">
 
-          {/* =========================
+          {/* =================================================
               الصورة الجانبية
-          ========================== */}
+          ================================================== */}
+
           <div className="relative hidden min-h-[780px] overflow-hidden lg:block">
             <img
               src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85"
@@ -310,8 +364,9 @@ const Register = () => {
               </h2>
 
               <p className="mt-5 max-w-md text-sm leading-7 text-white/75">
-                اكتشفي أفضل خدمات الزفاف، أو انضمي إلى زَفَاف لتعرضي نشاطك
-                وتوصلي بخدماتك إلى المقبلين على الزواج.
+                اكتشفي أفضل خدمات الزفاف، أو انضمي إلى زَفَاف
+                لتعرضي نشاطك وتوصلي بخدماتك إلى المقبلين على
+                الزواج.
               </p>
 
               <div className="mt-8 flex items-center gap-3 text-xs text-white/70">
@@ -321,12 +376,14 @@ const Register = () => {
             </div>
           </div>
 
-          {/* =========================
-              الجانب الخاص بالفورم
-          ========================== */}
+          {/* =================================================
+              الفورم
+          ================================================== */}
+
           <div className="px-5 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
 
             {/* Header */}
+
             <div className="mb-8 flex items-center justify-between">
               <Link
                 to="/"
@@ -352,7 +409,10 @@ const Register = () => {
               </Link>
             </div>
 
-            {/* العنوان */}
+            {/* =================================================
+                العنوان
+            ================================================== */}
+
             <div className="mb-8">
               <p className="mb-2 text-sm font-bold text-[#6B3038]">
                 أهلًا بكِ في زَفَاف
@@ -367,9 +427,10 @@ const Register = () => {
               </p>
             </div>
 
-            {/* =========================
+            {/* =================================================
                 خطوات التسجيل
-            ========================== */}
+            ================================================== */}
+
             <div className="mb-8 flex items-center">
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6B3038] text-xs font-bold text-white">
@@ -394,9 +455,10 @@ const Register = () => {
               </div>
             </div>
 
-            {/* =========================
+            {/* =================================================
                 اختيار نوع الحساب
-            ========================== */}
+            ================================================== */}
+
             <div className="mb-8">
               <p className="mb-3 text-sm font-bold text-[#2d2424]">
                 أريد إنشاء حساب كـ
@@ -404,10 +466,13 @@ const Register = () => {
 
               <div className="grid grid-cols-2 gap-3">
 
-                {/* زائرة */}
+                {/* Visitor */}
+
                 <button
                   type="button"
-                  onClick={() => handleAccountType("visitor")}
+                  onClick={() =>
+                    handleAccountType("visitor")
+                  }
                   className={`relative rounded-2xl border p-4 text-right transition-all duration-200 ${
                     accountType === "visitor"
                       ? "border-[#6B3038] bg-[#f8eee7]"
@@ -416,7 +481,10 @@ const Register = () => {
                 >
                   {accountType === "visitor" && (
                     <div className="absolute left-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#6B3038] text-white">
-                      <Check size={12} strokeWidth={3} />
+                      <Check
+                        size={12}
+                        strokeWidth={3}
+                      />
                     </div>
                   )}
 
@@ -427,7 +495,10 @@ const Register = () => {
                         : "bg-[#f8eee7] text-[#6B3038]"
                     }`}
                   >
-                    <UserRound size={19} strokeWidth={1.8} />
+                    <UserRound
+                      size={19}
+                      strokeWidth={1.8}
+                    />
                   </div>
 
                   <p className="text-sm font-bold text-[#2d2424]">
@@ -439,10 +510,13 @@ const Register = () => {
                   </p>
                 </button>
 
-                {/* مقدم خدمة */}
+                {/* Provider */}
+
                 <button
                   type="button"
-                  onClick={() => handleAccountType("provider")}
+                  onClick={() =>
+                    handleAccountType("provider")
+                  }
                   className={`relative rounded-2xl border p-4 text-right transition-all duration-200 ${
                     accountType === "provider"
                       ? "border-[#6B3038] bg-[#f8eee7]"
@@ -451,7 +525,10 @@ const Register = () => {
                 >
                   {accountType === "provider" && (
                     <div className="absolute left-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#6B3038] text-white">
-                      <Check size={12} strokeWidth={3} />
+                      <Check
+                        size={12}
+                        strokeWidth={3}
+                      />
                     </div>
                   )}
 
@@ -462,7 +539,10 @@ const Register = () => {
                         : "bg-[#f8eee7] text-[#6B3038]"
                     }`}
                   >
-                    <Store size={19} strokeWidth={1.8} />
+                    <Store
+                      size={19}
+                      strokeWidth={1.8}
+                    />
                   </div>
 
                   <p className="text-sm font-bold text-[#2d2424]">
@@ -476,12 +556,14 @@ const Register = () => {
               </div>
             </div>
 
-            {/* =========================
+            {/* =================================================
                 الفورم
-            ========================== */}
+            ================================================== */}
+
             <form onSubmit={handleSubmit}>
 
               {/* عنوان البيانات */}
+
               <div className="mb-5">
                 <h2 className="text-lg font-bold text-[#2d2424]">
                   {accountType === "provider"
@@ -496,11 +578,14 @@ const Register = () => {
                 </p>
               </div>
 
-              {/* الاسم */}
+              {/* =================================================
+                  الاسم
+              ================================================== */}
+
               <div className="mb-5">
                 <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   {accountType === "provider"
-                    ? "اسم النشاط / مقدم الخدمة"
+                    ? "اسم مقدم الخدمة"
                     : "الاسم"}
                 </label>
 
@@ -518,7 +603,10 @@ const Register = () => {
                 />
               </div>
 
-              {/* البريد الإلكتروني */}
+              {/* =================================================
+                  البريد
+              ================================================== */}
+
               <div className="mb-5">
                 <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   البريد الإلكتروني
@@ -535,15 +623,16 @@ const Register = () => {
                 />
               </div>
 
-              {/* =========================
-                  حقول مقدم الخدمة فقط
-              ========================== */}
+              {/* =================================================
+                  Provider Fields
+              ================================================== */}
+
               {accountType === "provider" && (
                 <>
-                  {/* الهاتف والواتساب */}
                   <div className="mb-5 grid gap-4 sm:grid-cols-2">
 
                     {/* الهاتف */}
+
                     <div>
                       <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                         رقم الهاتف
@@ -561,6 +650,7 @@ const Register = () => {
                     </div>
 
                     {/* واتساب */}
+
                     <div>
                       <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                         واتساب
@@ -583,6 +673,7 @@ const Register = () => {
                   </div>
 
                   {/* نوع الخدمة */}
+
                   <div className="mb-5">
                     <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                       نوع الخدمة
@@ -611,9 +702,10 @@ const Register = () => {
                 </>
               )}
 
-              {/* =========================
+              {/* =================================================
                   كلمة المرور
-              ========================== */}
+              ================================================== */}
+
               <div className="mb-5">
                 <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   كلمة المرور
@@ -621,7 +713,11 @@ const Register = () => {
 
                 <div className="relative">
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
@@ -633,7 +729,9 @@ const Register = () => {
                   <button
                     type="button"
                     onClick={() =>
-                      setShowPassword((prev) => !prev)
+                      setShowPassword(
+                        (prev) => !prev
+                      )
                     }
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-[#6B3038]"
                   >
@@ -645,14 +743,14 @@ const Register = () => {
                   </button>
                 </div>
 
-                {/* قوة كلمة المرور */}
                 {formData.password && (
                   <div className="mt-2">
                     <div className="h-1 overflow-hidden rounded-full bg-[#eee5df]">
                       <div
                         className="h-full rounded-full bg-[#6B3038] transition-all duration-300"
                         style={{
-                          width: passwordStrength.width,
+                          width:
+                            passwordStrength.width,
                         }}
                       />
                     </div>
@@ -667,9 +765,10 @@ const Register = () => {
                 )}
               </div>
 
-              {/* =========================
+              {/* =================================================
                   تأكيد كلمة المرور
-              ========================== */}
+              ================================================== */}
+
               <div className="mb-6">
                 <label className="mb-2 block text-xs font-bold text-[#2d2424]">
                   تأكيد كلمة المرور
@@ -722,9 +821,10 @@ const Register = () => {
                   )}
               </div>
 
-              {/* =========================
-                  رسالة النتيجة
-              ========================== */}
+              {/* =================================================
+                  النتيجة
+              ================================================== */}
+
               {result.message && (
                 <div
                   className={`mb-5 flex items-start gap-3 rounded-xl border p-4 ${
@@ -751,9 +851,10 @@ const Register = () => {
                 </div>
               )}
 
-              {/* =========================
+              {/* =================================================
                   زر التسجيل
-              ========================== */}
+              ================================================== */}
+
               <button
                 type="submit"
                 disabled={loading}
@@ -774,7 +875,10 @@ const Register = () => {
               </button>
             </form>
 
-            {/* تسجيل الدخول */}
+            {/* =================================================
+                تسجيل الدخول
+            ================================================== */}
+
             <div className="mt-6 border-t border-[#eee5df] pt-6 text-center">
               <p className="text-xs text-gray-400">
                 لديكِ حساب بالفعل؟{" "}
@@ -794,4 +898,3 @@ const Register = () => {
 };
 
 export default Register;
-

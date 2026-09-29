@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -69,14 +69,10 @@ const AdminLayout = () => {
       >
         {/* Logo */}
         <div className="flex h-20 items-center justify-between border-b border-[#eadfd7] px-6">
-          <button
-            onClick={() => navigate("/admin")}
+          <Link to='/'
             className="flex items-center gap-3"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B3038] text-lg font-bold text-[#e5c28d]">
-              ز
-            </div>
-
+         
             <div className="text-right">
               <h1 className="text-xl font-bold text-[#6B3038]">
                 زَفَاف
@@ -86,7 +82,7 @@ const AdminLayout = () => {
                 لوحة الإدارة
               </p>
             </div>
-          </button>
+          </Link>
 
           {/* Close mobile */}
           <button
