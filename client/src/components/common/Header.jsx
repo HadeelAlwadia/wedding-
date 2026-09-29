@@ -116,14 +116,14 @@ const Header = () => {
           </Link>
 
           <Link
-            to="/beauty"
+            to="/beautys"
             className="whitespace-nowrap text-sm font-medium text-[#2d2424] transition hover:text-[#6B3038]"
           >
             الكوافيرات
           </Link>
 
           <Link
-            to="/bridal-dresses"
+            to="/bridal-dressess"
             className="whitespace-nowrap text-sm font-medium text-[#2d2424] transition hover:text-[#6B3038]"
           >
             فساتين العرائس
@@ -574,7 +574,7 @@ const Header = () => {
               {[
                 ["/", "الرئيسية"],
                 ["/halls", "صالات الأفراح"],
-                ["/beauty", "الكوافيرات"],
+                ["/beautys", "الكوافيرات"],
                 ["/bridal-dresses", "فساتين العرائس"],
                 ["/photographers", "المصورين"],
                 ["/groom-suits", "بدلات العرسان"],

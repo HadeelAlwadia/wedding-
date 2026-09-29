@@ -1,23 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainLayout from "../layouts/MainLayout";
 
-// ==================================================
-// PUBLIC PAGES
-// ==================================================
+// ================= PUBLIC PAGES =================
 
 import Home from "../pages/Home";
-import ServicePage from "../pages/ServicePage";
 
-import Bussnise from "../pages/Bussnise/Bussnise";
-import BussniseDetails from "../pages/Bussnise/BussniseDetails";
 
-import StoreDetails from "../pages/Store/StoreDetailes";
 
-// ==================================================
-// AUTH
-// ==================================================
+import GroomSuits from "../pages/GroomSuits/GroomSuits";
+import GroomSuitDetails from "../pages/GroomSuits/GroomSuitDetails";
 
+import WeddingCars from "../pages/WeddingCars/WeddingCars";
+import WeddingCarDetails from "../pages/WeddingCars/WeddingCarDetails";
+
+
+
+// ================= AUTH =================
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
@@ -25,248 +24,138 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import PendingApproval from "../pages/PendingApproval";
 import NotFound from "../pages/NotFound";
 
-// ==================================================
-// PROVIDER DASHBOARD
-// ==================================================
+// ================= DASHBOARD =================
+
 
 import DashboardLayout from "../layouts/DashboardLayout ";
-import Dashboard from "../pages/Provider/Dashboard";
 import BusinessProfile from "../pages/Provider/BusinessProfile";
-import Gallery from "../pages/Provider/gallery";
+import Gallery from "../pages/Provider/Gallery";
 import Settings from "../pages/Provider/Settings";
 import Reviews from "../pages/Provider/Reviews";
-import Catalog from "../pages/Provider/Catalog";
+import AdminDashboard from "../pages/Admin/Dashboard";
+import AdminRequests from "../pages/Admin/Requests";
+import AdminLayout from "../layouts/AdminLayout";
+import AdminProviders from "../pages/Admin/Providers";
+import AdminSettings from "../pages/Admin/Settings";
+import WeddingAssistant from "../pages/WeddingAssistant/WeddingAssistant";
+import WeddingLook from "../pages/WeddingLook/WeddingLook";
+import Dashboard from "../pages/Provider/Dashboard";
+import CatalogManager from "../pages/Provider/templates/CatalogManager";
 import BeautyServices from "../pages/Provider/Business/Beauty";
 import PackageManager from "../pages/Provider/Package";
 import Reels from "../pages/Provider/Reels";
-
-// ==================================================
-// ADMIN
-// ==================================================
-
-import AdminLayout from "../layouts/AdminLayout";
-import AdminDashboard from "../pages/Admin/Dashboard";
-import AdminRequests from "../pages/Admin/Requests";
-import AdminProviders from "../pages/Admin/Providers";
-import AdminSettings from "../pages/Admin/Settings";
+import Catalog from "../pages/Provider/Catalog";
+import StoreDetails from "../pages/Store/StoreDetailes";
+import ServicePage from "../pages/ServicePage";
+import BussniseDetails from "../pages/Bussnise/BussniseDetails";
+import Bussnise from "../pages/Bussnise/Bussnise";
 
 function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* ==================================================
             PUBLIC WEBSITE
         ================================================== */}
 
         <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<ServicePage />} />
 
-          {/* Home */}
-          <Route
-            path="/"
-            element={<Home />}
-          />
+          {/* Halls */}
+          <Route path="/halls" element={<Bussnise
+            serytye="hall"
+            title="صالات الأفراح"
+            englishTitle="WEDDING VENUES"
+            description="اكتشفي المكان الذي يشبه حلمك ويكمل يومك."
+            searchPlaceholder="ابحثي عن قاعة أو مكان..."
+            itemLabel="صالات"
+            defaultName="قاعة أفراح"
+          />} />
+          <Route path="/halls/:id" element={<BussniseDetails nameofbassnse="hall" />} />
+              
 
-          {/* Services */}
-          <Route
-            path="/services"
-            element={<ServicePage />}
-          />
 
-          {/* ==================================================
-              HALLS
-          ================================================== */}
+          {/* Beauty */}
+          <Route path="/beautys" element={<Bussnise
+            serytye="beauty"
+            title="الكوافيرات والتجميل"
+            englishTitle="BEAUTY & SALON"
+            description="اختاري خبيرة التجميل التي تناسب إطلالتك."
+            searchPlaceholder="ابحثي عن كوافير أو صالون..."
+            itemLabel="كوافيرات"
+            defaultName="صالون تجميل"
+          />} />
 
-          <Route
-            path="/halls"
-            element={
-              <Bussnise
-                serytye="hall"
-                title="صالات الأفراح"
-                englishTitle="WEDDING VENUES"
-                description="اكتشفي المكان الذي يشبه حلمك ويكمل يومك."
-                searchPlaceholder="ابحثي عن قاعة أو مكان..."
-                itemLabel="صالات"
-                defaultName="قاعة أفراح"
-                defaultLocation="غزة"
-              />
-            }
-          />
+          <Route path="/beautys/:id" element={<BussniseDetails nameofbassnse='beauty' />} />
 
-          <Route
-            path="/halls/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="قاعة الأفراح"
-              />
-            }
-          />
 
-          {/* ==================================================
-              BEAUTY
-          ================================================== */}
-
-          <Route
-            path="/beauty"
-            element={
-              <Bussnise
-                serytye="beauty"
-                title="الكوافيرات والتجميل"
-                englishTitle="BEAUTY & SALON"
-                description="اختاري خبيرة التجميل التي تناسب إطلالتك."
-                searchPlaceholder="ابحثي عن كوافير أو صالون..."
-                itemLabel="كوافيرات"
-                defaultName="صالون تجميل"
-                defaultLocation="غزة"
-              />
-            }
-          />
-
-          <Route
-            path="/beauty/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="صالون التجميل"
-              />
-            }
-          />
-
-          {/* ==================================================
-              BRIDAL DRESSES
-          ================================================== */}
-
+          {/* Bridal Dresses */}
           <Route
             path="/bridal-dresses"
-            element={
-              <Bussnise
-                serytye="bridal-dresses"
-                title="فساتين الزفاف"
-                englishTitle="BRIDAL DRESSES"
-                description="اكتشفي فستانك بين أجمل الخيارات."
-                searchPlaceholder="ابحثي عن متجر أو فستان..."
-                itemLabel="متاجر"
-                defaultName="متجر فساتين"
-                defaultLocation="غزة"
-              />
-            }
+            element={<Bussnise
+              serytye="bridal-dresses"
+              title="فساتين الزفاف"
+              englishTitle="BRIDAL DRESSES"
+              description="اكتشفي فستانك بين أجمل الخيارات."
+              searchPlaceholder="ابحثي عن متجر أو فستان..."
+              itemLabel="متاجر"
+              defaultName="متجر فساتين"
+            />}
           />
 
           <Route
             path="/bridal-dresses/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="متجر فساتين الزفاف"
-              />
-            }
+            element={<BussniseDetails nameofbassnse='bridal-dresses  ' />}
           />
 
-          {/* ==================================================
-              GROOM SUITS
-          ================================================== */}
-
+          {/* Groom Suits */}
           <Route
             path="/groom-suits"
-            element={
-              <Bussnise
-                serytye="groom-suits"
-                title="بدلات العرسان"
-                englishTitle="GROOM SUITS"
-                description="اختار بدلتك من بين خيارات تناسب يومك."
-                searchPlaceholder="ابحث عن متجر أو بدلة..."
-                itemLabel="متاجر"
-                defaultName="متجر بدلات"
-                defaultLocation="غزة"
-              />
-            }
+            element={<GroomSuits />}
           />
 
           <Route
             path="/groom-suits/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="متجر بدلات العرسان"
-              />
-            }
+            element={<GroomSuitDetails />}
           />
 
-          {/* ==================================================
-              PHOTOGRAPHERS
-          ================================================== */}
-
-          <Route
-            path="/photographers"
-            element={
-              <Bussnise
-                serytye="photographers"
-                title="المصورون"
-                englishTitle="PHOTOGRAPHERS"
-                description="اختاري المصور الذي يوثق أجمل لحظات يومك."
-                searchPlaceholder="ابحثي عن مصور أو استوديو..."
-                itemLabel="مصورين"
-                defaultName="استوديو تصوير"
-                defaultLocation="غزة"
-              />
-            }
-          />
+   
 
           <Route
             path="/photographers/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="استوديو التصوير"
-              />
-            }
+            element={<BussniseDetails nameofbassnse="photographer" />}
           />
-
-          {/* ==================================================
-              WEDDING CARS
-          ================================================== */}
-
-          <Route
-            path="/wedding-cars"
-            element={
-              <Bussnise
-                serytye="wedding-cars"
-                title="سيارات الزفاف"
-                englishTitle="WEDDING CARS"
-                description="اختاري سيارة تليق بيومك المميز."
-                searchPlaceholder="ابحثي عن سيارة أو مكتب تأجير..."
-                itemLabel="مكاتب"
-                defaultName="مكتب تأجير سيارات"
-                defaultLocation="غزة"
-              />
-            }
-          />
-
-          <Route
-            path="/wedding-cars/:id"
-            element={
-              <BussniseDetails
-                nameofbassnse="سيارة الزفاف"
-              />
-            }
-          />
-
-          {/* ==================================================
-              STORE
-              للكتالوجات الخاصة بالفساتين والبدلات والسيارات
-          ================================================== */}
-
+          {/* store page /car/suit */}
           <Route
             path="/store/:serviceType/:id"
             element={<StoreDetails />}
           />
-
-          {/* ==================================================
-              PUBLIC NOT FOUND
-          ================================================== */}
-
+          {/* Wedding Cars */}
           <Route
-            path="*"
-            element={<NotFound />}
+            path="/wedding-cars"
+            element={<WeddingCars />}
           />
 
+          <Route
+            path="/wedding-cars/:id"
+            element={<BussniseDetails nameofbassnse="wedding-car" />}
+          />
+          {/*   <Route
+            path="/wedding-assistant"
+            element={<WeddingAssistant />}
+          ></Route>
+          <Route
+            path="/wedding-look"
+            element={<WeddingLook />}
+          ></Route>*/
+          }
+
+          {/* Public Not Found */}
+          <Route path="*" element={<NotFound />} />
         </Route>
+
+
 
         {/* ==================================================
             AUTH
@@ -292,125 +181,85 @@ function AppRoutes() {
           element={<PendingApproval />}
         />
 
-        {/* ==================================================
-            PROVIDER DASHBOARD
-        ================================================== */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          {/* الرئيسية */}
+          <Route index element={<Dashboard />} />
 
-        <Route
-          path="/dashboard"
-          element={<DashboardLayout />}
-        >
-
-          {/* Dashboard Home */}
-          <Route
-            index
-            element={<Dashboard />}
-          />
-
-          {/* Business Profile */}
+          {/* بيانات النشاط - مشتركة */}
           <Route
             path="business"
             element={<BusinessProfile />}
           />
 
-          {/* ==================================================
-              CATALOG
-              bridal-dresses
-              groom-suits
-              wedding-cars
-          ================================================== */}
-
+          {/* =========================
+      Catalog Providers
+      bridal-dresses
+      groom-suits
+      wedding-cars
+  ========================= */}
           <Route
             path="catalog"
             element={<Catalog />}
           />
 
-          {/* ==================================================
-              BEAUTY SERVICES
-          ================================================== */}
-
+          {/* =========================
+      Beauty
+  ========================= */}
           <Route
             path="services"
             element={<BeautyServices />}
           />
 
-          {/* ==================================================
-              PACKAGES
-              halls
-              photographers
-          ================================================== */}
-
+          {/* =========================
+      Hall + Photographer
+  ========================= */}
           <Route
             path="packages"
             element={<PackageManager />}
           />
 
-          {/* ==================================================
-              MEDIA
-          ================================================== */}
-
-          <Route
-            path="gallery"
-            element={<Gallery />}
-          />
-
+          {/* =========================
+      Media
+  ========================= */}
+          <Route path="gallery" element={<Gallery />} />
           <Route
             path="reels"
             element={<Reels />}
           />
 
-          {/* ==================================================
-              REVIEWS
-          ================================================== */}
+          {/* =========================
+      Hall + Photographer Rules
+  ========================= */}
 
+
+          {/* =========================
+      Shared
+  ========================= */}
           <Route
             path="reviews"
             element={<Reviews />}
           />
 
-          {/* ==================================================
-              SETTINGS
-          ================================================== */}
-
           <Route
             path="settings"
             element={<Settings />}
           />
-
         </Route>
+
 
         {/* ==================================================
-            ADMIN DASHBOARD
-        ================================================== */}
+    ADMIN DASHBOARD
+================================================== */}
 
-        <Route
-          path="/admin"
-          element={<AdminLayout />}
-        >
-
-          <Route
-            index
-            element={<AdminDashboard />}
-          />
-
-          <Route
-            path="requests"
-            element={<AdminRequests />}
-          />
-
-          <Route
-            path="providers"
-            element={<AdminProviders />}
-          />
-
-          <Route
-            path="settings"
-            element={<AdminSettings />}
-          />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="requests" element={<AdminRequests />} />
+          <Route path="Providers" element={<AdminProviders />} />
+          <Route path="settings" element={<AdminSettings />} />
 
         </Route>
-
       </Routes>
+
     </BrowserRouter>
   );
 }

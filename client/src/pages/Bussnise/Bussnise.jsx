@@ -41,6 +41,7 @@ const Bussnise = ({
         const response = await api.get(
           `/businesses?serviceType=${serytye}`
         );
+        
       console.log(Bussnise)
         const businesses =
           response.data?.businesses || [];
