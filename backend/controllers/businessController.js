@@ -126,18 +126,23 @@ const getSpecificCatalogItem = async (req, res) => {
       });
     }
 
+
     const business = await Business.findOne({
       "businessProfile.serviceType": serviceType,
     })
       .select("businessProfile catalog")
       .lean();
-  console.log(business)
+
+      
+
+    console.log(business)
+
     if (!business) {
       return res.status(404).json({
         success: false,
         message: "عنصر الكتالوج غير موجود",
       });
-    }
+    } 
 
     const item = business.catalog.find(
       (catalogItem) => catalogItem._id.toString() === id
@@ -149,6 +154,8 @@ const getSpecificCatalogItem = async (req, res) => {
         message: "عنصر الكتالوج غير موجود",
       });
     }
+
+
 
     const profile = business.businessProfile || {};
 

@@ -83,7 +83,7 @@ const SERVICE_CONFIG = {
     ],
   },
 
-  "bridal-dresses": {
+  "bridal-dress": {
     label: "فساتين العرائس",
     singular: "فستان عروس",
     icon: Shirt,
@@ -123,7 +123,7 @@ const SERVICE_CONFIG = {
     ],
   },
 
-  "groom-suits": {
+  "groom-suit": {
     label: "بدلات العرسان",
     singular: "بدلة عريس",
     icon: Shirt,
@@ -163,7 +163,7 @@ const SERVICE_CONFIG = {
     ],
   },
 
-  photographers: {
+  photographer: {
     label: "المصورين",
     singular: "خدمة تصوير",
     icon: Camera,
@@ -196,7 +196,7 @@ const SERVICE_CONFIG = {
     ],
   },
 
-  "wedding-cars": {
+  "wedding-car": {
     label: "سيارات الزفاف",
     singular: "سيارة زفاف",
     icon: CarFront,
@@ -303,7 +303,6 @@ const Catalog = () => {
 
   const serviceType = user?.serviceType;
   const config = SERVICE_CONFIG[serviceType];
-
   const fileInputRef = useRef(null);
 
   const [catalog, setCatalog] = useState([]);

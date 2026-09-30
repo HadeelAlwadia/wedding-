@@ -96,12 +96,13 @@ const businessProfileSchema = new mongoose.Schema(
       enum: [
         "hall",
         "beauty",
-        "bridal-dresses",
-        "groom-suits",
-        "photographers",
-        "wedding-cars",
+        "bridal-dress",
+        "groom-suit",
+        "photographer",
+        "wedding-car",
       ],
       trim: true,
+      
     },
 
     // =====================================================

@@ -16,7 +16,7 @@ const GroomSuits = () => {
   const [suits, setSuits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+ console.log(suits)
   // =========================================================
   // Get all groom suits from all businesses
   // =========================================================
@@ -28,7 +28,7 @@ const GroomSuits = () => {
         setError("");
 
         const response = await api.get(
-          "/businesses/catalog?serviceType=groom-suits"
+          "/businesses/catalog?serviceType=groom-suit"
         );
 
         const catalog = response.data?.catalog || [];

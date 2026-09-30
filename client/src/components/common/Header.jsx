@@ -75,7 +75,6 @@ const Header = () => {
           MAIN HEADER
       ====================================================== */}
       <div className="mx-auto flex min-h-[68px] w-full max-w-[1500px] items-center px-3 sm:min-h-[72px] sm:px-5 lg:min-h-[76px] lg:px-8">
-
         {/* ===============================
             LOGO
         ================================ */}
@@ -123,7 +122,7 @@ const Header = () => {
           </Link>
 
           <Link
-            to="/bridal-dressess"
+            to="/bridal-dresses"
             className="whitespace-nowrap text-sm font-medium text-[#2d2424] transition hover:text-[#6B3038]"
           >
             فساتين العرائس
@@ -246,9 +245,7 @@ const Header = () => {
                         )}
                       </div>
 
-                      {/* ===============================
-                          VISITOR
-                      ================================ */}
+                      {/* VISITOR */}
                       {isVisitor && (
                         <div className="p-2">
                           <Link
@@ -289,9 +286,7 @@ const Header = () => {
                         </div>
                       )}
 
-                      {/* ===============================
-                          PROVIDER
-                      ================================ */}
+                      {/* PROVIDER */}
                       {isProvider && (
                         <div className="p-2">
                           <Link
@@ -353,9 +348,7 @@ const Header = () => {
                         </div>
                       )}
 
-                      {/* ===============================
-                          ADMIN
-                      ================================ */}
+                      {/* ADMIN */}
                       {isAdmin && (
                         <div className="p-2">
                           <Link
@@ -535,70 +528,10 @@ const Header = () => {
 
           {/* Drawer */}
           <aside className="fixed right-0 top-[68px] z-50 flex h-[calc(100vh-68px)] w-[min(390px,92vw)] flex-col overflow-y-auto border-l border-[#eee5df] bg-white px-4 py-5 shadow-2xl sm:top-[72px] sm:h-[calc(100vh-72px)] sm:px-5 sm:py-6 lg:top-[76px] lg:h-[calc(100vh-76px)] xl:hidden">
-
-            {/* ===============================
-                MOBILE SEARCH
-            ================================ */}
-            <div className="mb-6">
-              <div className="flex h-11 overflow-hidden rounded-full border border-[#eadbd1] bg-[#fffaf5]">
-                <div className="relative min-w-0 flex-1">
-                  <Search
-                    size={18}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-
-                  <input
-                    type="text"
-                    placeholder="ابحثي عن خدمة..."
-                    className="h-full w-full bg-transparent px-10 text-sm outline-none"
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  className="m-1 shrink-0 rounded-full bg-[#6B3038] px-4 text-sm font-semibold text-white"
-                >
-                  بحث
-                </button>
-              </div>
-            </div>
-
-            {/* ===============================
-                NAVIGATION
-            ================================ */}
-            <p className="mb-2 px-3 text-xs font-semibold text-gray-400">
-              تصفح الخدمات
-            </p>
-
-            <nav className="space-y-1">
-              {[
-                ["/", "الرئيسية"],
-                ["/halls", "صالات الأفراح"],
-                ["/beautys", "الكوافيرات"],
-                ["/bridal-dresses", "فساتين العرائس"],
-                ["/photographers", "المصورين"],
-                ["/groom-suits", "بدلات العرسان"],
-                ["/wedding-cars", "سيارات الزفاف"],
-              ].map(([link, label]) => (
-                <Link
-                  key={link}
-                  to={link}
-                  onClick={closeMobileMenu}
-                  className="block rounded-2xl px-4 py-3.5 text-sm font-medium text-[#2d2424] transition hover:bg-[#f8eee7] hover:text-[#6B3038]"
-                >
-                  {label}
-                </Link>
-              ))}
-            </nav>
-
             {/* =================================================
-                ACCOUNT SECTION
+                ACCOUNT SECTION FIRST
             ================================================== */}
-            <div className="mt-6 border-t border-[#eee5df] pt-5">
-
-              {/* ===============================
-                  ACCOUNT BUTTON
-              ================================ */}
+            <div className="mb-6">
               <button
                 type="button"
                 onClick={() => setAccountOpen((prev) => !prev)}
@@ -619,9 +552,7 @@ const Header = () => {
                     </p>
 
                     <p className="mt-0.5 truncate text-xs text-gray-400">
-                      {user
-                        ? user.name
-                        : "تسجيل الدخول أو إنشاء حساب"}
+                      {user ? user.name : "تسجيل الدخول أو إنشاء حساب"}
                     </p>
                   </div>
                 </div>
@@ -639,7 +570,6 @@ const Header = () => {
               ================================================== */}
               {accountOpen && (
                 <div className="mt-2 rounded-2xl bg-[#fffaf5] p-2">
-
                   {user ? (
                     <>
                       {/* User Info */}
@@ -673,9 +603,7 @@ const Header = () => {
                         </div>
                       </div>
 
-                      {/* ===============================
-                          VISITOR ACCOUNT
-                      ================================ */}
+                      {/* VISITOR */}
                       {isVisitor && (
                         <div className="space-y-1">
                           <Link
@@ -698,9 +626,7 @@ const Header = () => {
                         </div>
                       )}
 
-                      {/* ===============================
-                          PROVIDER ACCOUNT
-                      ================================ */}
+                      {/* PROVIDER */}
                       {isProvider && (
                         <div className="space-y-1">
                           <Link
@@ -735,9 +661,7 @@ const Header = () => {
                         </div>
                       )}
 
-                      {/* ===============================
-                          ADMIN ACCOUNT
-                      ================================ */}
+                      {/* ADMIN */}
                       {isAdmin && (
                         <div className="space-y-1">
                           <Link
@@ -835,6 +759,61 @@ const Header = () => {
                 </div>
               )}
             </div>
+
+            {/* =================================================
+                MOBILE SEARCH
+            ================================================== */}
+            <div className="mb-6">
+              <div className="flex h-11 overflow-hidden rounded-full border border-[#eadbd1] bg-[#fffaf5]">
+                <div className="relative min-w-0 flex-1">
+                  <Search
+                    size={18}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="ابحثي عن خدمة..."
+                    className="h-full w-full bg-transparent px-10 text-sm outline-none"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className="m-1 shrink-0 rounded-full bg-[#6B3038] px-4 text-sm font-semibold text-white"
+                >
+                  بحث
+                </button>
+              </div>
+            </div>
+
+            {/* =================================================
+                NAVIGATION
+            ================================================== */}
+            <p className="mb-2 px-3 text-xs font-semibold text-gray-400">
+              تصفح الخدمات
+            </p>
+
+            <nav className="space-y-1">
+              {[
+                ["/", "الرئيسية"],
+                ["/halls", "صالات الأفراح"],
+                ["/beautys", "الكوافيرات"],
+                ["/bridal-dresses", "فساتين العرائس"],
+                ["/photographers", "المصورين"],
+                ["/groom-suits", "بدلات العرسان"],
+                ["/wedding-cars", "سيارات الزفاف"],
+              ].map(([link, label]) => (
+                <Link
+                  key={link}
+                  to={link}
+                  onClick={closeMobileMenu}
+                  className="block rounded-2xl px-4 py-3.5 text-sm font-medium text-[#2d2424] transition hover:bg-[#f8eee7] hover:text-[#6B3038]"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
           </aside>
         </>
       )}

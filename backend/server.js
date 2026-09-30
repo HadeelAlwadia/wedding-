@@ -10,8 +10,9 @@ const businessRoutes = require("./routes/businessRoutes");
 dotenv.config();
 const app = express();
 
+
 // Database
-connectDB();
+connectDB(); 
 
 // Middleware
 app.use(cors());

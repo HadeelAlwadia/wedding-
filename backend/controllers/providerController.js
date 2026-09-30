@@ -45,7 +45,7 @@ const createBusiness = async (
     
 
       businessProfile: {
-        name: businessName,
+      name: businessName,
       serviceType,
       },
 
@@ -1026,10 +1026,10 @@ const deleteGalleryImage = async (req, res) => {
 
 const CATALOG_SERVICE_TYPES = [
   "beauty",
-  "bridal-dresses",
-  "groom-suits",
-  "photographers",
-  "wedding-cars",
+  "bridal-dress",
+  "groom-suit",
+  "photographer",
+  "wedding-car",
 ];
 
 // =========================================================
@@ -1351,7 +1351,7 @@ const createCatalog = async (req, res) => {
     // Add To Business Catalog
     // =======================================================
 
-    business.catalog.push(catalogItem);
+     business.catalog.push(catalogItem);
 
     await business.save();
 
@@ -1363,6 +1363,7 @@ const createCatalog = async (req, res) => {
       business.catalog[
         business.catalog.length - 1
       ];
+      
 
     res.status(201).json({
       success: true,

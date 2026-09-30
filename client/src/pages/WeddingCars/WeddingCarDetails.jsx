@@ -40,7 +40,7 @@ const WeddingCarDetails = () => {
         setError("");
 
         const response = await api.get(
-          `/businesses/catalog/${id}?serviceType=wedding-cars`
+          `/businesses/catalog/${id}?serviceType=wedding-car`
         );
 
         const item = response.data?.item;

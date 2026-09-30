@@ -76,7 +76,7 @@ const approveProvider = async (req, res) => {
     const { 
       businessName, 
       serviceType,id 
-    } = provider; 
+    } = provider;  
  
  
   createBusiness(id, 

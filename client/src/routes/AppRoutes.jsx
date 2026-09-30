@@ -49,6 +49,8 @@ import StoreDetails from "../pages/Store/StoreDetailes";
 import ServicePage from "../pages/ServicePage";
 import BussniseDetails from "../pages/Bussnise/BussniseDetails";
 import Bussnise from "../pages/Bussnise/Bussnise";
+import BridalDresses from "../pages/BridalDresses/BridalDresses";
+import BridalDressDetails from "../pages/BridalDresses/BridalDressDetails";
 
 function AppRoutes() {
   return (
@@ -64,7 +66,7 @@ function AppRoutes() {
 
           {/* Halls */}
           <Route path="/halls" element={<Bussnise
-            serytye="hall"
+            serviceType="hall"
             title="صالات الأفراح"
             englishTitle="WEDDING VENUES"
             description="اكتشفي المكان الذي يشبه حلمك ويكمل يومك."
@@ -78,7 +80,7 @@ function AppRoutes() {
 
           {/* Beauty */}
           <Route path="/beautys" element={<Bussnise
-            serytye="beauty"
+            serviceType="beauty"
             title="الكوافيرات والتجميل"
             englishTitle="BEAUTY & SALON"
             description="اختاري خبيرة التجميل التي تناسب إطلالتك."
@@ -93,20 +95,12 @@ function AppRoutes() {
           {/* Bridal Dresses */}
           <Route
             path="/bridal-dresses"
-            element={<Bussnise
-              serytye="bridal-dresses"
-              title="فساتين الزفاف"
-              englishTitle="BRIDAL DRESSES"
-              description="اكتشفي فستانك بين أجمل الخيارات."
-              searchPlaceholder="ابحثي عن متجر أو فستان..."
-              itemLabel="متاجر"
-              defaultName="متجر فساتين"
-            />}
+            element={<BridalDresses/>}
           />
 
           <Route
             path="/bridal-dresses/:id"
-            element={<BussniseDetails nameofbassnse='bridal-dresses  ' />}
+            element={<BridalDressDetails  />}
           />
 
           {/* Groom Suits */}
@@ -120,12 +114,27 @@ function AppRoutes() {
             element={<GroomSuitDetails />}
           />
 
-   
+<Route
+  path="/photographers"
+  element={
+    <Bussnise
+      serviceType="photographer"
+      title="مصورين الزفاف"
+      englishTitle="PHOTOGRAPHERS"
+      description="اكتشفي مصوري الزفاف واختاري المصور المناسب لفرحك."
+      searchPlaceholder="ابحثي عن مصور..."
+      itemLabel="مصورين"
+      defaultName="مصور زفاف"
+    />
+  }
+/>
 
           <Route
             path="/photographers/:id"
             element={<BussniseDetails nameofbassnse="photographer" />}
           />
+
+
           {/* store page /car/suit */}
           <Route
             path="/store/:serviceType/:id"

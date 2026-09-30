@@ -25,9 +25,9 @@ import {
 
 const getServiceNavigation = (type) => {
   if (
-    type === "groom-suits" ||
-    type === "wedding-cars" ||
-    type === "bridal-dresses"||
+    type === "groom-suit" ||
+    type === "wedding-car" ||
+    type === "bridal-dresse"||
     type==='beauty'
   ) {
     return [
@@ -50,10 +50,10 @@ const getServiceLabel = (type) => {
   const labels = {
     hall: "صالات الأفراح",
     beauty: "الكوافيرات",
-    "bridal-dresses": "فساتين العرائس",
-    "groom-suits": "بدلات العرسان",
-    photographers: "المصورين",
-    "wedding-cars": "سيارات الزفاف",
+    "bridal-dress": "فساتين العرائس",
+    "groom-suit": "بدلات العرسان",
+    photographer: "المصورين",
+    "wedding-car": "سيارات الزفاف",
   };
 
   return labels[type] || "مقدم خدمة";

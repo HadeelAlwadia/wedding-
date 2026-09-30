@@ -38,7 +38,7 @@ const GroomSuitDetails = () => {
         setError("");
 
         const response = await api.get(
-          `/businesses/catalog/${id}?serviceType=groom-suits`
+          `/businesses/catalog/${id}?serviceType=groom-suit`
         );
 
         const item = response.data?.item;

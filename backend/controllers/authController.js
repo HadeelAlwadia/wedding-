@@ -15,6 +15,7 @@ const register = async (req, res) => {
       phone,
       whatsapp,
       serviceType,
+      bassniseName
     } = req.body;
 
     console.log("Register request:", {
@@ -92,6 +93,7 @@ const userData = {
   isApproved: accountRole === "visitor",
 };
 
+
     // =========================
     // بيانات مقدم الخدمة فقط
     // =========================
@@ -99,6 +101,7 @@ const userData = {
       userData.phone = phone.trim();
       userData.whatsapp = whatsapp?.trim() || "";
       userData.serviceType = serviceType;
+      userData.bassniseName=bassniseName
     }
 
     // =========================

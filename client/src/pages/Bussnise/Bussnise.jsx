@@ -10,7 +10,7 @@ import {
 import api from "../../api/api";
 
 const Bussnise = ({
-  serytye = "hall",
+  serviceType = "hall",
   title = "صالات الأفراح",
   englishTitle = "WEDDING VENUES",
   description = "اكتشفي المكان الذي يشبه حلمك ويكمل يومك.",
@@ -39,7 +39,7 @@ const Bussnise = ({
         setError("");
 
         const response = await api.get(
-          `/businesses?serviceType=${serytye}`
+          `/businesses?serviceType=${serviceType}`
         );
         
       console.log(Bussnise)
@@ -63,7 +63,7 @@ const Bussnise = ({
     };
 
     fetchBussnise();
-  }, [serytye, title]);
+  }, [serviceType, title]);
 
   // =========================================================
   // Search

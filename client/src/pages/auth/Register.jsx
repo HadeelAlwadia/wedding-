@@ -22,6 +22,7 @@ const Register = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    businessName: "",
     email: "",
     phone: "",
     whatsapp: "",
@@ -44,7 +45,7 @@ const Register = () => {
   const serviceTypes = [
     { value: "hall", label: "قاعات أفراح" },
     { value: "beauty", label: "صالونات وتجميل" },
-    { value: "bridal-dresse", label: "فساتين زفاف" },
+    { value: "bridal-dress", label: "فساتين زفاف" },
     { value: "groom-suit", label: "بدلات رجالية" },
     { value: "photographer", label: "تصوير" },
     { value: "wedding-car", label: "سيارات أفراح" },
@@ -60,6 +61,7 @@ const Register = () => {
     setFormData((prev) => ({
       ...prev,
       name: "",
+      businessName: "",
       phone: "",
       whatsapp: "",
       serviceType: "",
@@ -153,8 +155,24 @@ const Register = () => {
         type: "error",
         message:
           accountType === "provider"
-            ? "يرجى إدخال اسم النشاط / مقدم الخدمة."
+            ? "يرجى إدخال اسم مقدم الخدمة."
             : "يرجى إدخال اسمك.",
+      });
+
+      return;
+    }
+
+    // =======================================================
+    // اسم النشاط لمقدم الخدمة
+    // =======================================================
+
+    if (
+      accountType === "provider" &&
+      !formData.businessName.trim()
+    ) {
+      setResult({
+        type: "error",
+        message: "يرجى إدخال اسم النشاط.",
       });
 
       return;
@@ -200,7 +218,9 @@ const Register = () => {
     // تأكيد كلمة المرور
     // =======================================================
 
-    if (formData.password !== formData.confirmPassword) {
+    if (
+      formData.password !== formData.confirmPassword
+    ) {
       setResult({
         type: "error",
         message: "كلمتا المرور غير متطابقتين.",
@@ -262,6 +282,7 @@ const Register = () => {
       else {
         payload = {
           name: formData.name.trim(),
+          businessName: formData.businessName.trim(),
           email: formData.email.trim(),
           password: formData.password,
           role: "provider",
@@ -596,12 +617,32 @@ const Register = () => {
                   onChange={handleChange}
                   placeholder={
                     accountType === "provider"
-                      ? "مثال: قاعة ليالي العمر"
+                      ? "مثال: سارة أحمد"
                       : "مثال: سارة أحمد"
                   }
                   className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
                 />
               </div>
+
+              {/* =================================================
+                  اسم النشاط - Provider فقط
+              ================================================== */}
+
+              {accountType === "provider" && (
+                <div className="mb-5">
+                  <label className="mb-2 block text-xs font-bold text-[#2d2424]">
+                    اسم النشاط
+                  </label>
+<input
+  type="text"
+  name="businessName"
+  value={formData.businessName}
+  onChange={handleChange}
+  placeholder="مثال: اكتبي اسم نشاطك أو علامتك التجارية"
+  className="h-12 w-full rounded-xl border border-[#eadbd1] bg-[#fffdfb] px-4 text-sm text-[#2d2424] outline-none transition placeholder:text-gray-300 focus:border-[#6B3038] focus:ring-4 focus:ring-[#6B3038]/5"
+/>
+                </div>
+              )}
 
               {/* =================================================
                   البريد
@@ -898,3 +939,4 @@ const Register = () => {
 };
 
 export default Register;
+

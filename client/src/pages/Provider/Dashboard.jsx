@@ -33,22 +33,22 @@ const SERVICE_CONFIG = {
     icon: Store,
   },
 
-  "bridal-dresses": {
+  "bridal-dress": {
     label: "فساتين عرائس",
     icon: Store,
   },
 
-  "groom-suits": {
+  "groom-suit": {
     label: "بدلات عرسان",
     icon: Store,
   },
 
-  photographers: {
+  photographer: {
     label: "تصوير أفراح",
     icon: Camera,
   },
 
-  "wedding-cars": {
+  "wedding-car": {
     label: "سيارات زفاف",
     icon: Store,
   },
@@ -68,7 +68,7 @@ const Dashboard = () => {
   // =======================================================
   // Fetch Dashboard
   // =======================================================
-
+console.log(dashboard)
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
